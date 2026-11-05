@@ -32,8 +32,8 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 - [ ] Remediation status tracking (Open → In Progress → Fixed → Verified)
 
 ### Planned
-- [ ] CISA Known Exploited Vulnerabilities (KEV) catalog enrichment
-- [ ] EPSS (Exploit Prediction Scoring System) enrichment
+- [x] CISA Known Exploited Vulnerabilities (KEV) catalog enrichment
+- [x] EPSS (Exploit Prediction Scoring System) enrichment
 - [ ] SLA tracking by severity and asset tier
 - [ ] Owner assignment and notifications
 - [ ] Executive reporting: closure rate, MTTR, risk trend
@@ -65,19 +65,29 @@ See the full [framework alignment](docs/framework-alignment.md) mapping.
 
 ---
 
-## Prioritization Model (Draft)
+## Prioritization Model
 
-Each finding receives a VulnHQ Risk Score based on:
+Each finding receives a **VulnHQ Risk Score from 0 to 100**, weighted toward real-world exploitation and business impact:
 
-| Factor | Example Inputs |
-|---|---|
-| **Severity** | CVSS base score |
-| **Exploitability** | CISA KEV listing, EPSS probability, public exploit available |
-| **Asset criticality** | Business tier, data sensitivity, production vs. non-production |
-| **Exposure** | Internet-facing, internal, segmented |
-| **Age** | Days open vs. SLA target |
+| Factor | Max Points | Source |
+|---|---|---|
+| **Known exploited (CISA KEV)** | 30 | CISA KEV catalog |
+| **Exploit likelihood (EPSS)** | 25 | FIRST EPSS probability × 25 |
+| **Ransomware use** | 10 | CISA KEV |
+| **Application criticality (1 to 5)** | 20 | Application inventory |
+| **Internet exposure** | 10 | Application or asset |
+| **Sensitive data (confidential / restricted)** | 5 | Application inventory |
 
-> The scoring weights are configurable and will be documented in `docs/scoring.md` (coming soon).
+### Remediation Tiers
+
+| Tier | Score | Fix Within |
+|---|---|---|
+| **Critical** | 80 to 100 | 7 days |
+| **High** | 60 to 79 | 30 days |
+| **Medium** | 40 to 59 | 60 days |
+| **Low** | Below 40 | 90 days |
+
+Weights, thresholds and SLA days are configurable. See the full [scoring model](docs/scoring.md), including a worked example and planned enhancements (CVSS, age vs. SLA, exploit availability).
 
 ---
 
@@ -91,14 +101,12 @@ VulnHQ uses a calming base palette with standard red / orange / yellow / green s
 
 ## Tech Stack
 
-> Update as the stack is finalized.
-
 | Layer | Technology |
 |---|---|
-| Frontend | TBD (e.g., React) |
-| Backend | TBD (e.g., Python / Flask or FastAPI) |
-| Database | TBD (e.g., PostgreSQL) |
-| Testing | TBD (e.g., pytest, Jest, Playwright) |
+| Frontend | React + TypeScript (Vite) |
+| Backend | Python 3.12, FastAPI, SQLAlchemy |
+| Database | PostgreSQL 16 |
+| Testing | pytest (backend); frontend testing TBD |
 | CI/CD | GitHub Actions |
 
 ---
