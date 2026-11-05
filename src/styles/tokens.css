@@ -1,0 +1,60 @@
+/* VulnHQ design tokens: calming base UI + standard severity colors.
+   All text/background pairs meet WCAG AA (4.5:1 or higher). */
+:root {
+  /* Base UI */
+  --vhq-bg: #F5F8FA;            /* Mist: app background */
+  --vhq-surface: #FFFFFF;       /* Cards, panels */
+  --vhq-surface-alt: #EAF1F4;   /* Harbor: sidebar, table headers */
+  --vhq-border: #D5E0E6;
+  --vhq-text: #1E2B37;          /* Deep Slate: primary text */
+  --vhq-text-muted: #52606D;    /* Slate: secondary text */
+  --vhq-primary: #2F6F8F;       /* Calm Teal: buttons, links */
+  --vhq-primary-hover: #24586F;
+  --vhq-on-primary: #FFFFFF;
+  --vhq-accent: #6A9C89;        /* Sage: highlights, charts */
+  --vhq-focus: #7FB3D5;         /* Focus ring */
+
+  /* Severity: solid (badges, chart fills) */
+  --vhq-critical: #B42318;  --vhq-on-critical: #FFFFFF;
+  --vhq-high: #C2410C;      --vhq-on-high: #FFFFFF;
+  --vhq-medium: #F2C230;    --vhq-on-medium: #3D2E00;
+  --vhq-low: #2E7D32;       --vhq-on-low: #FFFFFF;
+  --vhq-info: #5B7083;      --vhq-on-info: #FFFFFF;
+
+  /* Severity: tint (table rows, alert backgrounds) */
+  --vhq-critical-tint: #FDECEA; --vhq-critical-tint-text: #8F1D13;
+  --vhq-high-tint: #FFF1E6;     --vhq-high-tint-text: #9A3412;
+  --vhq-medium-tint: #FFF8E1;   --vhq-medium-tint-text: #7A5A00;
+  --vhq-low-tint: #E8F5E9;      --vhq-low-tint-text: #1E5E23;
+  --vhq-info-tint: #EEF2F5;     --vhq-info-tint-text: #3E5263;
+
+  /* Remediation status: kept separate from severity so "Fixed" isn't confused with "Low" */
+  --vhq-status-open: #52606D;
+  --vhq-status-in-progress: #2F6F8F;
+  --vhq-status-fixed: #6A9C89;
+  --vhq-status-verified: #1F5A4C;
+  --vhq-status-accepted: #6B5B95;
+  --vhq-status-overdue: #B42318;
+}
+
+/* Dark mode: calm night palette; severity solids stay the same */
+[data-theme="dark"] {
+  --vhq-bg: #121B22;
+  --vhq-surface: #1A262F;
+  --vhq-surface-alt: #22313C;
+  --vhq-border: #2E3F4C;
+  --vhq-text: #E3EBF0;
+  --vhq-text-muted: #A3B3BF;
+  --vhq-primary: #7FB3D5;
+  --vhq-primary-hover: #9CC6E2;
+  --vhq-on-primary: #121B22;
+}
+
+/* Example severity badge */
+.vhq-badge { display:inline-flex; gap:.35rem; align-items:center; padding:.15rem .6rem;
+  border-radius:999px; font-weight:600; font-size:.8rem; text-transform:uppercase; }
+.vhq-badge--critical { background:var(--vhq-critical); color:var(--vhq-on-critical); }
+.vhq-badge--high     { background:var(--vhq-high);     color:var(--vhq-on-high); }
+.vhq-badge--medium   { background:var(--vhq-medium);   color:var(--vhq-on-medium); }
+.vhq-badge--low      { background:var(--vhq-low);      color:var(--vhq-on-low); }
+.vhq-badge--info     { background:var(--vhq-info);     color:var(--vhq-on-info); }
