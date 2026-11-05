@@ -46,3 +46,20 @@ class ApplicationCreate(BaseModel):
     data_classification: str | None = None
     internet_facing: bool = False
     money_movement: MoneyMovement = "none"
+
+
+class FixListItem(BaseModel):
+    finding_id: int
+    cve_id: str
+    vulnerability_name: str | None
+    hostname: str
+    application: str | None
+    status: str
+    risk_score: float
+    tier: str
+    first_seen: date
+    due_date: date
+    days_remaining: int
+    overdue: bool
+    # Points from each factor, so users can see why a finding ranks high
+    breakdown: dict[str, float]

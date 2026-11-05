@@ -1,13 +1,15 @@
 from contextlib import asynccontextmanager
+from datetime import date
 
 from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func, select, text
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app import models
 from app.database import Base, engine, get_db
-from app.schemas import ApplicationCreate, ApplicationOut, VulnerabilityOut
+from app.schemas import ApplicationCreate, ApplicationOut, FixListItem, VulnerabilityOut
+from app.scoring import ScoreInput, calculate_score, due_date
 
 
 @asynccontextmanager
@@ -69,6 +71,68 @@ def create_application(payload: ApplicationCreate, db: Session = Depends(get_db)
     db.commit()
     db.refresh(application)
     return application
+
+
+# ---------- Fix List (ranked findings) ----------
+
+@app.get("/fix-list", response_model=list[FixListItem])
+def fix_list(
+    status: str = "open",
+    tier: str | None = None,
+    limit: int = Query(100, le=1000),
+    db: Session = Depends(get_db),
+):
+    stmt = (
+        select(models.Finding)
+        .options(
+            joinedload(models.Finding.asset).joinedload(models.Asset.application),
+            joinedload(models.Finding.vulnerability),
+        )
+        .where(models.Finding.status == status)
+    )
+    findings = db.scalars(stmt).unique().all()
+
+    today = date.today()
+    items = []
+    for f in findings:
+        asset, vuln, app_ = f.asset, f.vulnerability, f.asset.application
+        # Application values win; fall back to the asset when there is no application
+        result = calculate_score(
+            ScoreInput(
+                in_kev=vuln.in_kev,
+                epss=vuln.epss_score,
+                ransomware=vuln.ransomware_use,
+                criticality=app_.criticality if app_ else asset.criticality,
+                internet_facing=asset.internet_facing or (app_.internet_facing if app_ else False),
+                money_movement=app_.money_movement if app_ else "none",
+                data_classification=app_.data_classification if app_ else None,
+            )
+        )
+        if tier and result.tier.lower() != tier.lower():
+            continue
+        first_seen = f.first_seen.date()
+        due = due_date(first_seen, result.sla_days)
+        items.append(
+            FixListItem(
+                finding_id=f.id,
+                cve_id=vuln.cve_id,
+                vulnerability_name=vuln.name,
+                hostname=asset.hostname,
+                application=app_.name if app_ else None,
+                status=f.status,
+                risk_score=result.score,
+                tier=result.tier,
+                first_seen=first_seen,
+                due_date=due,
+                days_remaining=(due - today).days,
+                overdue=due < today,
+                breakdown=result.breakdown,
+            )
+        )
+
+    # Highest risk first; earliest due date breaks ties
+    items.sort(key=lambda i: (-i.risk_score, i.due_date))
+    return items[:limit]
 
 
 # ---------- Dashboard stats ----------
