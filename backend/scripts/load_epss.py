@@ -1,36 +1,46 @@
+import csv
+import gzip
+import sys
+from pathlib import Path
+
 import httpx
 from sqlalchemy import select
 
 from app.database import SessionLocal
 from app.models import Vulnerability
 
-EPSS_URL = "https://api.first.org/data/v1/epss"
-BATCH_SIZE = 100  # The EPSS API accepts up to 100 CVEs per request
+# Full daily EPSS file (all CVEs) published by the EPSS team
+EPSS_CSV_URL = "https://epss.empiricalsecurity.com/epss_scores-current.csv.gz"
 
 
-def fetch_epss(cve_ids: list[str]) -> dict[str, float]:
-    # Returns {cve_id: epss_score} for one batch of CVEs
-    resp = httpx.get(EPSS_URL, params={"cve": ",".join(cve_ids)}, timeout=60)
-    resp.raise_for_status()
-    return {row["cve"]: float(row["epss"]) for row in resp.json()["data"]}
+def load_scores() -> dict[str, float]:
+    # Optional: pass a downloaded file path, e.g. python -m scripts.load_epss epss.csv.gz
+    if len(sys.argv) > 1:
+        print(f"Reading EPSS file {sys.argv[1]}...")
+        raw = Path(sys.argv[1]).read_bytes()
+    else:
+        print("Downloading daily EPSS file...")
+        resp = httpx.get(EPSS_CSV_URL, timeout=120, follow_redirects=True)
+        resp.raise_for_status()
+        raw = resp.content
+
+    text = gzip.decompress(raw).decode("utf-8")
+    # First line is a "#model_version..." comment, skip it
+    rows = csv.DictReader(line for line in text.splitlines() if not line.startswith("#"))
+    return {row["cve"]: float(row["epss"]) for row in rows}
 
 
 def main():
+    scores = load_scores()
+    print(f"Loaded {len(scores)} EPSS scores")
+
     with SessionLocal() as db:
         vulns = db.scalars(select(Vulnerability)).all()
-        print(f"Fetching EPSS scores for {len(vulns)} CVEs...")
-
-        scores: dict[str, float] = {}
-        for i in range(0, len(vulns), BATCH_SIZE):
-            batch = [v.cve_id for v in vulns[i : i + BATCH_SIZE]]
-            scores.update(fetch_epss(batch))
-
         updated = 0
         for vuln in vulns:
             if vuln.cve_id in scores:
                 vuln.epss_score = scores[vuln.cve_id]
                 updated += 1
-
         db.commit()
 
     print(f"EPSS scores updated for {updated} of {len(vulns)} CVEs")
