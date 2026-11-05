@@ -35,7 +35,24 @@
   --vhq-status-verified: #1F5A4C;
   --vhq-status-accepted: #6B5B95;
   --vhq-status-overdue: #B42318;
+
+  /* Typography */
+  --vhq-font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --vhq-font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* Spacing (4px base) */
+  --vhq-space-1: 4px;  --vhq-space-2: 8px;  --vhq-space-3: 12px; --vhq-space-4: 16px;
+  --vhq-space-6: 24px; --vhq-space-8: 32px; --vhq-space-12: 48px;
+
+  /* Radius */
+  --vhq-radius-sm: 4px; --vhq-radius-md: 8px; --vhq-radius-lg: 12px; --vhq-radius-pill: 999px;
+
+  /* Elevation */
+  --vhq-shadow-sm: 0 1px 2px rgba(30,43,55,.06);
+  --vhq-shadow-md: 0 4px 12px rgba(30,43,55,.08);
+  --vhq-shadow-lg: 0 12px 32px rgba(30,43,55,.12);
 }
+
 
 /* Dark mode: calm night palette; severity solids stay the same */
 [data-theme="dark"] {

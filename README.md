@@ -74,7 +74,7 @@ Each finding receives a VulnHQ Risk Score based on:
 
 ## Design
 
-VulnHQ uses a calming base palette with standard red / orange / yellow / green severity colors. See the [color system](docs/design-system.md).
+VulnHQ uses a calming base palette with standard red / orange / yellow / green severity colors. See the [design guide](docs/design-guide.md) for colors, typography, layout, components, voice and accessibility.
 
 ![VulnHQ color palette](docs/images/color-palette.png)
 
