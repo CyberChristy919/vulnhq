@@ -14,6 +14,9 @@ from app.inventory import (
     ContextSummary,
     InventoryFile,
     InventorySummary,
+    Options,
+    SoftwareIn,
+    add_software,
     apply_context,
     import_inventory,
 )
@@ -91,9 +94,44 @@ def import_assets(payload: ImportFile, db: Session = Depends(get_db)):
 
 
 @app.post("/import/inventory", response_model=InventorySummary)
-def import_inventory_file(payload: InventoryFile, db: Session = Depends(get_db)):
-    # Asset inventory with installed software; CVEs are matched automatically
-    return import_inventory(db, payload)
+def import_inventory_file(
+    payload: InventoryFile,
+    use_nvd: bool = True,
+    min_cvss: float = Query(7.0, ge=0, le=10),
+    db: Session = Depends(get_db),
+):
+    # Asset inventory with installed software. CVEs are matched with the vetted
+    # rules first, then a live NVD lookup for products the rules don't cover.
+    return import_inventory(db, payload, Options(use_nvd=use_nvd, min_cvss=min_cvss))
+
+
+@app.post("/assets/{hostname}/software")
+def add_asset_software(
+    hostname: str,
+    payload: SoftwareIn,
+    use_nvd: bool = True,
+    min_cvss: float = Query(7.0, ge=0, le=10),
+    db: Session = Depends(get_db),
+):
+    # Adds one software item to an existing asset and checks it right away
+    result = add_software(db, hostname, payload, Options(use_nvd=use_nvd, min_cvss=min_cvss))
+    if result is None:
+        raise HTTPException(status_code=404, detail=f"No asset named {hostname}. Import it first.")
+    summary, findings = result
+    return {
+        "summary": summary,
+        "findings": [
+            {
+                "cve_id": f.cve_id,
+                "name": f.vulnerability.name,
+                "in_kev": f.vulnerability.in_kev,
+                "cvss_score": f.vulnerability.cvss_score,
+                "confidence": f.confidence,
+                "match_note": f.match_note,
+            }
+            for f in sorted(findings, key=lambda f: (not f.vulnerability.in_kev, -(f.vulnerability.cvss_score or 0)))
+        ],
+    }
 
 
 @app.post("/import/context", response_model=ContextSummary)

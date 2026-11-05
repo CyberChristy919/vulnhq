@@ -25,6 +25,12 @@ def load_rules() -> list[dict]:
     return json.loads(RULES_PATH.read_text(encoding="utf-8"))["rules"]
 
 
+@lru_cache
+def covered_products() -> frozenset[str]:
+    """Software names that have at least one vetted rule."""
+    return frozenset(p for rule in load_rules() for p in rule["products"])
+
+
 def match_software(name: str, version: str) -> list[Match]:
     key = name.strip().lower()
     matches: dict[str, Match] = {}
