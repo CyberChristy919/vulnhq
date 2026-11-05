@@ -178,7 +178,7 @@ Contributions, ideas, and feedback are welcome.
 
 ## Security
 
-If you discover a security issue in VulnHQ, please **do not open a public issue**. Report it privately via the repository's Security tab (a `SECURITY.md` policy is coming soon).
+If you discover a security issue in VulnHQ, please **do not open a public issue**. Report it privately via the repository's [Security tab](https://github.com/CyberChristy919/vulnhq/security) and see the [security policy](SECURITY.md).
 
 ---
 
