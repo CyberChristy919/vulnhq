@@ -25,7 +25,7 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 ## Features
 
 ### Current (MVP)
-- [ ] Import vulnerability findings (CSV / JSON)
+- [x] Import assets and findings (JSON), with software-version to CVE matching. See [importing](docs/importing.md).
 - [ ] Asset inventory with business criticality ratings
 - [ ] Risk-based prioritization score
 - [ ] Ranked fix list dashboard

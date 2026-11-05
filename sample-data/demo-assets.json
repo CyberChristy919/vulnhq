@@ -1,0 +1,121 @@
+{
+  "applications": [
+    {
+      "name": "Customer Portal",
+      "description": "Online banking and customer bill pay",
+      "business_owner": "Digital Banking",
+      "technical_owner": "Web Platform Team",
+      "criticality": 5,
+      "data_classification": "confidential",
+      "internet_facing": true,
+      "money_movement": "outbound_payments"
+    },
+    {
+      "name": "Wire Transfer System",
+      "description": "Domestic and international wires",
+      "business_owner": "Treasury Operations",
+      "technical_owner": "Payments Engineering",
+      "criticality": 5,
+      "data_classification": "restricted",
+      "internet_facing": false,
+      "money_movement": "outbound_payments"
+    },
+    {
+      "name": "General Ledger",
+      "description": "Core accounting and internal transfers",
+      "business_owner": "Finance",
+      "technical_owner": "Finance Systems",
+      "criticality": 4,
+      "data_classification": "confidential",
+      "internet_facing": false,
+      "money_movement": "internal_transfers"
+    },
+    {
+      "name": "HR Intranet",
+      "description": "Employee self-service portal",
+      "business_owner": "Human Resources",
+      "technical_owner": "Corporate IT",
+      "criticality": 3,
+      "data_classification": "confidential",
+      "internet_facing": false,
+      "money_movement": "none"
+    },
+    {
+      "name": "Marketing Website",
+      "description": "Public brochure site and blog",
+      "business_owner": "Marketing",
+      "technical_owner": "Web Platform Team",
+      "criticality": 2,
+      "data_classification": "public",
+      "internet_facing": true,
+      "money_movement": "none"
+    }
+  ],
+  "assets": [
+    {
+      "hostname": "portal-web-01",
+      "ip_address": "10.10.1.11",
+      "application": "Customer Portal",
+      "internet_facing": true,
+      "cves": ["CVE-2023-4966", "CVE-2021-44228", "CVE-2023-44487"]
+    },
+    {
+      "hostname": "portal-app-01",
+      "ip_address": "10.10.1.21",
+      "application": "Customer Portal",
+      "internet_facing": false,
+      "cves": ["CVE-2022-22965", "CVE-2023-46604"]
+    },
+    {
+      "hostname": "wire-app-01",
+      "ip_address": "10.20.1.11",
+      "application": "Wire Transfer System",
+      "cves": ["CVE-2023-34362", "CVE-2021-34527"]
+    },
+    {
+      "hostname": "wire-db-01",
+      "ip_address": "10.20.1.31",
+      "application": "Wire Transfer System",
+      "cves": ["CVE-2024-6387"]
+    },
+    {
+      "hostname": "gl-app-01",
+      "ip_address": "10.30.1.11",
+      "application": "General Ledger",
+      "cves": ["CVE-2020-1472", "CVE-2017-0144"]
+    },
+    {
+      "hostname": "gl-db-01",
+      "ip_address": "10.30.1.31",
+      "application": "General Ledger",
+      "cves": ["CVE-2023-38545"]
+    },
+    {
+      "hostname": "hr-web-01",
+      "ip_address": "10.40.1.11",
+      "application": "HR Intranet",
+      "cves": ["CVE-2023-22515", "CVE-2019-0708"]
+    },
+    {
+      "hostname": "hr-db-01",
+      "ip_address": "10.40.1.31",
+      "application": "HR Intranet",
+      "cves": ["CVE-2024-45337"]
+    },
+    {
+      "hostname": "mkt-web-01",
+      "ip_address": "10.50.1.11",
+      "application": "Marketing Website",
+      "internet_facing": true,
+      "cves": ["CVE-2024-23897", "CVE-2014-0160"]
+    },
+    {
+      "hostname": "vpn-gw-01",
+      "ip_address": "10.0.0.5",
+      "owner": "Network Engineering",
+      "criticality": 5,
+      "internet_facing": true,
+      "cves": ["CVE-2024-3400", "CVE-2018-13379", "CVE-2024-21762"]
+    }
+  ]
+}

@@ -8,6 +8,15 @@ from sqlalchemy.orm import Session, joinedload
 
 from app import models
 from app.database import Base, engine, get_db
+from app.importer import ImportFile, ImportSummary, import_data
+from app.inventory import (
+    ContextFile,
+    ContextSummary,
+    InventoryFile,
+    InventorySummary,
+    apply_context,
+    import_inventory,
+)
 from app.schemas import ApplicationCreate, ApplicationOut, FixListItem, VulnerabilityOut
 from app.scoring import ScoreInput, calculate_score, due_date
 
@@ -73,6 +82,26 @@ def create_application(payload: ApplicationCreate, db: Session = Depends(get_db)
     return application
 
 
+# ---------- Import ----------
+
+@app.post("/import/assets", response_model=ImportSummary)
+def import_assets(payload: ImportFile, db: Session = Depends(get_db)):
+    # Accepts the JSON format in sample-data/demo-assets.json
+    return import_data(db, payload)
+
+
+@app.post("/import/inventory", response_model=InventorySummary)
+def import_inventory_file(payload: InventoryFile, db: Session = Depends(get_db)):
+    # Asset inventory with installed software; CVEs are matched automatically
+    return import_inventory(db, payload)
+
+
+@app.post("/import/context", response_model=ContextSummary)
+def import_context_file(payload: ContextFile, db: Session = Depends(get_db)):
+    # Business context (internet exposure, money movement, data classification) by hostname
+    return apply_context(db, payload)
+
+
 # ---------- Fix List (ranked findings) ----------
 
 @app.get("/fix-list", response_model=list[FixListItem])
@@ -104,8 +133,8 @@ def fix_list(
                 ransomware=vuln.ransomware_use,
                 criticality=app_.criticality if app_ else asset.criticality,
                 internet_facing=asset.internet_facing or (app_.internet_facing if app_ else False),
-                money_movement=app_.money_movement if app_ else "none",
-                data_classification=app_.data_classification if app_ else None,
+                money_movement=app_.money_movement if app_ else asset.money_movement,
+                data_classification=app_.data_classification if app_ else asset.data_classification,
             )
         )
         if tier and result.tier.lower() != tier.lower():
@@ -117,8 +146,18 @@ def fix_list(
                 finding_id=f.id,
                 cve_id=vuln.cve_id,
                 vulnerability_name=vuln.name,
+                in_kev=vuln.in_kev,
+                cvss_score=vuln.cvss_score,
+                epss_score=vuln.epss_score,
                 hostname=asset.hostname,
+                asset_id=asset.external_id,
+                department=asset.department,
                 application=app_.name if app_ else None,
+                software=f.software,
+                confidence=f.confidence,
+                match_note=f.match_note,
+                last_scan_date=asset.last_scan_date,
+                scan_age_days=(today - asset.last_scan_date).days if asset.last_scan_date else None,
                 status=f.status,
                 risk_score=result.score,
                 tier=result.tier,

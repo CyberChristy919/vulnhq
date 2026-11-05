@@ -1,0 +1,886 @@
+{
+  "_about": "Software-version to CVE rules used by the inventory importer. Version ranges come from NVD CPE data or the vendor advisory in 'source'. KEV status and EPSS are looked up from the database, not stored here.",
+  "_verified": "2026-11-05",
+  "rules": [
+    {
+      "cve": "CVE-2021-41773",
+      "title": "Apache HTTP Server Path Traversal Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "apache http server"
+      ],
+      "min_version": "2.4.49",
+      "min_inclusive": true,
+      "max_version": "2.4.49",
+      "max_inclusive": true,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-41773"
+    },
+    {
+      "cve": "CVE-2021-42013",
+      "title": "Apache HTTP Server Path Traversal Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "apache http server"
+      ],
+      "min_version": "2.4.49",
+      "min_inclusive": true,
+      "max_version": "2.4.50",
+      "max_inclusive": true,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-42013"
+    },
+    {
+      "cve": "CVE-2021-44790",
+      "title": "A carefully crafted request body can cause a buffer overflow in the mod_lua multipart parser (r:parsebody() called from ",
+      "cvss": 9.8,
+      "products": [
+        "apache http server"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "2.4.52",
+      "max_inclusive": false,
+      "condition": "Exploitable when mod_lua is enabled.",
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44790"
+    },
+    {
+      "cve": "CVE-2022-0778",
+      "title": "The BN_mod_sqrt() function, which computes a modular square root, contains a bug that can cause it to loop forever for n",
+      "cvss": 7.5,
+      "products": [
+        "openssl"
+      ],
+      "min_version": "1.0.2",
+      "min_inclusive": true,
+      "max_version": "1.0.2zd",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-0778"
+    },
+    {
+      "cve": "CVE-2022-0778",
+      "title": "The BN_mod_sqrt() function, which computes a modular square root, contains a bug that can cause it to loop forever for n",
+      "cvss": 7.5,
+      "products": [
+        "openssl"
+      ],
+      "min_version": "1.1.0",
+      "min_inclusive": true,
+      "max_version": "1.1.1n",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-0778"
+    },
+    {
+      "cve": "CVE-2022-0778",
+      "title": "The BN_mod_sqrt() function, which computes a modular square root, contains a bug that can cause it to loop forever for n",
+      "cvss": 7.5,
+      "products": [
+        "openssl"
+      ],
+      "min_version": "3.0.0",
+      "min_inclusive": true,
+      "max_version": "3.0.2",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-0778"
+    },
+    {
+      "cve": "CVE-2021-3711",
+      "title": "In order to decrypt SM2 encrypted data an application is expected to call the API function EVP_PKEY_decrypt(). Typically",
+      "cvss": 9.8,
+      "products": [
+        "openssl"
+      ],
+      "min_version": "1.1.1",
+      "min_inclusive": true,
+      "max_version": "1.1.1l",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-3711"
+    },
+    {
+      "cve": "CVE-2021-44228",
+      "title": "Apache Log4j2 Remote Code Execution Vulnerability",
+      "cvss": 10.0,
+      "products": [
+        "log4j-core",
+        "apache log4j"
+      ],
+      "min_version": "2.13.0",
+      "min_inclusive": true,
+      "max_version": "2.15.0",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"
+    },
+    {
+      "cve": "CVE-2021-44228",
+      "title": "Apache Log4j2 Remote Code Execution Vulnerability",
+      "cvss": 10.0,
+      "products": [
+        "log4j-core",
+        "apache log4j"
+      ],
+      "min_version": "2.4.0",
+      "min_inclusive": true,
+      "max_version": "2.12.2",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"
+    },
+    {
+      "cve": "CVE-2021-45046",
+      "title": "Apache Log4j2 Deserialization of Untrusted Data Vulnerability",
+      "cvss": 9.0,
+      "products": [
+        "log4j-core",
+        "apache log4j"
+      ],
+      "min_version": "2.13.0",
+      "min_inclusive": true,
+      "max_version": "2.16.0",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45046"
+    },
+    {
+      "cve": "CVE-2021-45046",
+      "title": "Apache Log4j2 Deserialization of Untrusted Data Vulnerability",
+      "cvss": 9.0,
+      "products": [
+        "log4j-core",
+        "apache log4j"
+      ],
+      "min_version": "2.0.1",
+      "min_inclusive": true,
+      "max_version": "2.12.2",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45046"
+    },
+    {
+      "cve": "CVE-2021-45105",
+      "title": "Apache Log4j2 versions 2.0-alpha1 through 2.16.0 (excluding 2.12.3 and 2.3.1) did not protect from uncontrolled recursio",
+      "cvss": 5.9,
+      "products": [
+        "log4j-core",
+        "apache log4j"
+      ],
+      "min_version": "2.13.0",
+      "min_inclusive": true,
+      "max_version": "2.16.0",
+      "max_inclusive": true,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45105"
+    },
+    {
+      "cve": "CVE-2021-45105",
+      "title": "Apache Log4j2 versions 2.0-alpha1 through 2.16.0 (excluding 2.12.3 and 2.3.1) did not protect from uncontrolled recursio",
+      "cvss": 5.9,
+      "products": [
+        "log4j-core",
+        "apache log4j"
+      ],
+      "min_version": "2.4",
+      "min_inclusive": true,
+      "max_version": "2.12.3",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45105"
+    },
+    {
+      "cve": "CVE-2021-44832",
+      "title": "Apache Log4j2 versions 2.0-beta7 through 2.17.0 (excluding security fix releases 2.3.2 and 2.12.4) are vulnerable to a r",
+      "cvss": 6.6,
+      "products": [
+        "log4j-core",
+        "apache log4j"
+      ],
+      "min_version": "2.13.0",
+      "min_inclusive": true,
+      "max_version": "2.17.1",
+      "max_inclusive": false,
+      "condition": "Requires attacker control of the logging configuration.",
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44832"
+    },
+    {
+      "cve": "CVE-2021-44832",
+      "title": "Apache Log4j2 versions 2.0-beta7 through 2.17.0 (excluding security fix releases 2.3.2 and 2.12.4) are vulnerable to a r",
+      "cvss": 6.6,
+      "products": [
+        "log4j-core",
+        "apache log4j"
+      ],
+      "min_version": "2.4",
+      "min_inclusive": true,
+      "max_version": "2.12.4",
+      "max_inclusive": false,
+      "condition": "Requires attacker control of the logging configuration.",
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44832"
+    },
+    {
+      "cve": "CVE-2024-23897",
+      "title": "Jenkins Command Line Interface (CLI) Path Traversal Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "jenkins"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "2.426.3",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-23897"
+    },
+    {
+      "cve": "CVE-2024-4956",
+      "title": "Path Traversal in Sonatype Nexus Repository 3 allows an unauthenticated attacker to read system files. Fixed in version ",
+      "cvss": 7.5,
+      "products": [
+        "sonatype nexus repository manager",
+        "nexus repository manager"
+      ],
+      "min_version": "3.0.0",
+      "min_inclusive": true,
+      "max_version": "3.68.1",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://support.sonatype.com/hc/en-us/articles/29416509323923"
+    },
+    {
+      "cve": "CVE-2022-2185",
+      "title": "A critical issue has been discovered in GitLab affecting all versions starting from 14.0 prior to 14.10.5, 15.0 prior to",
+      "cvss": 9.9,
+      "products": [
+        "gitlab ce",
+        "gitlab ee",
+        "gitlab"
+      ],
+      "min_version": "14.0.0",
+      "min_inclusive": true,
+      "max_version": "14.10.5",
+      "max_inclusive": false,
+      "condition": "Requires an authenticated user able to import projects.",
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-2185"
+    },
+    {
+      "cve": "CVE-2021-23017",
+      "title": "A security issue in nginx resolver was identified, which might allow an attacker who is able to forge UDP packets from t",
+      "cvss": 7.7,
+      "products": [
+        "nginx"
+      ],
+      "min_version": "0.6.18",
+      "min_inclusive": true,
+      "max_version": "1.20.1",
+      "max_inclusive": false,
+      "condition": "Exploitable when the resolver directive is configured.",
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-23017"
+    },
+    {
+      "cve": "CVE-2021-23214",
+      "title": "When the server is configured to use trust authentication with a clientcert requirement or to use cert authentication, a",
+      "cvss": 8.1,
+      "products": [
+        "postgresql"
+      ],
+      "min_version": "12.0",
+      "min_inclusive": true,
+      "max_version": "12.9",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-23214"
+    },
+    {
+      "cve": "CVE-2021-23214",
+      "title": "When the server is configured to use trust authentication with a clientcert requirement or to use cert authentication, a",
+      "cvss": 8.1,
+      "products": [
+        "postgresql"
+      ],
+      "min_version": "13.0",
+      "min_inclusive": true,
+      "max_version": "13.5",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-23214"
+    },
+    {
+      "cve": "CVE-2022-1552",
+      "title": "A flaw was found in PostgreSQL. There is an issue with incomplete efforts to operate safely when a privileged user is ma",
+      "cvss": 8.8,
+      "products": [
+        "postgresql"
+      ],
+      "min_version": "12.0",
+      "min_inclusive": true,
+      "max_version": "12.11",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-1552"
+    },
+    {
+      "cve": "CVE-2022-1552",
+      "title": "A flaw was found in PostgreSQL. There is an issue with incomplete efforts to operate safely when a privileged user is ma",
+      "cvss": 8.8,
+      "products": [
+        "postgresql"
+      ],
+      "min_version": "13.0",
+      "min_inclusive": true,
+      "max_version": "13.7",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-1552"
+    },
+    {
+      "cve": "CVE-2021-43798",
+      "title": "Grafana Path Traversal Vulnerability",
+      "cvss": 7.5,
+      "products": [
+        "grafana"
+      ],
+      "min_version": "8.2.0",
+      "min_inclusive": true,
+      "max_version": "8.2.7",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798"
+    },
+    {
+      "cve": "CVE-2021-43798",
+      "title": "Grafana Path Traversal Vulnerability",
+      "cvss": 7.5,
+      "products": [
+        "grafana"
+      ],
+      "min_version": "8.1.0",
+      "min_inclusive": true,
+      "max_version": "8.1.8",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798"
+    },
+    {
+      "cve": "CVE-2021-43798",
+      "title": "Grafana Path Traversal Vulnerability",
+      "cvss": 7.5,
+      "products": [
+        "grafana"
+      ],
+      "min_version": "8.0.1",
+      "min_inclusive": true,
+      "max_version": "8.0.7",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798"
+    },
+    {
+      "cve": "CVE-2018-15473",
+      "title": "OpenSSH through 7.7 is prone to a user enumeration vulnerability due to not delaying bailout for an invalid authenticati",
+      "cvss": 5.3,
+      "products": [
+        "openssh"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "7.7",
+      "max_inclusive": true,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2018-15473"
+    },
+    {
+      "cve": "CVE-2023-38408",
+      "title": "The PKCS#11 feature in ssh-agent in OpenSSH before 9.3p2 has an insufficiently trustworthy search path, leading to remot",
+      "cvss": 9.8,
+      "products": [
+        "openssh",
+        "openssh for windows"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "9.3p2",
+      "max_inclusive": false,
+      "condition": "Exploitable when ssh-agent forwarding is used.",
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-38408"
+    },
+    {
+      "cve": "CVE-2024-31497",
+      "title": "In PuTTY 0.68 through 0.80 before 0.81, biased ECDSA nonce generation allows an attacker to recover a user's NIST P-521 ",
+      "cvss": 5.9,
+      "products": [
+        "putty"
+      ],
+      "min_version": "0.68",
+      "min_inclusive": true,
+      "max_version": "0.81",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-31497"
+    },
+    {
+      "cve": "CVE-2024-31497",
+      "title": "In PuTTY 0.68 through 0.80 before 0.81, biased ECDSA nonce generation allows an attacker to recover a user's NIST P-521 ",
+      "cvss": 5.9,
+      "products": [
+        "winscp"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "6.3.3",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-31497"
+    },
+    {
+      "cve": "CVE-2022-41903",
+      "title": "Git is distributed revision control system. `git log` can display commits in an arbitrary format using its `--format` sp",
+      "cvss": 9.8,
+      "products": [
+        "git"
+      ],
+      "min_version": "2.32.0",
+      "min_inclusive": true,
+      "max_version": "2.32.4",
+      "max_inclusive": true,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-41903"
+    },
+    {
+      "cve": "CVE-2022-42475",
+      "title": "Fortinet FortiOS Heap-Based Buffer Overflow Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "fortinet fortios",
+        "fortios"
+      ],
+      "min_version": "6.4.0",
+      "min_inclusive": true,
+      "max_version": "6.4.11",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-42475"
+    },
+    {
+      "cve": "CVE-2023-27997",
+      "title": "Fortinet FortiOS and FortiProxy SSL-VPN Heap-Based Buffer Overflow Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "fortinet fortios",
+        "fortios"
+      ],
+      "min_version": "6.4.0",
+      "min_inclusive": true,
+      "max_version": "6.4.12",
+      "max_inclusive": true,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-27997"
+    },
+    {
+      "cve": "CVE-2024-21762",
+      "title": "Fortinet FortiOS Out-of-Bound Write Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "fortinet fortios",
+        "fortios"
+      ],
+      "min_version": "6.4.0",
+      "min_inclusive": true,
+      "max_version": "6.4.15",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-21762"
+    },
+    {
+      "cve": "CVE-2022-41328",
+      "title": "Fortinet FortiOS Path Traversal Vulnerability",
+      "cvss": 6.7,
+      "products": [
+        "fortinet fortios",
+        "fortios"
+      ],
+      "min_version": "6.4.0",
+      "min_inclusive": true,
+      "max_version": "6.4.12",
+      "max_inclusive": false,
+      "condition": "Requires a privileged local user.",
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-41328"
+    },
+    {
+      "cve": "CVE-2025-24813",
+      "title": "Apache Tomcat Path Equivalence Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "apache tomcat"
+      ],
+      "min_version": "9.0.0",
+      "min_inclusive": true,
+      "max_version": "9.0.99",
+      "max_inclusive": false,
+      "condition": "Exploitable only if default servlet writes and partial PUT are enabled (non-default).",
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-24813"
+    },
+    {
+      "cve": "CVE-2021-42321",
+      "title": "Microsoft Exchange Server Remote Code Execution Vulnerability",
+      "cvss": 8.8,
+      "products": [
+        "microsoft exchange server"
+      ],
+      "min_version": "15.1",
+      "min_inclusive": true,
+      "max_version": "15.1.2375.17",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-42321"
+    },
+    {
+      "cve": "CVE-2022-41040",
+      "title": "Microsoft Exchange Server Server-Side Request Forgery Vulnerability",
+      "cvss": 8.8,
+      "products": [
+        "microsoft exchange server"
+      ],
+      "min_version": "15.1",
+      "min_inclusive": true,
+      "max_version": "15.1.2507.16",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-41040"
+    },
+    {
+      "cve": "CVE-2022-41082",
+      "title": "Microsoft Exchange Server Remote Code Execution Vulnerability",
+      "cvss": 8.0,
+      "products": [
+        "microsoft exchange server"
+      ],
+      "min_version": "15.1",
+      "min_inclusive": true,
+      "max_version": "15.1.2507.16",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-41082"
+    },
+    {
+      "cve": "CVE-2020-1472",
+      "title": "Microsoft Netlogon Privilege Escalation Vulnerability",
+      "cvss": 5.5,
+      "products": [
+        "active directory domain services"
+      ],
+      "min_version": "10.0.17763",
+      "min_inclusive": true,
+      "max_version": "10.0.17763.1397",
+      "max_inclusive": false,
+      "condition": "Build number has no update revision. Verify the August 2020 or later Netlogon patch is installed.",
+      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2020-1472"
+    },
+    {
+      "cve": "CVE-2023-27532",
+      "title": "Veeam Backup & Replication Cloud Connect Missing Authentication for Critical Function Vulnerability",
+      "cvss": 7.5,
+      "products": [
+        "veeam backup & replication"
+      ],
+      "min_version": "11.0.0",
+      "min_inclusive": true,
+      "max_version": "11.0.1.1261",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-27532"
+    },
+    {
+      "cve": "CVE-2022-26500",
+      "title": "Veeam Backup & Replication Remote Code Execution Vulnerability",
+      "cvss": 8.8,
+      "products": [
+        "veeam backup & replication"
+      ],
+      "min_version": "11.0.0.825",
+      "min_inclusive": true,
+      "max_version": "11.0.1.1261",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-26500"
+    },
+    {
+      "cve": "CVE-2022-26501",
+      "title": "Veeam Backup & Replication Remote Code Execution Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "veeam backup & replication"
+      ],
+      "min_version": "11.0.0.825",
+      "min_inclusive": true,
+      "max_version": "11.0.1.1261",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-26501"
+    },
+    {
+      "cve": "CVE-2022-1388",
+      "title": "F5 BIG-IP Missing Authentication Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "f5 big-ip"
+      ],
+      "min_version": "14.1.0",
+      "min_inclusive": true,
+      "max_version": "14.1.4.6",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-1388"
+    },
+    {
+      "cve": "CVE-2023-46747",
+      "title": "F5 BIG-IP Configuration Utility Authentication Bypass Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "f5 big-ip"
+      ],
+      "min_version": "14.1.0",
+      "min_inclusive": true,
+      "max_version": "14.1.5",
+      "max_inclusive": true,
+      "condition": "Exploitable when the Configuration Utility is reachable.",
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-46747"
+    },
+    {
+      "cve": "CVE-2021-38000",
+      "title": "Google Chromium Intents Improper Input Validation Vulnerability",
+      "cvss": 6.1,
+      "products": [
+        "google chrome"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "95.0.4638.69",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-38000"
+    },
+    {
+      "cve": "CVE-2021-38003",
+      "title": "Google Chromium V8 Memory Corruption Vulnerability",
+      "cvss": 8.8,
+      "products": [
+        "google chrome"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "95.0.4638.69",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-38003"
+    },
+    {
+      "cve": "CVE-2023-2033",
+      "title": "Google Chromium V8 Type Confusion Vulnerability",
+      "cvss": 8.8,
+      "products": [
+        "google chrome"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "112.0.5615.121",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-2033"
+    },
+    {
+      "cve": "CVE-2023-4863",
+      "title": "Google Chromium WebP Heap-Based Buffer Overflow Vulnerability",
+      "cvss": 8.8,
+      "products": [
+        "google chrome"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "116.0.5845.187",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-4863"
+    },
+    {
+      "cve": "CVE-2023-5217",
+      "title": "Google Chromium libvpx Heap Buffer Overflow Vulnerability",
+      "cvss": 8.8,
+      "products": [
+        "google chrome"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "117.0.5938.132",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-5217"
+    },
+    {
+      "cve": "CVE-2023-4863",
+      "title": "Google Chromium WebP Heap-Based Buffer Overflow Vulnerability",
+      "cvss": 8.8,
+      "products": [
+        "mozilla firefox"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "117.0.1",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-4863"
+    },
+    {
+      "cve": "CVE-2023-5217",
+      "title": "Google Chromium libvpx Heap Buffer Overflow Vulnerability",
+      "cvss": 8.8,
+      "products": [
+        "mozilla firefox"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "118.0.1",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-5217"
+    },
+    {
+      "cve": "CVE-2024-9680",
+      "title": "Mozilla Firefox Use-After-Free Vulnerability",
+      "cvss": 9.8,
+      "products": [
+        "mozilla firefox"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "131.0.2",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-9680"
+    },
+    {
+      "cve": "CVE-2021-28550",
+      "title": "Adobe Acrobat and Reader Use-After-Free Vulnerability",
+      "cvss": 8.8,
+      "products": [
+        "adobe acrobat reader"
+      ],
+      "min_version": "15.008.20082",
+      "min_inclusive": true,
+      "max_version": "21.001.20150",
+      "max_inclusive": true,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-28550"
+    },
+    {
+      "cve": "CVE-2023-26369",
+      "title": "Adobe Acrobat and Reader Out-of-Bounds Write Vulnerability",
+      "cvss": 7.8,
+      "products": [
+        "adobe acrobat reader"
+      ],
+      "min_version": "15.007.20033",
+      "min_inclusive": true,
+      "max_version": "23.006.20320",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-26369"
+    },
+    {
+      "cve": "CVE-2025-0411",
+      "title": "7-Zip Mark of the Web Bypass Vulnerability",
+      "cvss": 7.0,
+      "products": [
+        "7-zip"
+      ],
+      "min_version": null,
+      "min_inclusive": true,
+      "max_version": "24.09",
+      "max_inclusive": false,
+      "condition": "Requires a user to open a crafted archive.",
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-0411"
+    },
+    {
+      "cve": "CVE-2023-41064",
+      "title": "Apple iOS, iPadOS, and macOS ImageIO Buffer Overflow Vulnerability",
+      "cvss": 7.8,
+      "products": [
+        "macos monterey",
+        "macos ventura",
+        "macos"
+      ],
+      "min_version": "12.0",
+      "min_inclusive": true,
+      "max_version": "12.6.9",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41064"
+    },
+    {
+      "cve": "CVE-2023-41064",
+      "title": "Apple iOS, iPadOS, and macOS ImageIO Buffer Overflow Vulnerability",
+      "cvss": 7.8,
+      "products": [
+        "macos monterey",
+        "macos ventura",
+        "macos"
+      ],
+      "min_version": "13.0",
+      "min_inclusive": true,
+      "max_version": "13.5.2",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41064"
+    },
+    {
+      "cve": "CVE-2023-41990",
+      "title": "Apple Multiple Products Code Execution Vulnerability",
+      "cvss": 7.8,
+      "products": [
+        "macos monterey",
+        "macos ventura",
+        "macos"
+      ],
+      "min_version": "12.0",
+      "min_inclusive": true,
+      "max_version": "12.6.8",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41990"
+    },
+    {
+      "cve": "CVE-2023-41992",
+      "title": "Apple Multiple Products Kernel Privilege Escalation Vulnerability",
+      "cvss": 7.8,
+      "products": [
+        "macos monterey",
+        "macos ventura",
+        "macos"
+      ],
+      "min_version": "12.0",
+      "min_inclusive": true,
+      "max_version": "12.7",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41992"
+    },
+    {
+      "cve": "CVE-2023-41992",
+      "title": "Apple Multiple Products Kernel Privilege Escalation Vulnerability",
+      "cvss": 7.8,
+      "products": [
+        "macos monterey",
+        "macos ventura",
+        "macos"
+      ],
+      "min_version": "13.0",
+      "min_inclusive": true,
+      "max_version": "13.6",
+      "max_inclusive": false,
+      "condition": null,
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41992"
+    }
+  ]
+}

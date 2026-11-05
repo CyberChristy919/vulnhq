@@ -52,8 +52,19 @@ class FixListItem(BaseModel):
     finding_id: int
     cve_id: str
     vulnerability_name: str | None
+    in_kev: bool
+    cvss_score: float | None
+    epss_score: float | None
     hostname: str
+    asset_id: str | None
+    department: str | None
     application: str | None
+    software: str | None
+    confidence: str
+    match_note: str | None
+    last_scan_date: date | None
+    # Days since the asset was last scanned; old scans mean the data may be stale
+    scan_age_days: int | None
     status: str
     risk_score: float
     tier: str
