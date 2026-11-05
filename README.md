@@ -71,11 +71,12 @@ Each finding receives a **VulnHQ Risk Score from 0 to 100**, weighted toward rea
 
 | Factor | Max Points | Source |
 |---|---|---|
-| **Known exploited (CISA KEV)** | 30 | CISA KEV catalog |
-| **Exploit likelihood (EPSS)** | 25 | FIRST EPSS probability × 25 |
+| **Known exploited (CISA KEV)** | 25 | CISA KEV catalog |
+| **Exploit likelihood (EPSS)** | 20 | FIRST EPSS probability × 20 |
 | **Ransomware use** | 10 | CISA KEV |
 | **Application criticality (1 to 5)** | 20 | Application inventory |
 | **Internet exposure** | 10 | Application or asset |
+| **Money movement** | 10 | None (0), internal transfers (5), outbound payments (10) |
 | **Sensitive data (confidential / restricted)** | 5 | Application inventory |
 
 ### Remediation Tiers
@@ -87,7 +88,7 @@ Each finding receives a **VulnHQ Risk Score from 0 to 100**, weighted toward rea
 | **Medium** | 40 to 59 | 60 days |
 | **Low** | Below 40 | 90 days |
 
-Weights, thresholds and SLA days are configurable. See the full [scoring model](docs/scoring.md), including a worked example and planned enhancements (CVSS, age vs. SLA, exploit availability).
+Weights, thresholds and SLA days are configurable. See the full [scoring model](docs/scoring.md), including money movement levels, a worked example and planned enhancements (CVSS, age vs. SLA, exploit availability).
 
 ---
 

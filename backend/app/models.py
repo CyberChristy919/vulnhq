@@ -19,6 +19,8 @@ class Application(Base):
     # e.g. public, internal, confidential, restricted
     data_classification: Mapped[str | None] = mapped_column(String(50))
     internet_facing: Mapped[bool] = mapped_column(Boolean, default=False)
+    # none, internal_transfers, or outbound_payments (see docs/scoring.md)
+    money_movement: Mapped[str] = mapped_column(String(30), default="none", server_default="none")
 
     assets: Mapped[list["Asset"]] = relationship(back_populates="application")
 

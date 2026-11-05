@@ -10,27 +10,47 @@ The model favors **real-world exploitation and business impact over theoretical 
 
 | Factor | Max Points | How It's Scored | Data Source |
 |---|---|---|---|
-| **Known exploited (KEV)** | 30 | 30 if the CVE is in the CISA KEV catalog, otherwise 0 | [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) |
-| **Exploit likelihood (EPSS)** | 25 | EPSS probability (0 to 1) × 25 | [FIRST EPSS](https://www.first.org/epss/) |
+| **Known exploited (KEV)** | 25 | 25 if the CVE is in the CISA KEV catalog, otherwise 0 | [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) |
+| **Exploit likelihood (EPSS)** | 20 | EPSS probability (0 to 1) × 20 | [FIRST EPSS](https://www.first.org/epss/) |
 | **Ransomware use** | 10 | 10 if KEV lists known ransomware campaign use, otherwise 0 | CISA KEV |
 | **Application criticality** | 20 | Criticality 1 to 5, scaled: (criticality ÷ 5) × 20 | Applications table |
 | **Internet exposure** | 10 | 10 if the application or asset is internet-facing, otherwise 0 | Applications / Assets |
+| **Money movement** | 10 | Based on the application's money movement level (below) | Applications table |
 | **Data sensitivity** | 5 | 5 if data classification is `confidential` or `restricted`, otherwise 0 | Applications table |
 | **Total** | **100** | | |
 
+### Money Movement Levels
+
+Money movement measures whether an application can **move funds**. It is scored separately from internet exposure: a public marketing site is internet-facing but moves no money, while an internal wire system moves money but is not internet-facing.
+
+| Level | Meaning | Points |
+|---|---|---|
+| `none` | Does not move money | 0 |
+| `internal_transfers` | Moves money between the organization's own accounts (e.g., general ledger, internal transfers) | 5 |
+| `outbound_payments` | Sends money outside the organization (e.g., ACH, wires, card payments, bill pay, treasury) | 10 |
+
+| Application | Internet-Facing | Money Movement | Exposure Points | Money Points |
+|---|---|---|---|---|
+| Public marketing site | Yes | `none` | 10 | 0 |
+| Customer bill pay portal | Yes | `outbound_payments` | 10 | 10 |
+| Internal wire transfer system | No | `outbound_payments` | 0 | 10 |
+| General ledger | No | `internal_transfers` | 0 | 5 |
+| HR intranet | No | `none` | 0 | 0 |
+
 ### Example
 
-A KEV-listed CVE with ransomware use and an EPSS of 0.94, on an internet-facing, criticality-5 application holding confidential data:
+A KEV-listed CVE with ransomware use and an EPSS of 0.94, on an internet-facing, criticality-5 customer bill pay application holding confidential data:
 
 | Factor | Points |
 |---|---|
-| KEV | 30 |
-| EPSS (0.94 × 25) | 23.5 |
+| KEV | 25 |
+| EPSS (0.94 × 20) | 18.8 |
 | Ransomware | 10 |
 | Criticality (5 ÷ 5 × 20) | 20 |
 | Internet-facing | 10 |
+| Money movement (`outbound_payments`) | 10 |
 | Confidential data | 5 |
-| **Risk Score** | **98.5 → Critical, fix within 7 days** |
+| **Risk Score** | **98.8 → Critical, fix within 7 days** |
 
 ---
 

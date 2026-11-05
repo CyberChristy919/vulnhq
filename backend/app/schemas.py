@@ -1,6 +1,10 @@
 from datetime import date
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
+
+# Allowed money movement levels (see docs/scoring.md)
+MoneyMovement = Literal["none", "internal_transfers", "outbound_payments"]
 
 
 class VulnerabilityOut(BaseModel):
@@ -30,6 +34,7 @@ class ApplicationOut(BaseModel):
     criticality: int
     data_classification: str | None
     internet_facing: bool
+    money_movement: MoneyMovement
 
 
 class ApplicationCreate(BaseModel):
