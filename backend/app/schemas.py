@@ -45,3 +45,4 @@ class ApplicationCreate(BaseModel):
     criticality: int = 3
     data_classification: str | None = None
     internet_facing: bool = False
+    money_movement: MoneyMovement = "none"
