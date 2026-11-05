@@ -32,6 +32,7 @@ Design tokens are defined in [`src/styles/tokens.css`](../src/styles/tokens.css)
 | **Fix what matters first** | The highest-risk work is always at the top of the screen and the top of the list. |
 | **Action over information** | Every screen answers "What should I do next?" |
 | **Prove it** | Progress, closure rates and risk reduction are always visible to leadership. |
+| **Framework-ready** | Every view can be explained in NIST CSF 2.0 and OWASP terms. See [framework alignment](framework-alignment.md). |
 
 ---
 
@@ -237,6 +238,22 @@ The core VulnHQ screen.
 - Labels go above fields, never only as placeholder text.
 - Field height 36px, Border color, 4px radius.
 - Errors: critical red text below the field with an icon, plus `aria-describedby`.
+
+### 5.8 Framework Tags
+
+Small outline chips that show which framework outcome a finding or report supports.
+
+`CSF ID.RA-05` · `OWASP A05:2025` · `BOD 22-01`
+
+| Property | Spec |
+|---|---|
+| Background | Harbor `#EAF1F4` |
+| Border | Border `#D5E0E6` |
+| Text | Slate `#52606D`, Mono 12px |
+| Radius | 4px (`--vhq-radius-sm`) |
+
+- Never use severity colors for framework tags. Frameworks describe *context*, not *risk level*.
+- Tags link to the matching section in the [framework alignment](framework-alignment.md).
 
 ---
 

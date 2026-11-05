@@ -40,6 +40,9 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 - [ ] Scanner integrations (e.g., Tenable, Qualys, Rapid7, Snyk)
 - [ ] Ticketing integrations (e.g., Jira, ServiceNow)
 - [ ] Exception and risk-acceptance workflow
+- [ ] NIST CSF 2.0 subcategory tagging and coverage view
+- [ ] OWASP Top 10:2025 classification for AppSec findings
+- [ ] OWASP Risk Rating scoring option
 
 ---
 
@@ -53,6 +56,12 @@ VulnHQ is designed to support practices from:
 | **Executive Order 14028** | Faster vulnerability response and improved visibility into software risk |
 | **CISA BOD 22-01** | Prioritizing Known Exploited Vulnerabilities with defined remediation timelines |
 | **Gartner CTEM** | Continuous scoping, discovery, prioritization, validation, and mobilization |
+| **NIST CSF 2.0** | Identify / Risk Assessment outcomes (ID.RA-01 to ID.RA-08), asset prioritization (ID.AM-05), governance oversight and reporting |
+| **OWASP Top 10:2025** | AppSec findings classified by Top 10 category via CWE mapping |
+| **OWASP Risk Rating Methodology** | Optional likelihood × impact scoring for findings without CVSS |
+| **OWASP ASVS 5.0** | VulnHQ itself is built and verified to ASVS Level 2 |
+
+See the full [framework alignment](docs/framework-alignment.md) mapping.
 
 ---
 
