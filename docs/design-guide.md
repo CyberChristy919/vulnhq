@@ -4,7 +4,7 @@
 
 This guide defines how VulnHQ looks, feels and communicates. The goal is simple: **a calm interface where risk stands out.** Security teams already deal with alert fatigue. VulnHQ should feel steady and clear, and color should be saved for what needs action.
 
-Design tokens are defined in [`src/styles/tokens.css`](../src/styles/tokens.css).
+All colors, fonts, spacing and other style values are defined as CSS variables in [`src/styles/base.css`](../src/styles/base.css).
 
 ---
 
@@ -42,7 +42,7 @@ Design tokens are defined in [`src/styles/tokens.css`](../src/styles/tokens.css)
 
 ### 2.1 Base UI
 
-| Token | Name | Hex | Use |
+| Variable | Name | Hex | Use |
 |---|---|---|---|
 | `--vhq-bg` | Mist | `#F5F8FA` | App background |
 | `--vhq-surface` | Surface | `#FFFFFF` | Cards, panels, modals |
@@ -117,7 +117,7 @@ Status uses the calm palette, not severity colors, so "Fixed" isn't confused wit
 
 ### 4.1 Spacing Scale (4px base)
 
-| Token | Value | Use |
+| Variable | Value | Use |
 |---|---|---|
 | `--vhq-space-1` | 4px | Icon-to-text gap |
 | `--vhq-space-2` | 8px | Inside badges, tight groups |
@@ -129,7 +129,7 @@ Status uses the calm palette, not severity colors, so "Fixed" isn't confused wit
 
 ### 4.2 Radius and Elevation
 
-| Token | Value | Use |
+| Variable | Value | Use |
 |---|---|---|
 | `--vhq-radius-sm` | 4px | Inputs, small buttons |
 | `--vhq-radius-md` | 8px | Cards, panels |
@@ -338,7 +338,7 @@ VulnHQ targets **WCAG 2.2 AA**.
 
 Dark mode is a **calm night palette**: the base colors change, and the severity solids stay the same so meaning doesn't shift.
 
-| Token | Light | Dark |
+| Variable | Light | Dark |
 |---|---|---|
 | `--vhq-bg` | `#F5F8FA` | `#121B22` |
 | `--vhq-surface` | `#FFFFFF` | `#1A262F` |
