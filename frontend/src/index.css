@@ -363,3 +363,31 @@ td {
 .add-result .vhq-badge {
   margin-left: var(--vhq-space-2);
 }
+
+/* Import page cards */
+.card {
+  background: var(--vhq-surface);
+  border: 1px solid var(--vhq-border);
+  border-radius: var(--vhq-radius-md);
+  box-shadow: var(--vhq-shadow-sm);
+  padding: var(--vhq-space-6);
+  margin-bottom: var(--vhq-space-6);
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--vhq-space-3);
+}
+
+.card h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.card .note {
+  margin: 0;
+}
+
+.card .add-result {
+  align-self: stretch;
+}

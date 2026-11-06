@@ -1,0 +1,154 @@
+import { useState } from 'react'
+
+// What the API sends back after importing an inventory file
+type InventoryResult = {
+  assets_created: number
+  assets_updated: number
+  software_items: number
+  findings_created: number
+  kev_findings: number
+  conditional_findings: number
+  nvd_findings: number
+  not_checked: string[]
+  needs_review: string[]
+}
+
+// What the API sends back after importing a business context file
+type ContextResult = {
+  assets_updated: number
+  not_found: string[]
+}
+
+// Reads a JSON file from your computer and sends it to the API
+async function postFile(url: string, file: File) {
+  // Remove the invisible marker some Windows editors put at the start of a file
+  const text = (await file.text()).replace(/^\uFEFF/, '')
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: text,
+  })
+  const data = await res.json()
+  if (!res.ok) {
+    // FastAPI sends a list of problems when the file isn't in the expected format
+    const detail = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail)
+    throw new Error(detail)
+  }
+  return data
+}
+
+function ImportPage() {
+  // The files picked in each box
+  const [inventoryFile, setInventoryFile] = useState<File | null>(null)
+  const [contextFile, setContextFile] = useState<File | null>(null)
+  // Which import is running: 'inventory', 'context', or '' for none
+  const [busy, setBusy] = useState('')
+  const [error, setError] = useState('')
+  const [inventory, setInventory] = useState<InventoryResult | null>(null)
+  const [context, setContext] = useState<ContextResult | null>(null)
+
+  async function importInventory() {
+    if (!inventoryFile) return
+    setBusy('inventory')
+    setError('')
+    setInventory(null)
+    try {
+      setInventory(await postFile('/api/import/inventory', inventoryFile))
+    } catch (err) {
+      setError(`Inventory import failed: ${err}`)
+    } finally {
+      setBusy('')
+    }
+  }
+
+  async function importContext() {
+    if (!contextFile) return
+    setBusy('context')
+    setError('')
+    setContext(null)
+    try {
+      setContext(await postFile('/api/import/context', contextFile))
+    } catch (err) {
+      setError(`Context import failed: ${err}`)
+    } finally {
+      setBusy('')
+    }
+  }
+
+  return (
+    <>
+      <h1>Import</h1>
+      {error && <p className="form-error">{error}</p>}
+
+      <section className="card">
+        <h2>1. Asset inventory</h2>
+        <p className="note">
+          Assets and their installed software. Each item is checked against the vetted rules, then NVD.
+        </p>
+        <input type="file" accept=".json" onChange={(e) => setInventoryFile(e.target.files?.[0] ?? null)} />
+        <button type="button" className="primary" disabled={!inventoryFile || busy !== ''} onClick={importInventory}>
+          {busy === 'inventory' ? 'Importing and checking for CVEs...' : 'Import inventory'}
+        </button>
+        {busy === 'inventory' && <p className="note">NVD lookups can take a few minutes without an API key.</p>}
+
+        {inventory && (
+          <div className="add-result">
+            <p>
+              <strong>{inventory.assets_created}</strong> assets created, <strong>{inventory.assets_updated}</strong> updated,{' '}
+              <strong>{inventory.software_items}</strong> software items checked
+            </p>
+            <p>
+              <strong>{inventory.findings_created}</strong> findings: <strong>{inventory.kev_findings}</strong> on KEV,{' '}
+              <strong>{inventory.conditional_findings}</strong> need a configuration check,{' '}
+              <strong>{inventory.nvd_findings}</strong> from NVD
+            </p>
+            {inventory.not_checked.length > 0 && (
+              <>
+                <h3>Not checked ({inventory.not_checked.length})</h3>
+                <ul>
+                  {inventory.not_checked.map((n) => (
+                    <li key={n}>{n}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {inventory.needs_review.length > 0 && (
+              <>
+                <h3>Needs review ({inventory.needs_review.length})</h3>
+                <ul>
+                  {inventory.needs_review.map((n) => (
+                    <li key={n}>{n}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+        )}
+      </section>
+
+      <section className="card">
+        <h2>2. Business context</h2>
+        <p className="note">
+          Internet exposure, money movement and data classification by hostname. Import the inventory first.
+        </p>
+        <input type="file" accept=".json" onChange={(e) => setContextFile(e.target.files?.[0] ?? null)} />
+        <button type="button" className="primary" disabled={!contextFile || busy !== ''} onClick={importContext}>
+          {busy === 'context' ? 'Importing...' : 'Import context'}
+        </button>
+
+        {context && (
+          <div className="add-result">
+            <p>
+              <strong>{context.assets_updated}</strong> assets updated
+            </p>
+            {context.not_found.length > 0 && (
+              <p className="note">Not found (import these assets first): {context.not_found.join(', ')}</p>
+            )}
+          </div>
+        )}
+      </section>
+    </>
+  )
+}
+
+export default ImportPage

@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import FixListPage from './FixListPage'
 import AssetsPage from './AssetsPage'
+import ImportPage from './ImportPage'
 
 // The pages in the sidebar. Add a new page here first.
-const PAGES = ['Fix list', 'Assets']
+const PAGES = ['Fix list', 'Assets', 'Import']
 
 function App() {
   // Which page is showing right now
@@ -27,6 +28,7 @@ function App() {
       <main>
         {page === 'Fix list' && <FixListPage />}
         {page === 'Assets' && <AssetsPage />}
+        {page === 'Import' && <ImportPage />}
       </main>
     </div>
   )
