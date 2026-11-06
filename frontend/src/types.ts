@@ -19,3 +19,17 @@ export type FixItem = {
     // Points from each scoring factor, e.g. { kev: 25, epss: 18.6 }
     breakdown: Record<string, number>
   }
+
+  // Numbers for the dashboard cards, from GET /stats
+export type Stats = {
+    assets: number
+    assets_with_findings: number
+    stale_scan_assets: number
+    stale_scan_days: number
+    open_findings: number
+    kev_findings: number
+    overdue_findings: number
+    findings_by_tier: Record<string, number>
+  }
+
+  

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { FixItem } from './types'
 import ScoreDetails from './ScoreDetails'
+import KpiCards from './KpiCards'
 
 function App() {
   const [items, setItems] = useState<FixItem[]>([])
@@ -25,6 +26,7 @@ function App() {
   return (
     <main>
       <h1>VulnHQ fix list</h1>
+      <KpiCards />
       {error && <p>Can't load the fix list: {error}. Is the API running?</p>}
       <div className="filters">
         {['', 'Critical', 'High', 'Medium', 'Low'].map((t) => (
