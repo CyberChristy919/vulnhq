@@ -14,22 +14,37 @@ type FixItem = {
 function App() {
   const [items, setItems] = useState<FixItem[]>([])
   const [error, setError] = useState('')
+  // Which tier to show; empty means all tiers
+  const [tier, setTier] = useState('')
 
-  // Runs once when the page opens: ask the API for the top 10 findings
+  // Runs when the page opens, and again whenever the tier changes
   useEffect(() => {
-    fetch('/api/fix-list?limit=10')
+    const url = tier ? `/api/fix-list?limit=25&tier=${tier}` : '/api/fix-list?limit=25'
+    fetch(url)
       .then((res) => {
         if (!res.ok) throw new Error(`API returned ${res.status}`)
         return res.json()
       })
       .then(setItems)
       .catch((err) => setError(String(err)))
-  }, [])
+  }, [tier])
 
   return (
     <main>
       <h1>VulnHQ fix list</h1>
       {error && <p>Can't load the fix list: {error}. Is the API running?</p>}
+      <div className="filters">
+        {['', 'Critical', 'High', 'Medium', 'Low'].map((t) => (
+          <button
+            key={t || 'all'}
+            type="button"
+            className={tier === t ? 'filter active' : 'filter'}
+            onClick={() => setTier(t)}
+          >
+            {t || 'All'}
+          </button>
+        ))}
+      </div>
       <table>
         <thead>
           <tr>

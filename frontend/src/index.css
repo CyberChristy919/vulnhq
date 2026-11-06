@@ -51,3 +51,35 @@ td {
   font-family: var(--vhq-font-mono);
   font-size: 13px;
 }
+
+.filters {
+  display: flex;
+  gap: var(--vhq-space-2);
+  margin-bottom: var(--vhq-space-4);
+}
+
+.filter {
+  height: 32px;
+  padding: 0 var(--vhq-space-4);
+  border: 1px solid var(--vhq-border);
+  border-radius: var(--vhq-radius-pill);
+  background: var(--vhq-surface);
+  color: var(--vhq-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.filter:hover {
+  border-color: var(--vhq-primary);
+}
+
+.filter.active {
+  background: var(--vhq-primary);
+  border-color: var(--vhq-primary);
+  color: var(--vhq-on-primary);
+}
+
+.filter:focus-visible {
+  outline: 2px solid var(--vhq-focus);
+  outline-offset: 2px;
+}
