@@ -391,3 +391,19 @@ td {
 .card .add-result {
   align-self: stretch;
 }
+
+/* Match confidence chips in the fix list */
+.chip {
+  display: inline-block;
+  font-size: 12px;
+  padding: 0 var(--vhq-space-2);
+  border-radius: var(--vhq-radius-sm);
+  border: 1px solid var(--vhq-border);
+  color: var(--vhq-text-muted);
+  background: var(--vhq-surface);
+}
+
+.chip--conditional {
+  border-style: dashed;
+  color: var(--vhq-text);
+}

@@ -50,6 +50,7 @@ function FixListPage() {
             <th>Asset</th>
             <th>Software</th>
             <th>KEV</th>
+            <th>Match</th>
           </tr>
         </thead>
         <tbody>
@@ -68,6 +69,9 @@ function FixListPage() {
               <td className="mono">{item.hostname}</td>
               <td>{item.software}</td>
               <td>{item.in_kev ? 'Yes' : ''}</td>
+              <td>
+                <span className={`chip chip--${item.confidence}`}>{item.confidence}</span>
+              </td>
             </tr>
           ))}
         </tbody>
