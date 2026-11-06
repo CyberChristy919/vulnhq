@@ -62,7 +62,7 @@ function ScoreDetails({ item, onClose }: Props) {
         <dd>{item.cvss_score ?? 'Not scored'}</dd>
         <dt>EPSS</dt>
         <dd>{epss}</dd>
-        <dt>Match</dt>
+        <dt>Confidence</dt>
         <dd>{item.confidence}</dd>
         <dt>Last scan</dt>
         <dd>{item.scan_age_days != null ? `${item.scan_age_days} days ago` : 'Unknown'}</dd>

@@ -50,7 +50,7 @@ function FixListPage() {
             <th>Asset</th>
             <th>Software</th>
             <th>KEV</th>
-            <th>Match</th>
+            <th>Confidence</th>
           </tr>
         </thead>
         <tbody>
