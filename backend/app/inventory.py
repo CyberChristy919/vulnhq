@@ -218,7 +218,7 @@ class SoftwareChecker:
 
     def check(self, asset: Asset, software: SoftwareIn) -> list[Finding]:
         created = self._match(asset, software)
-        label = f"{software.name} {software.version}"
+        label = software_label(software)
         if not created and not self.db.scalar(
             select(Finding.id).where(Finding.asset_id == asset.id, Finding.software == label).limit(1)
         ):
@@ -226,7 +226,7 @@ class SoftwareChecker:
         return created
 
     def _match(self, asset: Asset, software: SoftwareIn) -> list[Finding]:
-        label = f"{software.name} {software.version}"
+        label = software_label(software)
         created: list[Finding] = []
 
         # 1. Vetted rules
@@ -315,10 +315,17 @@ class SoftwareChecker:
                 if product and len(product[0]) >= 3 and product[0] in name
                 and ((vendor and vendor[0] in name) or len(product[0]) >= 5)]
         if hits:
-            line = (f"{software.name} {software.version}: no version match, but {len(hits)} known exploited "
+            line = (f"{software_label(software)}: no version match, but {len(hits)} known exploited "
                     f"CVEs list this product (e.g., {', '.join(hits[-3:])}). Check the version manually.")
             if line not in self.summary.needs_review:
                 self.summary.needs_review.append(line)
+
+
+def software_label(software: SoftwareIn) -> str:
+    """'Apache Tomcat 9.0.30', without repeating a version already in the name."""
+    if software.name.strip().endswith(software.version.strip()):
+        return software.name.strip()
+    return f"{software.name} {software.version}"
 
 
 def tokens(text: str | None) -> list[str]:

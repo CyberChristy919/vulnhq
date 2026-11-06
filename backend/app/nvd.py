@@ -160,18 +160,28 @@ class NvdClient:
         self.cache = _load_cache()
         self.requests_made = 0
 
-    def _get(self, url: str, params: str) -> dict:
-        wait = self.delay - (time.monotonic() - self._last)
-        if wait > 0:
-            time.sleep(wait)
+    def _get(self, url: str, params: str, attempts: int = 3) -> dict:
         headers = {"apiKey": self.api_key} if self.api_key else {}
-        try:
-            resp = httpx.get(f"{url}?{params}", headers=headers, timeout=self.timeout)
-        except httpx.HTTPError as exc:
-            raise NvdUnavailable(f"Can't reach NVD: {exc.__class__.__name__}") from exc
-        finally:
-            self._last = time.monotonic()
-            self.requests_made += 1
+        for attempt in range(1, attempts + 1):
+            wait = self.delay - (time.monotonic() - self._last)
+            if wait > 0:
+                time.sleep(wait)
+            try:
+                resp = httpx.get(f"{url}?{params}", headers=headers, timeout=self.timeout)
+            except httpx.HTTPError as exc:
+                # Networks that reset connections usually work on a retry
+                if attempt == attempts:
+                    raise NvdUnavailable(f"Can't reach NVD: {exc.__class__.__name__}") from exc
+                time.sleep(3 * attempt)
+                continue
+            finally:
+                self._last = time.monotonic()
+                self.requests_made += 1
+            if resp.status_code in (429, 503) and attempt < attempts:
+                time.sleep(10 * attempt)
+                continue
+            break
+
         if resp.status_code in (403, 429, 503):
             raise NvdUnavailable(f"NVD returned {resp.status_code} (rate limit or outage). Try again shortly.")
         if resp.status_code == 404:

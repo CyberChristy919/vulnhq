@@ -153,3 +153,34 @@ def test_wide_cisco_style_range_is_marked_broad():
     assert affects(c, "o:cisco:ios", "15.2(7)E3") == "broad"
     exact_range = cve("cpe:2.3:a:apache:tomcat:*:*:*:*:*:*:*:*", versionStartIncluding="9.0.0", versionEndExcluding="9.0.31")
     assert affects(exact_range, "a:apache:tomcat", "9.0.30") == "range"
+
+
+def test_nvd_retries_after_connection_reset(monkeypatch):
+    import httpx
+    from app import nvd
+
+    calls = {"n": 0}
+
+    class Resp:
+        status_code = 200
+
+        def json(self):
+            return {"vulnerabilities": [], "totalResults": 0, "resultsPerPage": 0}
+
+    def flaky_get(*args, **kwargs):
+        calls["n"] += 1
+        if calls["n"] < 3:
+            raise httpx.ConnectError("Connection was reset")
+        return Resp()
+
+    monkeypatch.setattr(nvd.httpx, "get", flaky_get)
+    monkeypatch.setattr(nvd.time, "sleep", lambda s: None)
+    client = nvd.NvdClient(api_key="test")
+    assert client._get(nvd.CVE_URL, "x=1") == Resp().json()
+    assert calls["n"] == 3
+
+
+def test_label_does_not_repeat_version():
+    from app.inventory import software_label
+    assert software_label(SoftwareIn(name="Red Hat Enterprise Linux 8.4", version="8.4")) == "Red Hat Enterprise Linux 8.4"
+    assert software_label(SoftwareIn(name="Apache Tomcat", version="9.0.30")) == "Apache Tomcat 9.0.30"
