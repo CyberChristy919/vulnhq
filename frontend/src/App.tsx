@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import FixListPage from './FixListPage'
+import AssetsPage from './AssetsPage'
 
 // The pages in the sidebar. Add a new page here first.
 const PAGES = ['Fix list', 'Assets']
@@ -25,7 +26,7 @@ function App() {
       </nav>
       <main>
         {page === 'Fix list' && <FixListPage />}
-        {page === 'Assets' && <h1>Assets (coming next)</h1>}
+        {page === 'Assets' && <AssetsPage />}
       </main>
     </div>
   )

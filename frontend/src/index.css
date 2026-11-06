@@ -283,3 +283,9 @@ td {
   color: var(--vhq-on-primary);
   font-weight: 600;
 }
+
+/* Scan older than 90 days */
+.stale {
+  color: var(--vhq-high-tint-text);
+  font-weight: 600;
+}

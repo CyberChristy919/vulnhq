@@ -32,4 +32,24 @@ export type Stats = {
     findings_by_tier: Record<string, number>
   }
 
+  // One asset from GET /assets, with its software and finding counts
+export type Asset = {
+    hostname: string
+    asset_id: string | null
+    asset_type: string | null
+    department: string | null
+    os: string | null
+    os_version: string | null
+    criticality: number
+    internet_facing: boolean
+    money_movement: string
+    data_classification: string | null
+    last_scan_date: string | null
+    scan_age_days: number | null
+    software: { name: string; version: string }[]
+    open_findings: number
+    kev_findings: number
+    tiers: Record<string, number>
+    top_score: number
+  }
   
