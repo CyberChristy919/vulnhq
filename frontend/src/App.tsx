@@ -1,79 +1,33 @@
-import { useEffect, useState } from 'react'
-import type { FixItem } from './types'
-import ScoreDetails from './ScoreDetails'
-import KpiCards from './KpiCards'
+import { useState } from 'react'
+import FixListPage from './FixListPage'
+
+// The pages in the sidebar. Add a new page here first.
+const PAGES = ['Fix list', 'Assets']
 
 function App() {
-  const [items, setItems] = useState<FixItem[]>([])
-  const [error, setError] = useState('')
-  // Which tier to show; empty means all tiers
-  const [tier, setTier] = useState('')
-  // The finding whose score details are open; null means the panel is closed
-  const [selected, setSelected] = useState<FixItem | null>(null)
-
-  // Runs when the page opens, and again whenever the tier changes
-  useEffect(() => {
-    const url = tier ? `/api/fix-list?limit=25&tier=${tier}` : '/api/fix-list?limit=25'
-    fetch(url)
-      .then((res) => {
-        if (!res.ok) throw new Error(`API returned ${res.status}`)
-        return res.json()
-      })
-      .then(setItems)
-      .catch((err) => setError(String(err)))
-  }, [tier])
+  // Which page is showing right now
+  const [page, setPage] = useState('Fix list')
 
   return (
-    <main>
-      <h1>VulnHQ fix list</h1>
-      <KpiCards />
-      {error && <p>Can't load the fix list: {error}. Is the API running?</p>}
-      <div className="filters">
-        {['', 'Critical', 'High', 'Medium', 'Low'].map((t) => (
+    <div className="layout">
+      <nav className="sidebar">
+        <div className="brand">VulnHQ</div>
+        {PAGES.map((p) => (
           <button
-            key={t || 'all'}
+            key={p}
             type="button"
-            className={tier === t ? 'filter active' : 'filter'}
-            onClick={() => setTier(t)}
+            className={page === p ? 'nav-item active' : 'nav-item'}
+            onClick={() => setPage(p)}
           >
-            {t || 'All'}
+            {p}
           </button>
         ))}
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Tier</th>
-            <th>Score</th>
-            <th>CVE</th>
-            <th>Asset</th>
-            <th>Software</th>
-            <th>KEV</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <tr
-              key={item.finding_id}
-              onClick={() => setSelected(item)}
-              className={selected?.finding_id === item.finding_id ? 'row selected' : 'row'}
-            >
-              <td>{index + 1}</td>
-              <td>
-                <span className={`vhq-badge vhq-badge--${item.tier.toLowerCase()}`}>{item.tier}</span>
-              </td>
-              <td>{item.risk_score}</td>
-              <td className="mono">{item.cve_id}</td>
-              <td className="mono">{item.hostname}</td>
-              <td>{item.software}</td>
-              <td>{item.in_kev ? 'Yes' : ''}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {selected && <ScoreDetails item={selected} onClose={() => setSelected(null)} />}
-    </main>
+      </nav>
+      <main>
+        {page === 'Fix list' && <FixListPage />}
+        {page === 'Assets' && <h1>Assets (coming next)</h1>}
+      </main>
+    </div>
   )
 }
 
