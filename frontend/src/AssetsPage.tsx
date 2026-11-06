@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Asset } from './types'
+import AssetDetails from './AssetDetails'
 
 // Scans older than this many days are flagged as stale
 const STALE_DAYS = 90
@@ -7,9 +8,12 @@ const STALE_DAYS = 90
 function AssetsPage() {
   const [assets, setAssets] = useState<Asset[]>([])
   const [error, setError] = useState('')
+  // The asset whose details are open; null means the panel is closed
+  const [selectedHost, setSelectedHost] = useState<string | null>(null)
+  const selected = assets.find((a) => a.hostname === selectedHost) ?? null
 
-  // Runs once when the page opens: get all assets, riskiest first
-  useEffect(() => {
+  // Gets all assets, riskiest first. A named function so we can call it again later.
+  function loadAssets() {
     fetch('/api/assets')
       .then((res) => {
         if (!res.ok) throw new Error(`API returned ${res.status}`)
@@ -17,6 +21,11 @@ function AssetsPage() {
       })
       .then(setAssets)
       .catch((err) => setError(String(err)))
+  }
+
+  // Runs once when the page opens
+  useEffect(() => {
+    loadAssets()
   }, [])
 
   return (
@@ -40,7 +49,11 @@ function AssetsPage() {
         </thead>
         <tbody>
           {assets.map((a) => (
-            <tr key={a.hostname} className="row">
+            <tr
+              key={a.hostname}
+              onClick={() => setSelectedHost(a.hostname)}
+              className={selected?.hostname === a.hostname ? 'row selected' : 'row'}
+            >
               <td className="mono">{a.hostname}</td>
               <td>{a.department ?? ''}</td>
               <td>{a.criticality} of 5</td>
@@ -57,6 +70,7 @@ function AssetsPage() {
           ))}
         </tbody>
       </table>
+      {selected && <AssetDetails asset={selected} onClose={() => setSelectedHost(null)} onChanged={loadAssets} />}
     </>
   )
 }
