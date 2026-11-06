@@ -26,15 +26,20 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 
 ### Current (MVP)
 - [x] Import assets and findings (JSON), with software-version to CVE matching (vetted rules plus live NVD lookup). See [importing](docs/importing.md).
-- [ ] Asset inventory with business criticality ratings
-- [ ] Risk-based prioritization score
-- [ ] Ranked fix list dashboard
+- [x] Asset inventory with business criticality ratings (business context file)
+- [x] Risk-based prioritization score (0 to 100, with factor breakdown)
+- [x] Ranked fix list page with tier filters (Critical / High / Medium / Low)
+- [x] Score details panel showing why each finding ranks where it does
+- [ ] Dashboard KPI cards (open findings, KEV, overdue, stale scans)
+- [ ] Assets page with an "Add software" form
+- [ ] JSON import page in the UI
+- [ ] Sidebar navigation and dark mode
 - [ ] Remediation status tracking (Open → In Progress → Fixed → Verified)
 
 ### Planned
 - [x] CISA Known Exploited Vulnerabilities (KEV) catalog enrichment
 - [x] EPSS (Exploit Prediction Scoring System) enrichment
-- [ ] SLA tracking by severity and asset tier
+- [x] SLA due dates by remediation tier (fix-by date, days remaining, overdue flag)
 - [ ] Owner assignment and notifications
 - [ ] Executive reporting: closure rate, MTTR, risk trend
 - [ ] Scanner integrations (e.g., Tenable, Qualys, Rapid7, Snyk)
@@ -116,35 +121,82 @@ VulnHQ uses a calming base palette with standard red / orange / yellow / green s
 
 ### Prerequisites
 - Git
-- Python 3.11+ *(if using a Python backend)*
-- Node.js 20+ *(if using a JavaScript frontend)*
+- Python 3.12
+- Node.js 20+
+- PostgreSQL 16
 
-### Installation
+### Installation (Windows PowerShell)
 
-```bash
+```powershell
 # Clone the repository
 git clone https://github.com/CyberChristy919/vulnhq.git
 cd vulnhq
 
-# Install dependencies (update once the stack is finalized)
-# pip install -r requirements.txt
-# npm install
+# Backend
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+
+# Frontend
+cd ..\frontend
+npm install
 ```
+
+Create `backend/.env` (never commit it):
+
+```
+DATABASE_URL=postgresql+psycopg://postgres:<password>@localhost:5432/vulnapp
+NVD_API_KEY=
+```
+
+A free [NVD API key](https://nvd.nist.gov/developers/request-an-api-key) makes live NVD lookups about 10 times faster. It is optional.
+
+### Loading Data
+
+Run these from the `backend` folder with the virtual environment active:
+
+```powershell
+python -m scripts.migrate_db        # add any new database columns
+python -m scripts.load_kev          # CISA KEV catalog
+python -m scripts.import_inventory <inventory.json> --context <context.json>
+python -m scripts.load_epss         # EPSS scores (takes a few minutes)
+```
+
+Other helpers:
+
+| Script | What it does |
+|---|---|
+| `scripts.check_nvd` | Checks that the NVD API is reachable before a demo |
+| `scripts.add_software` | Adds one software item to an asset and matches it to CVEs |
+| `scripts.reset_demo` | Clears all demo data (type `RESET` to confirm) |
+
+See [importing](docs/importing.md) for file formats.
 
 ### Running Locally
 
-```bash
-# Update with the actual start commands
-# python app.py
-# npm run dev
+Use two terminals.
+
+```powershell
+# Terminal 1: API on http://127.0.0.1:8000 (docs at /docs)
+cd backend
+.\.venv\Scripts\Activate.ps1
+uvicorn app.main:app --reload
+
+# Terminal 2: UI on http://localhost:5173
+cd frontend
+npm run dev
 ```
+
+The Vite dev server forwards `/api/*` requests to the FastAPI backend.
+
+**Troubleshooting:** If the API hangs after terminals were closed, stuck Python processes may be holding the database. Run `Stop-Process -Name python -Force`, then start uvicorn again.
 
 ### Running Tests
 
-```bash
-# Update with the actual test commands
-# pytest
-# npm test
+```powershell
+cd backend
+pytest
 ```
 
 ---
@@ -153,15 +205,32 @@ cd vulnhq
 
 ```
 vulnhq/
-├── docs/              # Documentation, scoring model, architecture
-├── src/               # Application source code
-├── tests/             # Unit, integration, and end-to-end tests
-├── sample-data/       # Sample findings and assets for demos
-├── .github/workflows/ # CI/CD pipelines
+├── backend/
+│   ├── app/           # FastAPI app: models, scoring, KEV/EPSS/NVD matching, API
+│   ├── data/          # Matching rules and CPE aliases
+│   ├── scripts/       # Load, import, migrate and reset scripts
+│   └── tests/         # pytest tests
+├── frontend/
+│   └── src/           # React UI: fix list (App.tsx), score panel (ScoreDetails.tsx)
+├── src/styles/        # Shared design tokens (base.css)
+├── docs/              # Scoring model, design guide, importing, framework alignment
+├── sample-data/       # Demo assets (private/ is gitignored and never committed)
 └── README.md
 ```
 
 ---
+
+## Progress
+
+**Done so far**
+- Backend: data model, KEV and EPSS enrichment, risk scoring, SLA due dates, inventory import with vetted rules plus live NVD lookup, business context import
+- Frontend: ranked fix list, tier filters, score details panel with factor bars
+
+**Next up**
+- Dashboard KPI cards and Assets page (backend endpoints in progress)
+- "Add software" form and JSON import page
+- Sidebar navigation, dark mode and page title
+- GitHub Actions CI
 
 ## Roadmap
 
