@@ -1,21 +1,14 @@
 import { useEffect, useState } from 'react'
-
-// One row from the API's /fix-list
-type FixItem = {
-  finding_id: number
-  cve_id: string
-  hostname: string
-  software: string | null
-  in_kev: boolean
-  risk_score: number
-  tier: string
-}
+import type { FixItem } from './types'
+import ScoreDetails from './ScoreDetails'
 
 function App() {
   const [items, setItems] = useState<FixItem[]>([])
   const [error, setError] = useState('')
   // Which tier to show; empty means all tiers
   const [tier, setTier] = useState('')
+  // The finding whose score details are open; null means the panel is closed
+  const [selected, setSelected] = useState<FixItem | null>(null)
 
   // Runs when the page opens, and again whenever the tier changes
   useEffect(() => {
@@ -59,11 +52,15 @@ function App() {
         </thead>
         <tbody>
           {items.map((item, index) => (
-            <tr key={item.finding_id}>
+            <tr
+              key={item.finding_id}
+              onClick={() => setSelected(item)}
+              className={selected?.finding_id === item.finding_id ? 'row selected' : 'row'}
+            >
               <td>{index + 1}</td>
               <td>
-  <span className={`vhq-badge vhq-badge--${item.tier.toLowerCase()}`}>{item.tier}</span>
-</td>
+                <span className={`vhq-badge vhq-badge--${item.tier.toLowerCase()}`}>{item.tier}</span>
+              </td>
               <td>{item.risk_score}</td>
               <td className="mono">{item.cve_id}</td>
               <td className="mono">{item.hostname}</td>
@@ -73,6 +70,7 @@ function App() {
           ))}
         </tbody>
       </table>
+      {selected && <ScoreDetails item={selected} onClose={() => setSelected(null)} />}
     </main>
   )
 }
