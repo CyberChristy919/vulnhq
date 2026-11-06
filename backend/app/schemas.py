@@ -53,6 +53,7 @@ class FixListItem(BaseModel):
     cve_id: str
     vulnerability_name: str | None
     in_kev: bool
+    ransomware: bool = False
     cvss_score: float | None
     epss_score: float | None
     hostname: str
@@ -74,3 +75,29 @@ class FixListItem(BaseModel):
     overdue: bool
     # Points from each factor, so users can see why a finding ranks high
     breakdown: dict[str, float]
+
+
+class SoftwareOut(BaseModel):
+    name: str
+    version: str
+
+
+class AssetSummary(BaseModel):
+    hostname: str
+    asset_id: str | None
+    asset_type: str | None
+    department: str | None
+    os: str | None
+    os_version: str | None
+    criticality: int
+    internet_facing: bool
+    money_movement: str
+    data_classification: str | None
+    last_scan_date: date | None
+    scan_age_days: int | None
+    software: list[SoftwareOut]
+    open_findings: int
+    kev_findings: int
+    # Open findings per tier: Critical, High, Medium, Low
+    tiers: dict[str, int]
+    top_score: float

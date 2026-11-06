@@ -20,7 +20,14 @@ from app.inventory import (
     apply_context,
     import_inventory,
 )
-from app.schemas import ApplicationCreate, ApplicationOut, FixListItem, VulnerabilityOut
+from app.schemas import (
+    ApplicationCreate,
+    ApplicationOut,
+    AssetSummary,
+    FixListItem,
+    SoftwareOut,
+    VulnerabilityOut,
+)
 from app.scoring import ScoreInput, calculate_score, due_date
 
 
@@ -36,7 +43,7 @@ app = FastAPI(title="VulnHQ API", lifespan=lifespan)
 # Lets the React dev server call this API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -142,13 +149,8 @@ def import_context_file(payload: ContextFile, db: Session = Depends(get_db)):
 
 # ---------- Fix List (ranked findings) ----------
 
-@app.get("/fix-list", response_model=list[FixListItem])
-def fix_list(
-    status: str = "open",
-    tier: str | None = None,
-    limit: int = Query(100, le=1000),
-    db: Session = Depends(get_db),
-):
+def scored_findings(db: Session, status: str = "open", hostname: str | None = None) -> list[FixListItem]:
+    """All findings with their VulnHQ Risk Score, highest risk first."""
     stmt = (
         select(models.Finding)
         .options(
@@ -157,6 +159,8 @@ def fix_list(
         )
         .where(models.Finding.status == status)
     )
+    if hostname:
+        stmt = stmt.join(models.Asset).where(models.Asset.hostname == hostname)
     findings = db.scalars(stmt).unique().all()
 
     today = date.today()
@@ -175,8 +179,6 @@ def fix_list(
                 data_classification=app_.data_classification if app_ else asset.data_classification,
             )
         )
-        if tier and result.tier.lower() != tier.lower():
-            continue
         first_seen = f.first_seen.date()
         due = due_date(first_seen, result.sla_days)
         items.append(
@@ -185,6 +187,7 @@ def fix_list(
                 cve_id=vuln.cve_id,
                 vulnerability_name=vuln.name,
                 in_kev=vuln.in_kev,
+                ransomware=bool(vuln.ransomware_use),
                 cvss_score=vuln.cvss_score,
                 epss_score=vuln.epss_score,
                 hostname=asset.hostname,
@@ -209,7 +212,68 @@ def fix_list(
 
     # Highest risk first; earliest due date breaks ties
     items.sort(key=lambda i: (-i.risk_score, i.due_date))
+    return items
+
+
+@app.get("/fix-list", response_model=list[FixListItem])
+def fix_list(
+    status: str = "open",
+    tier: str | None = None,
+    hostname: str | None = None,
+    limit: int = Query(100, le=1000),
+    db: Session = Depends(get_db),
+):
+    items = scored_findings(db, status, hostname)
+    if tier:
+        items = [i for i in items if i.tier.lower() == tier.lower()]
     return items[:limit]
+
+
+# ---------- Assets ----------
+
+STALE_SCAN_DAYS = 90
+
+
+@app.get("/assets", response_model=list[AssetSummary])
+def list_assets(db: Session = Depends(get_db)):
+    assets = db.scalars(
+        select(models.Asset).options(joinedload(models.Asset.software)).order_by(models.Asset.hostname)
+    ).unique().all()
+    by_host: dict[str, list[FixListItem]] = {}
+    for item in scored_findings(db):
+        by_host.setdefault(item.hostname, []).append(item)
+
+    today = date.today()
+    out = []
+    for a in assets:
+        items = by_host.get(a.hostname, [])
+        tiers = {t: 0 for t in ("Critical", "High", "Medium", "Low")}
+        for i in items:
+            tiers[i.tier] += 1
+        out.append(
+            AssetSummary(
+                hostname=a.hostname,
+                asset_id=a.external_id,
+                asset_type=a.asset_type,
+                department=a.department,
+                os=a.os,
+                os_version=a.os_version,
+                criticality=a.criticality,
+                internet_facing=bool(a.internet_facing),
+                money_movement=a.money_movement or "none",
+                data_classification=a.data_classification,
+                last_scan_date=a.last_scan_date,
+                scan_age_days=(today - a.last_scan_date).days if a.last_scan_date else None,
+                software=[SoftwareOut(name=s.name, version=s.version) for s in a.software],
+                open_findings=len(items),
+                kev_findings=sum(i.in_kev for i in items),
+                tiers=tiers,
+                top_score=max((i.risk_score for i in items), default=0),
+            )
+        )
+    # Riskiest assets first
+    out.sort(key=lambda a: (-a.top_score, -a.open_findings, a.hostname))
+    return out
 
 
 # ---------- Dashboard stats ----------
@@ -221,9 +285,26 @@ def stats(db: Session = Depends(get_db)):
     kev = db.scalar(select(func.count()).select_from(V).where(V.in_kev.is_(True)))
     ransomware = db.scalar(select(func.count()).select_from(V).where(V.ransomware_use.is_(True)))
     apps = db.scalar(select(func.count()).select_from(models.Application))
+    assets = db.scalars(select(models.Asset)).all()
+    items = scored_findings(db)
+
+    today = date.today()
+    tiers = {t: 0 for t in ("Critical", "High", "Medium", "Low")}
+    for i in items:
+        tiers[i.tier] += 1
     return {
         "total_vulnerabilities": total,
         "kev_count": kev,
         "ransomware_linked": ransomware,
         "applications": apps,
+        "assets": len(assets),
+        "assets_with_findings": len({i.hostname for i in items}),
+        "stale_scan_assets": sum(
+            1 for a in assets if a.last_scan_date and (today - a.last_scan_date).days > STALE_SCAN_DAYS
+        ),
+        "stale_scan_days": STALE_SCAN_DAYS,
+        "open_findings": len(items),
+        "kev_findings": sum(i.in_kev for i in items),
+        "overdue_findings": sum(i.overdue for i in items),
+        "findings_by_tier": tiers,
     }
