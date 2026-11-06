@@ -103,24 +103,24 @@ function ImportPage() {
               <strong>{inventory.nvd_findings}</strong> from NVD
             </p>
             {inventory.not_checked.length > 0 && (
-              <>
-                <h3>Not checked ({inventory.not_checked.length})</h3>
+            <details>
+                <summary>Not checked ({inventory.not_checked.length})</summary>
                 <ul>
                   {inventory.not_checked.map((n) => (
                     <li key={n}>{n}</li>
                   ))}
                 </ul>
-              </>
+              </details>
             )}
             {inventory.needs_review.length > 0 && (
-              <>
-                <h3>Needs review ({inventory.needs_review.length})</h3>
+              <details>
+                <summary>Needs review ({inventory.needs_review.length})</summary>
                 <ul>
                   {inventory.needs_review.map((n) => (
                     <li key={n}>{n}</li>
                   ))}
                 </ul>
-              </>
+              </details>
             )}
           </div>
         )}
