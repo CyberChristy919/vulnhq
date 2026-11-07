@@ -30,10 +30,12 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 - [x] Risk-based prioritization score (0 to 100, with factor breakdown)
 - [x] Ranked fix list page with tier filters (Critical / High / Medium / Low)
 - [x] Score details panel showing why each finding ranks where it does
-- [ ] Dashboard KPI cards (open findings, KEV, overdue, stale scans)
-- [ ] Assets page with an "Add software" form
-- [ ] JSON import page in the UI
-- [ ] Sidebar navigation and dark mode
+- [x] Dashboard KPI cards (critical open, known exploited, overdue, stale scans, open findings)
+- [x] Confidence column on every finding (confirmed / conditional / nvd)
+- [x] Assets page with stale-scan flags, asset details panel and an "Add software" form
+- [x] JSON import page in the UI (inventory and business context), with a check for files that have no software
+- [x] Sidebar navigation; side panels close with Escape
+- [ ] Dark mode
 - [ ] Remediation status tracking (Open → In Progress → Fixed → Verified)
 
 ### Planned
@@ -113,7 +115,7 @@ VulnHQ uses a calming base palette with standard red / orange / yellow / green s
 | Backend | Python 3.12, FastAPI, SQLAlchemy |
 | Database | PostgreSQL 16 |
 | Testing | pytest (backend); frontend testing TBD |
-| CI/CD | GitHub Actions |
+| CI/CD | GitHub Actions (planned) |
 
 ---
 
@@ -192,6 +194,32 @@ The Vite dev server forwards `/api/*` requests to the FastAPI backend.
 
 **Troubleshooting:** If the API hangs after terminals were closed, stuck Python processes may be holding the database. Run `Stop-Process -Name python -Force`, then start uvicorn again.
 
+### Using VulnHQ
+
+| Page | What it shows |
+|---|---|
+| **Fix list** | KPI cards, then findings ranked by risk score, with tier filters. Click a row for the score breakdown. |
+| **Assets** | Every asset, riskiest first. Scans older than 90 days are flagged. Click an asset to see its software and add new software, which is checked for CVEs right away. |
+| **Import** | Upload an asset inventory JSON, then a business context JSON. Shows what was created, plus software that couldn't be checked or needs review. |
+
+**Confidence** tells you how sure VulnHQ is that a CVE applies to that software version:
+
+| Confidence | Meaning |
+|---|---|
+| **confirmed** | A vetted rule matches this exact version, with no special configuration needed |
+| **conditional** | The version is affected, but exploitation needs a specific setting; check the configuration |
+| **nvd** | Matched from a live NVD lookup and not yet reviewed by a vetted rule |
+
+The risk score says how bad a finding would be. Confidence says how sure we are that it applies.
+
+### Demo Walkthrough
+
+1. Reset: `python -m scripts.reset_demo` (type `RESET`). CVE, KEV and EPSS data are kept.
+2. **Import** page: import the inventory file, then the business context file. Context moves findings on payment and sensitive-data systems up a tier.
+3. **Fix list**: walk through the top findings and open one to show why it ranks there.
+4. **Assets**: point out stale scans on critical systems.
+5. Add software live on the **Assets** page and show the new finding appear in the fix list.
+
 ### Running Tests
 
 ```powershell
@@ -211,7 +239,8 @@ vulnhq/
 │   ├── scripts/       # Load, import, migrate and reset scripts
 │   └── tests/         # pytest tests
 ├── frontend/
-│   └── src/           # React UI: fix list (App.tsx), score panel (ScoreDetails.tsx)
+│   └── src/           # React UI: App.tsx (sidebar), FixListPage, AssetsPage, ImportPage,
+│                      #   KpiCards, ScoreDetails and AssetDetails panels, useEscape hook
 ├── src/styles/        # Shared design tokens (base.css)
 ├── docs/              # Scoring model, design guide, importing, framework alignment
 ├── sample-data/       # Demo assets (private/ is gitignored and never committed)
@@ -224,13 +253,14 @@ vulnhq/
 
 **Done so far**
 - Backend: data model, KEV and EPSS enrichment, risk scoring, SLA due dates, inventory import with vetted rules plus live NVD lookup, business context import
-- Frontend: ranked fix list, tier filters, score details panel with factor bars
+- Backend API: fix list (with tier and hostname filters), assets summary, dashboard stats, add software, JSON imports
+- Frontend: sidebar navigation; Fix list with KPI cards, tier filters, confidence column and score details panel; Assets page with details panel and "Add software" form; Import page; Escape closes panels
 
 **Next up**
-- Dashboard KPI cards and Assets page (backend endpoints in progress)
-- "Add software" form and JSON import page
-- Sidebar navigation, dark mode and page title
+- Dark mode
+- Compare progress against the assignment and the SRS
 - GitHub Actions CI
+- Remediation status tracking
 
 ## Roadmap
 
