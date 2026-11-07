@@ -53,7 +53,16 @@ function ImportPage() {
     setError('')
     setInventory(null)
     try {
-      setInventory(await postFile('/api/import/inventory', inventoryFile))
+        // Check the file before sending it: count the software on every asset
+        const parsed = JSON.parse((await inventoryFile.text()).replace(/^\uFEFF/, ''))
+        const softwareCount = (parsed.assets ?? []).reduce(
+          (total: number, a: { installed_software?: unknown[] }) => total + (a.installed_software?.length ?? 0),
+          0,
+        )
+        if (softwareCount === 0) {
+          throw new Error('This file has no installed_software lists, so nothing can be checked for CVEs. Is it the right file?')
+        }
+        setInventory(await postFile('/api/import/inventory', inventoryFile))
     } catch (err) {
       setError(`Inventory import failed: ${err}`)
     } finally {
