@@ -1,4 +1,5 @@
 import type { FixItem } from './types'
+import { useEscape } from './useEscape'
 
 // Each scoring factor: key from the API, label, and maximum points (see docs/scoring.md)
 const FACTORS: [string, string, number][] = [
@@ -17,6 +18,7 @@ type Props = {
 }
 
 function ScoreDetails({ item, onClose }: Props) {
+  useEscape(onClose)
   const epss =
     item.epss_score != null
       ? `${(item.epss_score * 100).toFixed(1)}% chance of exploitation in the next 30 days`

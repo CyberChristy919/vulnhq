@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Asset } from './types'
+import { useEscape } from './useEscape'
 
 type Props = {
   asset: Asset
@@ -15,6 +16,7 @@ type AddResult = {
 }
 
 function AssetDetails({ asset, onClose, onChanged }: Props) {
+  useEscape(onClose)
   // What's typed in the form
   const [name, setName] = useState('')
   const [version, setVersion] = useState('')
