@@ -299,6 +299,28 @@ vulnhq/
 
 ---
 
+## Demo Scope (Monday)
+
+Build through Sunday, then switch to the presentation and docs. Goal: answer the 10 assignment questions (SRS Section 11) with deterministic views, no AI agent.
+
+**Saturday**
+- [ ] Replace BOD 22-01 with BOD 26-04 in all docs
+- [ ] BOD 26-04 tier per finding from [`bod2604_matrix.json`](backend/data/bod2604_matrix.json): add `automatable` and `technical_impact` to the vetted rules, explicit Unknown exposure (worst case plus flag), Tier and Deadline columns
+- [ ] KEV past-due flag and KPI card (Q5)
+
+**Sunday**
+- [ ] Confidence levels Confirmed / Likely / Uncertain, "Needs verification" tab, ruled-out count
+- [ ] Package-level patch plan with before / after (Q3, Q8)
+- [ ] "Why it ranks here" sentence
+- [ ] Filters: business unit, asset type, CVSS sort, stale + high (Q1, Q4, Q7, Q9, Q10)
+- [ ] Stretch: template CISO summary (Q6), as-of date in header, "What this tool does not do," GitHub Actions CI
+
+**Stop rule:** If the tier and patch plan aren't working by Sunday evening, freeze and demo what works.
+
+**Scope cuts for the roadmap slide:** AI question agent, owner sections (SRS 5.11 to 5.24), scanner and ticketing integrations, notifications, remediation workflow, dark mode.
+
+---
+
 ## Progress
 
 **Done so far**

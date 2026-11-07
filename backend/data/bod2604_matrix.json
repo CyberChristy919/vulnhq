@@ -1,0 +1,55 @@
+{
+  "_about": "CISA BOD 26-04 Appendix A, Table 1: Remediation Timelines. Each asset-vulnerability pair is looked up by its four values. Days are calendar days. Transcribed from the table image on the CISA directive page; do not edit rows without re-checking the source.",
+  "directive": "BOD 26-04: Prioritizing Security Updates Based on Risk",
+  "source": "https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk",
+  "table_image": "https://www.cisa.gov/sites/default/files/2026-06/BOD_26-04_Table_1_Remediation_Timelines_0.png",
+  "issued": "2026-06-10",
+  "timelines_effective": "2026-12-07",
+  "matrix_version": "2026-11-07.1",
+  "verified": "2026-11-07",
+  "supersedes": ["BOD 19-02", "BOD 22-01"],
+
+  "clock_start": "Whichever comes first: the date CISA added the CVE to KEV, or the date the vulnerability was first detected on the asset.",
+  "forensic_triage_note": "'3 days & forensic triage' means remediate or mitigate within 3 days and triage the asset for signs of compromise.",
+
+  "variables": {
+    "publicly_exposed": "Yes if the asset is reachable by unauthenticated or untrusted entities over public networks such as the internet.",
+    "in_kev": "Yes if the CVE is in the CISA Known Exploited Vulnerabilities catalog.",
+    "automatable": "SSVC 'Automatable' value from CISA Vulnrichment (yes / no).",
+    "technical_impact": "SSVC 'Technical Impact' value from CISA Vulnrichment (total / partial)."
+  },
+
+  "tiers": {
+    "1": {"label": "3 days & forensic triage", "days": 3, "forensic_triage": true},
+    "2": {"label": "3 days", "days": 3, "forensic_triage": false},
+    "3": {"label": "14 days", "days": 14, "forensic_triage": false},
+    "4": {"label": "60 days", "days": 60, "forensic_triage": false},
+    "5": {"label": "Fix on system upgrade", "days": null, "forensic_triage": false}
+  },
+
+  "rows": [
+    {"row": 1,  "publicly_exposed": true,  "in_kev": true,  "automatable": true,  "technical_impact": "total",   "tier": 1},
+    {"row": 2,  "publicly_exposed": true,  "in_kev": true,  "automatable": true,  "technical_impact": "partial", "tier": 2},
+    {"row": 3,  "publicly_exposed": true,  "in_kev": true,  "automatable": false, "technical_impact": "total",   "tier": 1},
+    {"row": 4,  "publicly_exposed": true,  "in_kev": true,  "automatable": false, "technical_impact": "partial", "tier": 3},
+    {"row": 5,  "publicly_exposed": true,  "in_kev": false, "automatable": true,  "technical_impact": "total",   "tier": 2},
+    {"row": 6,  "publicly_exposed": true,  "in_kev": false, "automatable": true,  "technical_impact": "partial", "tier": 3},
+    {"row": 7,  "publicly_exposed": true,  "in_kev": false, "automatable": false, "technical_impact": "total",   "tier": 3},
+    {"row": 8,  "publicly_exposed": true,  "in_kev": false, "automatable": false, "technical_impact": "partial", "tier": 4},
+    {"row": 9,  "publicly_exposed": false, "in_kev": true,  "automatable": true,  "technical_impact": "total",   "tier": 1},
+    {"row": 10, "publicly_exposed": false, "in_kev": true,  "automatable": true,  "technical_impact": "partial", "tier": 3},
+    {"row": 11, "publicly_exposed": false, "in_kev": true,  "automatable": false, "technical_impact": "total",   "tier": 3},
+    {"row": 12, "publicly_exposed": false, "in_kev": true,  "automatable": false, "technical_impact": "partial", "tier": 3},
+    {"row": 13, "publicly_exposed": false, "in_kev": false, "automatable": true,  "technical_impact": "total",   "tier": 4},
+    {"row": 14, "publicly_exposed": false, "in_kev": false, "automatable": true,  "technical_impact": "partial", "tier": 4},
+    {"row": 15, "publicly_exposed": false, "in_kev": false, "automatable": false, "technical_impact": "total",   "tier": 5},
+    {"row": 16, "publicly_exposed": false, "in_kev": false, "automatable": false, "technical_impact": "partial", "tier": 5}
+  ],
+
+  "unknown_values": {
+    "_about": "VulnHQ policy, not part of the directive (SRS FR-PRI-08, A2). When a value is unknown, evaluate every possible value, use the most urgent tier (lowest number), and flag the finding.",
+    "policy": "most_urgent",
+    "flag_text": "Tier assumes the worst case for: {fields}. Confirm to get the exact deadline.",
+    "edge_devices_presumed_exposed": true
+  }
+}
