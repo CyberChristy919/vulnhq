@@ -51,6 +51,56 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 - [ ] OWASP Top 10:2025 classification for AppSec findings
 - [ ] OWASP Risk Rating scoring option
 
+### Added from SRS review (v1 and v1.2)
+See the full [SRS gap analysis](docs/srs-gap-analysis.md) for requirement IDs.
+
+**Prioritization and matching**
+- [ ] BOD 26-04 tier per finding (exposure, KEV, automatable, technical impact) from a versioned matrix file, with the score ordering work inside each tier (SRS Section 9)
+- [ ] Add CVSS and time pressure to the score; plain-language "why it ranks here" sentence
+- [ ] Show the KEV due date and flag it past due, separately from the company SLA
+- [ ] Explicit Unknown exposure; compute the tier both ways and show the more urgent one
+- [ ] Confidence levels Confirmed / Likely / Uncertain / Ruled out, with a separate "needs verification" lane
+- [ ] Keep ruled-out CVE candidates with the reason instead of skipping them
+- [ ] Coverage gaps with a recommended data source; distro backport handling (for example OpenSSL on RHEL)
+- [ ] Vendor version translators (Java, Exchange CU, Cisco trains, OpenSSL letters)
+
+**Data and enrichment**
+- [ ] Data-quality report on import (counts, missing fields, departments vs. business units)
+- [ ] Configurable as-of date; show it on every page
+- [ ] Store KEV catalog version, raw NVD responses, EPSS percentile and model version
+- [ ] SSVC Automatable and Technical Impact from CISA Vulnrichment
+- [ ] CWE, MITRE ATT&CK and CTEM stage mapping per finding
+- [ ] End-of-support flags; maintenance groups; environment (prod / dev)
+- [ ] Daily KEV refresh; mark NVD cache entries older than 7 days stale
+
+**Answers, trust and reporting**
+- [ ] Natural-language questions answered by a deterministic router plus LLM, covering the 10 assignment questions (SRS Section 11)
+- [ ] Citations and an evidence bundle per finding; answer verifier with Pass / Fail
+- [ ] Package-level patch plan (package, target version, hosts, risk removed) and "simulate patch"
+- [ ] Risk response type, scenario (routine, emergency patch, emergency mitigation, unpatchable) and forensic triage checklist for top-tier KEV findings
+- [ ] Business-unit summary, 3-sentence cited CISO summary, CWE root-cause view
+- [ ] "What this tool does not do" statement
+- [ ] Audit log of questions, answers and configuration changes
+
+**Owner features (SRS Sections 5.11 to 5.24)**
+- [ ] Organization configuration: custom fields, tags, ID schemes, criticality model, formula editor with preview and approval
+- [ ] Scan standards page with presets and warnings
+- [ ] Manual review ticket queue for components that can't be assessed
+- [ ] Notification center: email, Teams and Slack, routing rules, delivery log
+- [ ] Ingestion API plus SARIF, CycloneDX SBOM and Burp parsers, with provenance
+- [ ] Cross-tool correlation (SAST, DAST, WAF, pentest) into one issue
+- [ ] SLA policy: rating schemes, clock rules, extensions, risk acceptance, SLA reports
+- [ ] Lifecycle rules (container rotation) and an orphan queue for unknown hosts
+- [ ] Vendor fix tracking, VEX import and vendor scorecard
+- [ ] Five standard VM reports with snapshots and trends
+- [ ] Target remediation date rules and attack-path imports
+- [ ] Terminology translator for tool severities
+- [ ] Preventive maintenance planning: maintenance windows, cycle and emergency packages, maintenance debt (new in SRS v1.2)
+
+**Security of VulnHQ itself**
+- [ ] Pinned dependencies and an SBOM for VulnHQ
+- [ ] Treat feed text as untrusted (prompt-injection defense) once the agent is added
+
 ---
 
 ## Framework Alignment
@@ -61,7 +111,7 @@ VulnHQ is designed to support practices from:
 |---|---|
 | **NIST SP 800-40 Rev. 4** | Enterprise patch management planning, prioritization, and remediation tracking |
 | **Executive Order 14028** | Faster vulnerability response and improved visibility into software risk |
-| **CISA BOD 22-01** | Prioritizing Known Exploited Vulnerabilities with defined remediation timelines |
+| **CISA BOD 26-04** | Risk-based remediation timelines from exposure, KEV status, automatability and technical impact (replaced BOD 22-01 in June 2026) |
 | **Gartner CTEM** | Continuous scoping, discovery, prioritization, validation, and mobilization |
 | **NIST CSF 2.0** | Identify / Risk Assessment outcomes (ID.RA-01 to ID.RA-08), asset prioritization (ID.AM-05), governance oversight and reporting |
 | **OWASP Top 10:2025** | AppSec findings classified by Top 10 category via CWE mapping |
@@ -242,7 +292,7 @@ vulnhq/
 │   └── src/           # React UI: App.tsx (sidebar), FixListPage, AssetsPage, ImportPage,
 │                      #   KpiCards, ScoreDetails and AssetDetails panels, useEscape hook
 ├── src/styles/        # Shared design tokens (base.css)
-├── docs/              # Scoring model, design guide, importing, framework alignment
+├── docs/              # Scoring model, design guide, importing, framework alignment, SRS gap analysis
 ├── sample-data/       # Demo assets (private/ is gitignored and never committed)
 └── README.md
 ```
@@ -258,17 +308,25 @@ vulnhq/
 
 **Next up**
 - Dark mode
-- Compare progress against the assignment and the SRS
 - GitHub Actions CI
 - Remediation status tracking
+- Update BOD 22-01 references to BOD 26-04 in the docs
+- BOD 26-04 tier layer and KEV past-due flag
+- Confidence levels and needs-verification lane to match the SRS
+- Data-quality report and as-of date
 
 ## Roadmap
 
-1. **Foundation:** Data model, finding import, asset inventory
-2. **Prioritization:** Risk scoring, KEV and EPSS enrichment, ranked fix list
-3. **Remediation:** Status workflow, owners, SLAs
-4. **Reporting:** Dashboards, MTTR, closure rate, risk trend
-5. **Integrations:** Scanners, ticketing, notifications
+Aligned to SRS Section 12. If time is tight, build 1, 2, 4, 5, then 3 and 6.
+
+1. **Foundation and scoping:** Data model, finding import, asset inventory, data-quality report, maintenance groups, SBOM
+2. **Discovery:** Normalization, KEV and NVD lookup, matcher, evidence bundles, coverage gaps
+3. **Enrichment and mapping:** EPSS, SSVC, CWE, ATT&CK, CTEM stages
+4. **Prioritization:** BOD 26-04 tier, risk score, reasoning, needs-verification lane, ranked fix list
+5. **Questions and trust:** Router, LLM answers, verifier, citations, trace view
+6. **Remediation and mobilization:** Status workflow, owners, SLA policy, patch plan, response types, forensic triage, exports
+7. **Reporting:** BU and CISO summaries, MTTR, closure rate, risk trend, VM reports
+8. **Integrations and owner features:** Scanners, ticketing, notifications, correlation, vendors, preventive maintenance
 
 ---
 
