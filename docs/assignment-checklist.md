@@ -2,7 +2,7 @@
 
 How VulnHQ measures up against the Deloitte Cyber Engineering interview assignment. The checklist uses the requirements that SRS v2.0 traces to the assignment brief: the 10 assignment questions, requirements whose source is "Assignment brief", the known issues in the assignment data and the trust rules for the AI.
 
-Status as of November 8, 2026. Answers were checked on the fictional lab data set (`sample-data/lab-inventory.json`) with the keyword router. 173 automated tests pass.
+Status as of November 8, 2026. Answers were checked on the fictional lab data set (`sample-data/lab-inventory.json`) with the keyword router. 176 automated tests pass.
 
 **Status key:** ✅ Done · 🟡 Partial (works, with a gap noted) · ⬜ Not started
 
@@ -10,11 +10,11 @@ Status as of November 8, 2026. Answers were checked on the fictional lab data se
 
 | Area | ✅ Done | 🟡 Partial | ⬜ Not started |
 |---|---|---|---|
-| The 10 assignment questions | 5 | 5 | 0 |
+| The 10 assignment questions | 6 | 4 | 0 |
 | Answer quality from the brief | 3 | 5 | 1 |
 | Assignment data issues | 0 | 4 | 1 |
 | Trust and AI rules | 6 | 2 | 2 |
-| **Total (34 items)** | **14** | **16** | **4** |
+| **Total (34 items)** | **15** | **15** | **4** |
 
 All 10 questions are answered from the data in under a tenth of a second. Most of the partial items are a missing detail, like a note or one more number, not a missing feature.
 
@@ -30,7 +30,7 @@ All 10 questions are answered from the data in under a tenth of a second. Most o
 | Q2 | What is our highest-risk server right now and why? | ✅ | One server, top CVE, risk score, criticality, KEV count; score breakdown on the Fix list | — | — |
 | Q3 | Which software package should we patch first? | 🟡 | Package-level ranking with hosts, findings removed, KEV count and risk removed, plus the next two packages | No target version ("upgrade to X"). The vetted rules store affected version ranges, not a fixed version for each product. | Add `fixed_version` to `vuln_rules.json` and show "Upgrade to X" in the answer |
 | Q4 | How many Finance assets are affected by actively exploited vulnerabilities? | ✅ | Count of Finance assets plus the list of KEV findings with due dates | — | — |
-| Q5 | Are any assets past a CISA KEV due date? | 🟡 | Findings past the KEV due date, days overdue, oldest first; KPI card and Fix list column | The BOD 22-01 vs. BOD 26-04 note is calculated in `app/kev.py` (`due_date_set_under`) but not shown in the answer yet | Add a note: "X due dates were set under BOD 22-01, Y under BOD 26-04" |
+| Q5 | Are any assets past a CISA KEV due date? | ✅ | Findings past the KEV due date, days overdue, oldest first; KPI card and Fix list column. A note says how many due dates were set under BOD 22-01 vs. BOD 26-04 | — | — |
 | Q6 | Summarise our posture for the CISO in 3 sentences | 🟡 | Three sentences built by code from the data, so every number is exact | Numbers are not cited one by one and there is no verifier "Pass" badge. No AI writes the text, so there is nothing for a verifier to catch yet. | Add citations under the summary; add the verifier when the AI writes summaries |
 | Q7 | Which business unit has the most critical exposure? | ✅ | Business unit ranking with Critical, KEV and total counts; the metric definition is stated | — | Option to rank by total risk score (the SRS metric) |
 | Q8 | What would patching Apache HTTP Server reduce our CVE count by? | 🟡 | Before and after CVE and finding counts; asks "which one?" when "Apache" is ambiguous | KEV and risk-score before and after are not shown. The patch plan already has those numbers. | Add KEV count and total risk score before and after |
@@ -81,7 +81,7 @@ All 10 questions are answered from the data in under a tenth of a second. Most o
 ## Quick wins (small fixes, about 5 to 20 minutes each)
 
 1. ~~Q10 caveat~~ (done November 8)
-2. Q5 note: which due dates were set under BOD 22-01 vs. BOD 26-04
+2. ~~Q5 note: which due dates were set under BOD 22-01 vs. BOD 26-04~~ (done November 8)
 3. Q8: add KEV count and risk score before and after
 4. ~~Test offline~~ (done November 8: all 10 questions work with Wi-Fi off)
 5. Settings fix: allow `OLLAMA_MODEL` in `backend\.env` (add `extra="ignore"` in `app/config.py`)
