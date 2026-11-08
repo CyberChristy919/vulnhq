@@ -60,6 +60,7 @@ class Item:
     kev_due_date: date | None = None
     kev_past_due: bool = False
     kev_days_overdue: int | None = None
+    kev_date_added: date | None = None
     bod_due_date: date | None = None
     bod_assumed: list = field(default_factory=list)
 
@@ -74,15 +75,19 @@ ASSETS = [
 
 ITEMS = [
     Item("fin-app01", "FIN-SRV-001", "Apache HTTP Server 2.4.49", "CVE-2021-41773", 9.8, 95.0, "Critical",
-         True, kev_due_date=date(2021, 11, 17), kev_past_due=True, kev_days_overdue=1817),
+         True, kev_due_date=date(2021, 11, 17), kev_past_due=True, kev_days_overdue=1817,
+         kev_date_added=date(2021, 11, 3)),
     Item("fin-app01", "FIN-SRV-001", "Apache HTTP Server 2.4.49", "CVE-2021-42013", 9.8, 93.0, "Critical",
-         True, kev_due_date=date(2021, 11, 17), kev_past_due=True, kev_days_overdue=1817),
+         True, kev_due_date=date(2021, 11, 17), kev_past_due=True, kev_days_overdue=1817,
+         kev_date_added=date(2021, 11, 3)),
     Item("hr-srv01", "HR-SRV-001", "Apache HTTP Server 2.4.50", "CVE-2021-42013", 9.8, 80.0, "High",
-         True, kev_due_date=date(2021, 11, 17), kev_past_due=True, kev_days_overdue=1817),
+         True, kev_due_date=date(2021, 11, 17), kev_past_due=True, kev_days_overdue=1817,
+         kev_date_added=date(2021, 11, 3)),
     Item("fin-ws01", "FIN-WS-001", "OpenSSL 1.1.1", "CVE-2022-0778", 7.5, 55.0, "Medium",
          confidence="conditional"),
     Item("core-rtr01", "NET-RTR-001", "Cisco IOS XE 16.9", "CVE-2023-20198", 10.0, 90.0, "Critical",
-         True, kev_due_date=date(2023, 10, 20), kev_past_due=True, kev_days_overdue=1115),
+         True, kev_due_date=date(2023, 10, 20), kev_past_due=True, kev_days_overdue=1115,
+         kev_date_added=date(2023, 10, 16)),
     Item("core-rtr01", "NET-RTR-001", "Cisco IOS XE 16.9", "CVE-2023-20273", 7.2, 70.0, "High",
          True, confidence="nvd", bod_assumed=["automatable"]),
     Item("mkt-ws01", "MKT-WS-001", "Apache Tomcat 9.0.30", "CVE-2020-1938", None, 40.0, "Low"),
@@ -200,6 +205,33 @@ def test_q5_kev_past_due():
     r = run("Any CISA KEV due dates already passed?")
     assert r.answer.startswith("Yes: 4 findings on 3 assets")
     assert "1817 days" in r.answer
+
+
+def test_q5_notes_which_directive_set_the_due_dates():
+    # All four past-due KEV entries were added before June 10, 2026 (BOD 22-01)
+    r = run("Any CISA KEV due dates already passed?")
+    assert ("4 of these due dates were set under BOD 22-01 and 0 under BOD 26-04, "
+            "which replaced it on June 10, 2026.") in r.notes
+
+
+def test_q5_counts_due_dates_set_under_bod_26_04():
+    # A CVE added to KEV after June 10, 2026 had its due date set under BOD 26-04
+    new = Item("hr-srv01", "HR-SRV-001", "Example App 1.0", "CVE-2026-0001", 8.8, 75.0, "High",
+               True, kev_due_date=date(2026, 7, 22), kev_past_due=True, kev_days_overdue=109,
+               kev_date_added=date(2026, 7, 1))
+    r = ask.answer("Any CISA KEV due dates already passed?", ITEMS + [new], ASSETS, AS_OF)
+    assert ("4 of these due dates were set under BOD 22-01 and 1 under BOD 26-04, "
+            "which replaced it on June 10, 2026.") in r.notes
+
+
+def test_q5_no_directive_note_without_kev_dates():
+    # No dates added means nothing to report, so no note
+    r = ask.answer("Any CISA KEV due dates already passed?",
+                   [Item("fin-app01", "FIN-SRV-001", "Apache HTTP Server 2.4.49", "CVE-2021-41773", 9.8, 95.0,
+                         "Critical", True, kev_due_date=date(2021, 11, 17), kev_past_due=True,
+                         kev_days_overdue=1817)],
+                   ASSETS, AS_OF)
+    assert not any("BOD 22-01" in n for n in r.notes)
 
 
 def test_q6_posture_is_three_sentences():
