@@ -78,6 +78,12 @@ class FixListItem(BaseModel):
     kev_due_date: date | None = None
     kev_past_due: bool = False
     kev_days_overdue: int | None = None
+    # CISA BOD 26-04 tier (1 most urgent) and its fix-by date
+    bod_tier: int = 5
+    bod_label: str = ""
+    bod_due_date: date | None = None
+    bod_forensic_triage: bool = False
+    bod_assumed: list[str] = []
     # Points from each factor, so users can see why a finding ranks high
     breakdown: dict[str, float]
 

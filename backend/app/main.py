@@ -31,6 +31,7 @@ from app.schemas import (
 from app.scoring import ScoreInput, calculate_score, due_date
 from app.kev import kev_kpi, kev_status
 from app.kev import kev_status, kev_kpi
+from app.bod import SSVC, bod_due_date, bod_tier
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -182,8 +183,11 @@ def scored_findings(db: Session, status: str = "open", hostname: str | None = No
         )
         first_seen = f.first_seen.date()
         due = due_date(first_seen, result.sla_days)
-        due = due_date(first_seen, result.sla_days)
         kev = kev_status(vuln.in_kev, vuln.kev_date_added, vuln.kev_due_date, today)
+        exposed = asset.internet_facing or (app_.internet_facing if app_ else False)
+        automatable, impact = SSVC.get(vuln.cve_id, (None, None))
+        bod = bod_tier(exposed, vuln.in_kev, automatable, impact)
+        bod_due = bod_due_date(first_seen, vuln.kev_date_added, bod.days)
         items.append(
             FixListItem(
                 finding_id=f.id,

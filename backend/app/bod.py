@@ -24,6 +24,14 @@ ROWS = {
 }
 
 
+# CISA SSVC values per CVE from vuln_rules.json: cve -> (automatable, technical_impact)
+RULES_PATH = Path(__file__).resolve().parents[1] / "data" / "vuln_rules.json"
+SSVC = {
+    r["cve"]: (r.get("automatable"), r.get("technical_impact"))
+    for r in json.loads(RULES_PATH.read_text(encoding="utf-8"))["rules"]
+}
+
+
 @dataclass
 class BodResult:
     tier: int  # 1 to 5, 1 is most urgent
