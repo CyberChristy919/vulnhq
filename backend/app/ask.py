@@ -9,6 +9,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import date
 
+from app.kev import BOD_26_04_ISSUED
 from app.patch_plan import package_name, patch_plan, patch_impact
 
 # Shortcut questions shown on the Ask page, and suggested when a question isn't understood
@@ -216,7 +217,14 @@ def answer(question, items, assets, as_of: date, intent=None) -> Answer:
         text = (f"Yes: {len(hits)} findings on {len(hosts)} assets are past their CISA KEV due date; "
                 f"the oldest is {hits[0].kev_days_overdue} days overdue ({hits[0].cve_id})."
                 if hits else "No: no open findings are past their CISA KEV due date.")
-        return Answer(intent, text, [evidence_row(i) for i in hits], common_notes(hits))
+        notes = common_notes(hits)
+        # Which directive set each due date: BOD 26-04 replaced BOD 22-01 on June 10, 2026
+        old = sum(1 for i in hits if i.kev_date_added and i.kev_date_added < BOD_26_04_ISSUED)
+        new = sum(1 for i in hits if i.kev_date_added and i.kev_date_added >= BOD_26_04_ISSUED)
+        if old or new:
+            notes.append(f"{old} of these due dates were set under BOD 22-01 and {new} under BOD 26-04, "
+                         "which replaced it on June 10, 2026.")
+        return Answer(intent, text, [evidence_row(i) for i in hits], notes)
 
     # Q10: assets not scanned in N days that have CVSS 7.0+ findings
     if intent == "stale_high":
@@ -231,7 +239,7 @@ def answer(question, items, assets, as_of: date, intent=None) -> Answer:
         # Assets with no scan date can't be checked; say so instead of dropping them
         if unknown:
             notes.append(f"{len(unknown)} assets have no scan date and could not be checked: {', '.join(sorted(unknown))}.")
-                # Old scans miss newer software changes, so the real count may be higher
+        # Old scans miss newer software changes, so the real count may be higher
         if hosts:
             notes.append("Findings on these assets may be understated, since their last scan is out of date.")
         return Answer(intent, text, [evidence_row(i) for i in hits], notes)
@@ -242,6 +250,7 @@ def answer(question, items, assets, as_of: date, intent=None) -> Answer:
         dept_hosts = {a.hostname for a in assets if a.department == dept}
         hits = [i for i in items if i.hostname in dept_hosts and i.in_kev]
         hosts = {i.hostname for i in hits}
+
         text = (f"{len(hosts)} of {len(dept_hosts)} {dept} assets are affected by actively exploited (CISA KEV) "
                 f"vulnerabilities: {len(hits)} findings across {len({i.cve_id for i in hits})} CVEs.")
         return Answer(intent, text, [evidence_row(i) for i in hits], common_notes(hits))
