@@ -73,6 +73,11 @@ class FixListItem(BaseModel):
     due_date: date
     days_remaining: int
     overdue: bool
+    # CISA KEV due date, kept separate from the VulnHQ SLA flag above (SRS FR-PRI-03)
+    kev_date_added: date | None = None
+    kev_due_date: date | None = None
+    kev_past_due: bool = False
+    kev_days_overdue: int | None = None
     # Points from each factor, so users can see why a finding ranks high
     breakdown: dict[str, float]
 

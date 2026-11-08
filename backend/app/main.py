@@ -29,7 +29,8 @@ from app.schemas import (
     VulnerabilityOut,
 )
 from app.scoring import ScoreInput, calculate_score, due_date
-
+from app.kev import kev_kpi, kev_status
+from app.kev import kev_status, kev_kpi
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -181,6 +182,8 @@ def scored_findings(db: Session, status: str = "open", hostname: str | None = No
         )
         first_seen = f.first_seen.date()
         due = due_date(first_seen, result.sla_days)
+        due = due_date(first_seen, result.sla_days)
+        kev = kev_status(vuln.in_kev, vuln.kev_date_added, vuln.kev_due_date, today)
         items.append(
             FixListItem(
                 finding_id=f.id,
@@ -207,6 +210,10 @@ def scored_findings(db: Session, status: str = "open", hostname: str | None = No
                 days_remaining=(due - today).days,
                 overdue=due < today,
                 breakdown=result.breakdown,
+                kev_date_added=vuln.kev_date_added,
+                kev_due_date=vuln.kev_due_date,
+                kev_past_due=kev.past_due,
+                kev_days_overdue=kev.days_overdue,
             )
         )
 
@@ -307,4 +314,6 @@ def stats(db: Session = Depends(get_db)):
         "kev_findings": sum(i.in_kev for i in items),
         "overdue_findings": sum(i.overdue for i in items),
         "findings_by_tier": tiers,
+        "findings_by_tier": tiers,
+        **kev_kpi(items, today),
     }
