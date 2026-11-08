@@ -405,8 +405,21 @@ td {
   margin: 0;
 }
 
-.card .note {
-  margin: 0;
+
+/* Space between the lines of a file explanation */
+.card .note p {
+  margin: 0 0 var(--vhq-space-2);
+}
+
+.card .note p:last-child {
+  margin-bottom: 0;
+}
+
+/* Intro line under a page title */
+.lede {
+  color: var(--vhq-text-muted);
+  margin: 0 0 var(--vhq-space-6);
+  max-width: 800px;
 }
 
 .card .add-result {

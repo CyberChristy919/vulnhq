@@ -87,13 +87,17 @@ function ImportPage() {
   return (
     <>
       <h1>Import</h1>
+      <p className="lede">Two files are all VulnHQ needs: what you own, and why it matters to the business.</p>
       {error && <p className="form-error">{error}</p>}
 
       <section className="card">
         <h2>1. Asset inventory</h2>
-        <p className="note">
-          Assets and their installed software. Each item is checked against the vetted rules, then NVD.
-        </p>
+        {/* Plain-language explanation of the file, for people new to the app */}
+        <div className="note">
+          <p><strong>What it is:</strong> the list of company devices and the software installed on each one, like a parts list.</p>
+          <p><strong>What's in it:</strong> asset ID, hostname, department, how critical the asset is, last scan date, and each software name and version.</p>
+          <p><strong>What VulnHQ does with it:</strong> checks every software version against CISA's list of flaws attackers are actively using (KEV), then the National Vulnerability Database (NVD), and turns each match into a finding.</p>
+        </div>
         <input type="file" accept=".json" onChange={(e) => setInventoryFile(e.target.files?.[0] ?? null)} />
         <button type="button" className="primary" disabled={!inventoryFile || busy !== ''} onClick={importInventory}>
           {busy === 'inventory' ? 'Importing and checking for CVEs...' : 'Import inventory'}
@@ -137,9 +141,12 @@ function ImportPage() {
 
       <section className="card">
         <h2>2. Business context</h2>
-        <p className="note">
-          Internet exposure, money movement and data classification by hostname. Import the inventory first.
-        </p>
+        {/* Plain-language explanation of the file, for people new to the app */}
+        <div className="note">
+          <p><strong>What it is:</strong> what each asset means to the business, matched by hostname. Import the inventory first.</p>
+          <p><strong>What's in it:</strong> whether the asset can be reached from the internet, whether it moves money, and how sensitive its data is.</p>
+          <p><strong>What VulnHQ does with it:</strong> moves findings on internet-facing, payment and sensitive-data systems up the fix list, so the same flaw ranks higher where it could hurt the business most.</p>
+        </div>
         <input type="file" accept=".json" onChange={(e) => setContextFile(e.target.files?.[0] ?? null)} />
         <button type="button" className="primary" disabled={!contextFile || busy !== ''} onClick={importContext}>
           {busy === 'context' ? 'Importing...' : 'Import context'}
