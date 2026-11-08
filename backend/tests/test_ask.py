@@ -136,6 +136,12 @@ def test_unpatched_is_not_patch():
     assert ask.detect_intent("unpatched critical CVEs", DEPTS, PKGS) == "critical_assets"
 
 
+def test_bugs_is_not_business_unit():
+    # "bu" must be a whole word; "bugs" used to match it
+    assert ask.detect_intent("any exploited bugs today?", DEPTS, PKGS) != "bu_exposure"
+    assert ask.detect_intent("which BU is worst?", DEPTS, PKGS) == "bu_exposure"
+
+
 def test_not_understood():
     r = run("What's the weather in Raleigh?")
     assert r.intent is None
