@@ -218,6 +218,11 @@ def scored_findings(db: Session, status: str = "open", hostname: str | None = No
                 kev_due_date=vuln.kev_due_date,
                 kev_past_due=kev.past_due,
                 kev_days_overdue=kev.days_overdue,
+                bod_tier=bod.tier,
+                bod_label=bod.label,
+                bod_due_date=bod_due,
+                bod_forensic_triage=bod.forensic_triage,
+                bod_assumed=bod.assumed,
             )
         )
 
@@ -226,17 +231,30 @@ def scored_findings(db: Session, status: str = "open", hostname: str | None = No
     return items
 
 
+# Sort choices for the fix list; each key is a value the UI can send as ?sort=
+SORT_KEYS = {
+    "risk": lambda i: (-i.risk_score, i.due_date),
+    "cisa": lambda i: (i.bod_tier, i.bod_due_date or date.max, -i.risk_score),
+    "kev_overdue": lambda i: (-(i.kev_days_overdue or -1), -i.risk_score),
+    "due": lambda i: (i.due_date, -i.risk_score),
+    "asset": lambda i: (i.hostname, -i.risk_score),
+}
+
+
 @app.get("/fix-list", response_model=list[FixListItem])
 def fix_list(
     status: str = "open",
     tier: str | None = None,
     hostname: str | None = None,
+    sort: str = "risk",
     limit: int = Query(100, le=1000),
     db: Session = Depends(get_db),
 ):
     items = scored_findings(db, status, hostname)
     if tier:
         items = [i for i in items if i.tier.lower() == tier.lower()]
+    # Unknown sort values fall back to risk score
+    items.sort(key=SORT_KEYS.get(sort, SORT_KEYS["risk"]))
     return items[:limit]
 
 

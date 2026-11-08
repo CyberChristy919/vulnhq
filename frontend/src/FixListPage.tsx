@@ -8,20 +8,24 @@ function FixListPage() {
   const [error, setError] = useState('')
   // Which tier to show; empty means all tiers
   const [tier, setTier] = useState('')
+  // How to order the list; matches SORT_KEYS in backend/app/main.py
+  const [sort, setSort] = useState('risk')
   // The finding whose score details are open; null means the panel is closed
   const [selected, setSelected] = useState<FixItem | null>(null)
 
   // Runs when the page opens, and again whenever the tier changes
-  useEffect(() => {
-    const url = tier ? `/api/fix-list?limit=25&tier=${tier}` : '/api/fix-list?limit=25'
-    fetch(url)
+    // Runs when the page opens, and again whenever the tier or sort changes
+    useEffect(() => {
+      const params = new URLSearchParams({ limit: '25', sort })
+      if (tier) params.set('tier', tier)
+      fetch(`/api/fix-list?${params}`)
       .then((res) => {
         if (!res.ok) throw new Error(`API returned ${res.status}`)
         return res.json()
       })
       .then(setItems)
       .catch((err) => setError(String(err)))
-  }, [tier])
+    }, [tier, sort])
 
   return (
     <>
@@ -39,10 +43,20 @@ function FixListPage() {
             {t || 'All'}
           </button>
         ))}
+        <label className="sort">
+          Sort by{' '}
+          <select value={sort} onChange={(e) => setSort(e.target.value)}>
+            <option value="risk">Risk score</option>
+            <option value="cisa">CISA deadline</option>
+            <option value="kev_overdue">KEV days overdue</option>
+            <option value="due">SLA due date</option>
+            <option value="asset">Asset</option>
+          </select>
+        </label>
       </div>
       <table>
         <thead>
-        <tr>
+          <tr>
             <th>Asset</th>
             <th>Company ID</th>
             <th>Risk</th>
@@ -88,6 +102,7 @@ function FixListPage() {
             </tr>
           ))}
         </tbody>
+      </table>
       {selected && <ScoreDetails item={selected} onClose={() => setSelected(null)} />}
     </>
   )
