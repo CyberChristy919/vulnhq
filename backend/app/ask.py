@@ -94,7 +94,8 @@ def detect_intent(question, departments=(), packages=()):
         return "stale_high"
     if find_department(q, departments):
         return "department_kev"
-    if has(q, "business unit", "department", " bu", "bu "):
+    # \bbu\b is the whole word "bu", so "bugs" does not count
+    if has(q, "business unit", "department") or re.search(r"\bbu\b", q):
         return "bu_exposure"
     if has(q, *NETWORK_WORDS):
         return "network_cves"
@@ -150,12 +151,13 @@ def sev(items, floor):
     return [i for i in items if i.cvss_score is not None and i.cvss_score >= floor]
 
 
-def answer(question, items, assets, as_of: date) -> Answer:
-    """Answer any question. items = open findings, assets = asset summaries."""
+def answer(question, items, assets, as_of: date, intent=None) -> Answer:
+    """Answer any question. items = open findings, assets = asset summaries.
+    intent: skip keyword detection (used when the local AI model picked the question type)."""
     by_host = {a.hostname: a for a in assets}
     departments = [a.department for a in assets]
     packages = [package_name(i.software) for i in items]
-    intent = detect_intent(question, departments, packages)
+    intent = intent or detect_intent(question, departments, packages)
     q = question.lower()
 
     # Q1: assets with CVSS 9.0+ findings
@@ -288,3 +290,27 @@ def answer(question, items, assets, as_of: date) -> Answer:
     return Answer(None, "I can't answer that question yet. Try one of these, or reword using words like "
                   "'critical', 'patch first', 'past due', a department name, or 'network devices'.",
                   suggestions=EXAMPLES)
+
+
+def answer_with_ai(question, items, assets, as_of: date, classify) -> Answer:
+    """Keywords first. If they don't match, let the local AI model pick the question type.
+
+    classify(question, departments, packages) returns {"intent", "department", "package", "days"} or None.
+    """
+    result = answer(question, items, assets, as_of)
+    if result.intent is not None:
+        return result
+    departments = sorted({a.department for a in assets if a.department})
+    packages = sorted({package_name(i.software) for i in items})
+    guess = classify(question, departments, packages)
+    if not guess:
+        return result
+    # Add the details the model found, so the usual helpers (find_department, find_package, find_days) see them
+    hints = [guess.get("department"), guess.get("package")]
+    if guess.get("days"):
+        hints.append(f"{guess['days']} days")
+    reworded = " ".join([question] + [h for h in hints if h])
+    ai = answer(reworded, items, assets, as_of, intent=guess["intent"])
+    ai.notes.insert(0, f"Question type picked by the local AI model ({guess['intent']}). "
+                       "Every number comes from the data, not the model.")
+    return ai                 

@@ -33,7 +33,8 @@ from app.kev import kev_kpi, kev_status
 from app.bod import SSVC, bod_due_date, bod_tier
 from dataclasses import asdict
 from pydantic import BaseModel, Field
-from app.ask import EXAMPLES, answer
+from app.ask import EXAMPLES, answer_with_ai
+from app.llm_intent import classify
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Creates tables if they don't exist yet (Alembic migrations come later)
@@ -357,5 +358,5 @@ def ask_examples():
 @app.post("/ask")
 def ask(body: AskIn, db: Session = Depends(get_db)):
     """Answer a question from the same scored findings and assets the other pages use."""
-    result = answer(body.question, scored_findings(db), list_assets(db), date.today())
+    result = answer_with_ai(body.question, scored_findings(db), list_assets(db), date.today(), classify)
     return asdict(result)
