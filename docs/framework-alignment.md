@@ -5,7 +5,7 @@ VulnHQ is aligned to two framework families:
 1. **NIST Cybersecurity Framework (CSF) 2.0**, which covers **what the program achieves**. VulnHQ features map to CSF outcomes, so teams can show progress in CSF terms.
 2. **OWASP**, which covers **how application risk is classified and how VulnHQ itself is built**. Findings are tagged to the OWASP Top 10, risk can be scored with the OWASP Risk Rating Methodology, and VulnHQ is developed against OWASP ASVS.
 
-It also supports NIST SP 800-40 Rev. 4, Executive Order 14028, CISA BOD 22-01 and Gartner CTEM (see the [README](../README.md#framework-alignment)).
+It also supports NIST SP 800-40 Rev. 4, Executive Order 14028, CISA BOD 26-04 (which replaced BOD 22-01 in June 2026) and Gartner CTEM (see the [README](../README.md#framework-alignment)).
 
 ---
 

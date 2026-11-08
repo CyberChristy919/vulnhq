@@ -2,7 +2,7 @@
 
 Every finding (an asset that has a specific CVE) receives a **VulnHQ Risk Score from 0 to 100**. The score ranks the Fix List and sets the remediation tier and due date.
 
-The model favors **real-world exploitation and business impact over theoretical severity**, consistent with CISA BOD 22-01, NIST SP 800-40 Rev. 4 and NIST CSF 2.0 ID.RA-04 / ID.RA-05.
+The model favors **real-world exploitation and business impact over theoretical severity**, consistent with CISA BOD 26-04, NIST SP 800-40 Rev. 4 and NIST CSF 2.0 ID.RA-04 / ID.RA-05.
 
 ---
 
@@ -64,6 +64,37 @@ A KEV-listed CVE with ransomware use and an EPSS of 0.94, on an internet-facing,
 | **Low** | Below 40 | 90 days | Green |
 
 The due date is calculated from the date the finding was first seen. Severity colors follow the [design guide](design-guide.md).
+
+---
+
+## CISA BOD 26-04 Deadline (Shown Next to the Score)
+
+The VulnHQ score and tier are the company's own ranking and SLA. Each finding also shows the federal deadline from [CISA BOD 26-04](https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk), which replaced BOD 22-01 in June 2026. The two are kept separate so a finding can be inside the company SLA and still past CISA's date, or the other way around.
+
+The BOD 26-04 tier comes from four inputs, looked up in the versioned matrix file [`bod2604_matrix.json`](../backend/data/bod2604_matrix.json) (CISA Table 1):
+
+| Input | Source in VulnHQ |
+|---|---|
+| **Exposed** | Asset or application `internet_facing` |
+| **In KEV** | CISA KEV catalog |
+| **Automatable** | CISA Vulnrichment SSVC, stored on each vetted rule in `vuln_rules.json` |
+| **Technical impact** | CISA Vulnrichment SSVC (`total` or `partial`) |
+
+| BOD tier | Remediation timeline |
+|---|---|
+| 1 | 3 days and forensic triage |
+| 2 | 3 days |
+| 3 | 14 days |
+| 4 | 60 days |
+| 5 | Fix on system upgrade |
+
+- **Clock start:** the earlier of the date the finding was first seen and the date CISA added the CVE to KEV.
+- **Unknown inputs:** when CISA has not scored a CVE, VulnHQ evaluates every possible value and uses the most urgent tier, then labels the finding "Assumed worst case" with the assumed fields listed.
+- **Effective date:** BOD 26-04 timelines apply to federal agencies from December 7, 2026 ([FedRAMP notice 0014](https://www.fedramp.gov/notices/0014/)). Before then, the dates show what the deadline will be.
+
+### KEV Past Due
+
+Separately, every KEV finding shows CISA's KEV due date, and a **KEV past due** flag when that date has passed. The KPI card counts past-due findings and affected assets. This is independent of the VulnHQ "Overdue" flag, which measures the company SLA.
 
 ---
 

@@ -28,9 +28,10 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 - [x] Import assets and findings (JSON), with software-version to CVE matching (vetted rules plus live NVD lookup). See [importing](docs/importing.md).
 - [x] Asset inventory with business criticality ratings (business context file)
 - [x] Risk-based prioritization score (0 to 100, with factor breakdown)
-- [x] Ranked fix list page with tier filters (Critical / High / Medium / Low)
+- [x] Ranked fix list page with tier filters (Critical / High / Medium / Low) and sort options (risk score, CISA deadline, KEV days overdue, SLA due date, asset)
+- [x] **Ask page:** plain-English questions answered from the data, with evidence rows, caveats and ambiguity handling
 - [x] Score details panel showing why each finding ranks where it does
-- [x] Dashboard KPI cards (critical open, known exploited, overdue, stale scans, open findings)
+- [x] Dashboard KPI cards (critical open, known exploited, KEV past due, overdue, stale scans, open findings)
 - [x] Confidence column on every finding (confirmed / conditional / nvd)
 - [x] Assets page with stale-scan flags, asset details panel and an "Add software" form
 - [x] JSON import page in the UI (inventory and business context), with a check for files that have no software
@@ -55,9 +56,9 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 See the full [SRS gap analysis](docs/srs-gap-analysis.md) for requirement IDs.
 
 **Prioritization and matching**
-- [ ] BOD 26-04 tier per finding (exposure, KEV, automatable, technical impact) from a versioned matrix file, with the score ordering work inside each tier (SRS Section 9)
+- [x] BOD 26-04 tier per finding (exposure, KEV, automatable, technical impact) from a versioned matrix file, with the score ordering work inside each tier (SRS Section 9)
 - [ ] Add CVSS and time pressure to the score; plain-language "why it ranks here" sentence
-- [ ] Show the KEV due date and flag it past due, separately from the company SLA
+- [x] Show the KEV due date and flag it past due, separately from the company SLA
 - [ ] Explicit Unknown exposure; compute the tier both ways and show the more urgent one
 - [ ] Confidence levels Confirmed / Likely / Uncertain / Ruled out, with a separate "needs verification" lane
 - [ ] Keep ruled-out CVE candidates with the reason instead of skipping them
@@ -68,17 +69,20 @@ See the full [SRS gap analysis](docs/srs-gap-analysis.md) for requirement IDs.
 - [ ] Data-quality report on import (counts, missing fields, departments vs. business units)
 - [ ] Configurable as-of date; show it on every page
 - [ ] Store KEV catalog version, raw NVD responses, EPSS percentile and model version
-- [ ] SSVC Automatable and Technical Impact from CISA Vulnrichment
+- [x] SSVC Automatable and Technical Impact from CISA Vulnrichment
 - [ ] CWE, MITRE ATT&CK and CTEM stage mapping per finding
 - [ ] End-of-support flags; maintenance groups; environment (prod / dev)
 - [ ] Daily KEV refresh; mark NVD cache entries older than 7 days stale
 
 **Answers, trust and reporting**
-- [ ] Natural-language questions answered by a deterministic router plus LLM, covering the 10 assignment questions (SRS Section 11)
+- [x] Natural-language questions answered by a deterministic router, covering the 10 assignment questions (SRS Section 11)
+- [ ] Local LLM to understand unusual wording (numbers still calculated by code)
 - [ ] Citations and an evidence bundle per finding; answer verifier with Pass / Fail
-- [ ] Package-level patch plan (package, target version, hosts, risk removed) and "simulate patch"
+- [x] Package-level patch plan (package, hosts, risk removed) and "what would patching X remove"
+- [ ] Target version per package
 - [ ] Risk response type, scenario (routine, emergency patch, emergency mitigation, unpatchable) and forensic triage checklist for top-tier KEV findings
-- [ ] Business-unit summary, 3-sentence cited CISO summary, CWE root-cause view
+- [x] Business-unit summary and 3-sentence CISO summary (Ask page)
+- [ ] CWE root-cause view
 - [ ] "What this tool does not do" statement
 - [ ] Audit log of questions, answers and configuration changes
 
@@ -248,7 +252,8 @@ The Vite dev server forwards `/api/*` requests to the FastAPI backend.
 
 | Page | What it shows |
 |---|---|
-| **Fix list** | KPI cards, then findings ranked by risk score, with tier filters. Click a row for the score breakdown. |
+| **Ask** | Type any question, or click one of the 10 shortcut questions. Each answer shows the evidence behind it (asset ID, CVE with NVD link, CVSS, source, KEV due date, CISA deadline, confidence) and notes on anything uncertain. |
+| **Fix list** | KPI cards, then findings ranked by risk score, with tier filters and a Sort by menu. Columns include the CISA BOD 26-04 deadline and KEV past-due days. Click a row for the score breakdown. |
 | **Assets** | Every asset, riskiest first. Scans older than 90 days are flagged. Click an asset to see its software and add new software, which is checked for CVEs right away. |
 | **Import** | Upload an asset inventory JSON, then a business context JSON. Shows what was created, plus software that couldn't be checked or needs review. |
 
@@ -269,6 +274,26 @@ The risk score says how bad a finding would be. Confidence says how sure we are 
 3. **Fix list**: walk through the top findings and open one to show why it ranks there.
 4. **Assets**: point out stale scans on critical systems.
 5. Add software live on the **Assets** page and show the new finding appear in the fix list.
+6. **Ask**: click the 10 shortcut questions, then type one in your own words. Show the evidence table and the "What to know" notes, and type "What would patching Apache reduce?" to show the "which one?" reply.
+
+### How the Ask Page Works
+
+No AI model is used. Answers are a workflow over the same data as the other pages:
+
+1. **Ingest:** asset inventory and business context (Import page)
+2. **Look up:** CISA KEV, NVD and EPSS, plus CISA SSVC from Vulnrichment
+3. **Match:** software names and versions to CVEs, with a confidence level
+4. **Score:** VulnHQ risk score and tier, BOD 26-04 deadline, KEV past due
+5. **Answer:** keywords pick the question type (`backend/app/ask.py`), details such as department, package, asset type and days are pulled from the question, and the answer is calculated from the scored findings
+
+Every answer lists its evidence and states caveats: match confidence counts, findings with no CVSS score, assumed CISA tiers, and assets with no scan date. Questions that aren't understood get an honest "can't answer that yet" with suggestions instead of a guess.
+
+### What This Tool Does Not Do
+
+- It does not scan hosts. It relies on the inventory's software versions and scan dates.
+- It does not confirm exploitability. "Conditional" and "nvd" matches need a human check.
+- It does not account for vendor backports (for example, OpenSSL patched by Red Hat without a version change).
+- BOD 26-04 deadlines are calculated from CISA's published table, but federal timelines take effect December 7, 2026.
 
 ### Running Tests
 
@@ -284,12 +309,13 @@ pytest
 ```
 vulnhq/
 ├── backend/
-│   ├── app/           # FastAPI app: models, scoring, KEV/EPSS/NVD matching, API
+│   ├── app/           # FastAPI app: models, scoring, KEV/EPSS/NVD matching, BOD 26-04 tier,
+│   │                  #   KEV past due, patch plan, Ask (plain-English questions), API
 │   ├── data/          # Matching rules and CPE aliases
 │   ├── scripts/       # Load, import, migrate and reset scripts
 │   └── tests/         # pytest tests
 ├── frontend/
-│   └── src/           # React UI: App.tsx (sidebar), FixListPage, AssetsPage, ImportPage,
+│   └── src/           # React UI: App.tsx (sidebar), AskPage, FixListPage, AssetsPage, ImportPage,
 │                      #   KpiCards, ScoreDetails and AssetDetails panels, useEscape hook
 ├── src/styles/        # Shared design tokens (base.css)
 ├── docs/              # Scoring model, design guide, importing, framework alignment, SRS gap analysis
@@ -301,23 +327,25 @@ vulnhq/
 
 ## Demo Scope (Monday)
 
-Build through Sunday, then switch to the presentation and docs. Goal: answer the 10 assignment questions (SRS Section 11) with deterministic views, no AI agent.
+Build through Sunday, then switch to the presentation and docs. Goal: answer the 10 assignment questions (SRS Section 11) with deterministic answers, no AI agent. All 10 are answered on the Ask page.
 
 **Saturday**
-- [ ] Replace BOD 22-01 with BOD 26-04 in all docs
-- [ ] BOD 26-04 tier per finding from [`bod2604_matrix.json`](backend/data/bod2604_matrix.json): add `automatable` and `technical_impact` to the vetted rules, explicit Unknown exposure (worst case plus flag), Tier and Deadline columns
-- [ ] KEV past-due flag and KPI card (Q5)
+- [x] Replace BOD 22-01 with BOD 26-04 in all docs
+- [x] BOD 26-04 tier per finding from [`bod2604_matrix.json`](backend/data/bod2604_matrix.json): add `automatable` and `technical_impact` to the vetted rules, explicit Unknown exposure (worst case plus flag), Tier and Deadline columns
+- [x] KEV past-due flag and KPI card (Q5)
 
 **Sunday**
 - [ ] Confidence levels Confirmed / Likely / Uncertain, "Needs verification" tab, ruled-out count
-- [ ] Package-level patch plan with before / after (Q3, Q8)
+- [x] Package-level patch plan with before / after (Q3, Q8)
 - [ ] "Why it ranks here" sentence
-- [ ] Filters: business unit, asset type, CVSS sort, stale + high (Q1, Q4, Q7, Q9, Q10)
-- [ ] Stretch: template CISO summary (Q6), as-of date in header, "What this tool does not do," GitHub Actions CI
+- [x] Business unit, asset type, CVSS sort, stale + high (Q1, Q4, Q7, Q9, Q10), answered on the Ask page
+- [x] Fix list Sort by menu
+- [x] Template CISO summary (Q6) and "What this tool does not do"
+- [ ] Stretch: as-of date in header, GitHub Actions CI
 
 **Stop rule:** If the tier and patch plan aren't working by Sunday evening, freeze and demo what works.
 
-**Scope cuts for the roadmap slide:** AI question agent, owner sections (SRS 5.11 to 5.24), scanner and ticketing integrations, notifications, remediation workflow, dark mode.
+**Scope cuts for the roadmap slide:** local LLM for wording (numbers stay in code), owner sections (SRS 5.11 to 5.24), scanner and ticketing integrations, notifications, remediation workflow, dark mode.
 
 ---
 
@@ -325,15 +353,16 @@ Build through Sunday, then switch to the presentation and docs. Goal: answer the
 
 **Done so far**
 - Backend: data model, KEV and EPSS enrichment, risk scoring, SLA due dates, inventory import with vetted rules plus live NVD lookup, business context import
-- Backend API: fix list (with tier and hostname filters), assets summary, dashboard stats, add software, JSON imports
-- Frontend: sidebar navigation; Fix list with KPI cards, tier filters, confidence column and score details panel; Assets page with details panel and "Add software" form; Import page; Escape closes panels
+- Backend: BOD 26-04 tier and deadline, KEV past-due flag, CISA SSVC data, package-level patch plan, Ask answers for any question with evidence and caveats
+- Backend API: fix list (with tier, hostname and sort options), assets summary, dashboard stats, add software, JSON imports, `POST /ask`, `GET /ask/examples`
+- Frontend: Ask page; sidebar navigation; Fix list with KPI cards (including KEV past due), CISA deadline column, sort menu, tier filters, confidence column and score details panel; Assets page with details panel and "Add software" form; Import page; Escape closes panels
 
 **Next up**
 - Dark mode
 - GitHub Actions CI
 - Remediation status tracking
-- Update BOD 22-01 references to BOD 26-04 in the docs
-- BOD 26-04 tier layer and KEV past-due flag
+- Local LLM to understand unusual question wording
+- Explicit Unknown exposure (yes / no / unknown)
 - Confidence levels and needs-verification lane to match the SRS
 - Data-quality report and as-of date
 

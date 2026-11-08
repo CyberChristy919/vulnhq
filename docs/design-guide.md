@@ -243,7 +243,7 @@ The core VulnHQ screen.
 
 Small outline chips that show which framework outcome a finding or report supports.
 
-`CSF ID.RA-05` · `OWASP A05:2025` · `BOD 22-01`
+`CSF ID.RA-05` · `OWASP A05:2025` · `BOD 26-04`
 
 | Property | Spec |
 |---|---|
