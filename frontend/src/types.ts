@@ -16,6 +16,9 @@ export type FixItem = {
     due_date: string
     days_remaining: number
     overdue: boolean
+    kev_due_date: string | null
+    kev_past_due: boolean
+    kev_days_overdue: number | null
     // Points from each scoring factor, e.g. { kev: 25, epss: 18.6 }
     breakdown: Record<string, number>
   }
@@ -30,6 +33,9 @@ export type Stats = {
     kev_findings: number
     overdue_findings: number
     findings_by_tier: Record<string, number>
+    kev_past_due_findings: number
+    kev_past_due_assets: number
+    oldest_days_overdue: number | null
   }
 
   // One asset from GET /assets, with its software and finding counts

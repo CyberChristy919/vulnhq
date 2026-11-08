@@ -68,7 +68,12 @@ function FixListPage() {
               <td className="mono">{item.cve_id}</td>
               <td className="mono">{item.hostname}</td>
               <td>{item.software}</td>
-              <td>{item.in_kev ? 'Yes' : ''}</td>
+              <td>
+                {item.in_kev ? 'Yes' : ''}
+                {item.kev_past_due && (
+                  <div className="kpi-note">Past due {item.kev_days_overdue}d</div>
+                )}
+              </td>
               <td>
                 <span className={`chip chip--${item.confidence}`}>{item.confidence}</span>
               </td>

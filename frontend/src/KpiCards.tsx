@@ -30,6 +30,12 @@ function KpiCards() {
       className: 'kpi',
     },
     {
+      label: 'KEV past due',
+      value: stats.kev_past_due_findings,
+      note: `On ${stats.kev_past_due_assets} assets, past CISA's due date`,
+      className: stats.kev_past_due_findings > 0 ? 'kpi kpi--critical' : 'kpi',
+    },
+    {
       label: 'Overdue',
       value: stats.overdue_findings,
       note: 'Past the fix-by date',
