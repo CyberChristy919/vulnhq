@@ -30,7 +30,6 @@ from app.schemas import (
 )
 from app.scoring import ScoreInput, calculate_score, due_date
 from app.kev import kev_kpi, kev_status
-from app.kev import kev_status, kev_kpi
 from app.bod import SSVC, bod_due_date, bod_tier
 from dataclasses import asdict
 from pydantic import BaseModel, Field

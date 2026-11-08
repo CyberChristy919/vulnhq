@@ -54,8 +54,29 @@ td {
 
 .filters {
   display: flex;
+  align-items: center;
   gap: var(--vhq-space-2);
   margin-bottom: var(--vhq-space-4);
+}
+
+/* Sort dropdown, pushed to the right end of the filter row */
+.sort {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--vhq-space-2);
+  font-size: 13px;
+  color: var(--vhq-text-muted);
+}
+
+.sort select {
+  height: 32px;
+  padding: 0 var(--vhq-space-2);
+  border: 1px solid var(--vhq-border);
+  border-radius: var(--vhq-radius-md);
+  background: var(--vhq-surface);
+  font: inherit;
+  color: inherit;
 }
 
 .filter {
