@@ -1,5 +1,5 @@
 {
-  "_about": "Software-version to CVE rules used by the inventory importer. Version ranges come from NVD CPE data or the vendor advisory in 'source'. KEV status and EPSS are looked up from the database, not stored here.",
+  "_about": "Software-version to CVE rules used by the inventory importer. Version ranges come from NVD CPE data or the vendor advisory in 'source'. KEV status and EPSS are looked up from the database, not stored here. 'automatable' and 'technical_impact' are CISA SSVC values from Vulnrichment (https://github.com/cisagov/vulnrichment), used for the BOD 26-04 tier; null means CISA has not scored the CVE, so the tier assumes the worst case.",
   "_verified": "2026-11-05",
   "rules": [
     {
@@ -14,7 +14,9 @@
       "max_version": "2.4.49",
       "max_inclusive": true,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-41773"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-41773",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-42013",
@@ -28,7 +30,9 @@
       "max_version": "2.4.50",
       "max_inclusive": true,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-42013"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-42013",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-44790",
@@ -42,7 +46,9 @@
       "max_version": "2.4.52",
       "max_inclusive": false,
       "condition": "Exploitable when mod_lua is enabled.",
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44790"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44790",
+      "automatable": null,
+      "technical_impact": null
     },
     {
       "cve": "CVE-2022-0778",
@@ -56,7 +62,9 @@
       "max_version": "1.0.2zd",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-0778"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-0778",
+      "automatable": true,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2022-0778",
@@ -70,7 +78,9 @@
       "max_version": "1.1.1n",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-0778"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-0778",
+      "automatable": true,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2022-0778",
@@ -84,7 +94,9 @@
       "max_version": "3.0.2",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-0778"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-0778",
+      "automatable": true,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2021-3711",
@@ -98,7 +110,9 @@
       "max_version": "1.1.1l",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-3711"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-3711",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-44228",
@@ -113,7 +127,9 @@
       "max_version": "2.15.0",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-44228",
@@ -128,7 +144,9 @@
       "max_version": "2.12.2",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-45046",
@@ -143,7 +161,9 @@
       "max_version": "2.16.0",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45046"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45046",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-45046",
@@ -158,7 +178,9 @@
       "max_version": "2.12.2",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45046"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45046",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-45105",
@@ -173,7 +195,9 @@
       "max_version": "2.16.0",
       "max_inclusive": true,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45105"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45105",
+      "automatable": false,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2021-45105",
@@ -188,7 +212,9 @@
       "max_version": "2.12.3",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45105"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-45105",
+      "automatable": false,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2021-44832",
@@ -203,7 +229,9 @@
       "max_version": "2.17.1",
       "max_inclusive": false,
       "condition": "Requires attacker control of the logging configuration.",
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44832"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44832",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-44832",
@@ -218,7 +246,9 @@
       "max_version": "2.12.4",
       "max_inclusive": false,
       "condition": "Requires attacker control of the logging configuration.",
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44832"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-44832",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2024-23897",
@@ -232,7 +262,9 @@
       "max_version": "2.426.3",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-23897"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-23897",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2024-4956",
@@ -247,7 +279,9 @@
       "max_version": "3.68.1",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://support.sonatype.com/hc/en-us/articles/29416509323923"
+      "source": "https://support.sonatype.com/hc/en-us/articles/29416509323923",
+      "automatable": true,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2022-2185",
@@ -263,7 +297,9 @@
       "max_version": "14.10.5",
       "max_inclusive": false,
       "condition": "Requires an authenticated user able to import projects.",
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-2185"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-2185",
+      "automatable": null,
+      "technical_impact": null
     },
     {
       "cve": "CVE-2021-23017",
@@ -277,7 +313,9 @@
       "max_version": "1.20.1",
       "max_inclusive": false,
       "condition": "Exploitable when the resolver directive is configured.",
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-23017"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-23017",
+      "automatable": null,
+      "technical_impact": null
     },
     {
       "cve": "CVE-2021-23214",
@@ -291,7 +329,9 @@
       "max_version": "12.9",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-23214"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-23214",
+      "automatable": null,
+      "technical_impact": null
     },
     {
       "cve": "CVE-2021-23214",
@@ -305,7 +345,9 @@
       "max_version": "13.5",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-23214"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-23214",
+      "automatable": null,
+      "technical_impact": null
     },
     {
       "cve": "CVE-2022-1552",
@@ -319,7 +361,9 @@
       "max_version": "12.11",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-1552"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-1552",
+      "automatable": null,
+      "technical_impact": null
     },
     {
       "cve": "CVE-2022-1552",
@@ -333,7 +377,9 @@
       "max_version": "13.7",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-1552"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-1552",
+      "automatable": null,
+      "technical_impact": null
     },
     {
       "cve": "CVE-2021-43798",
@@ -347,7 +393,9 @@
       "max_version": "8.2.7",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798",
+      "automatable": true,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2021-43798",
@@ -361,7 +409,9 @@
       "max_version": "8.1.8",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798",
+      "automatable": true,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2021-43798",
@@ -375,7 +425,9 @@
       "max_version": "8.0.7",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798",
+      "automatable": true,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2018-15473",
@@ -389,7 +441,9 @@
       "max_version": "7.7",
       "max_inclusive": true,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2018-15473"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2018-15473",
+      "automatable": false,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2023-38408",
@@ -404,7 +458,9 @@
       "max_version": "9.3p2",
       "max_inclusive": false,
       "condition": "Exploitable when ssh-agent forwarding is used.",
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-38408"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-38408",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2024-31497",
@@ -418,7 +474,9 @@
       "max_version": "0.81",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-31497"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-31497",
+      "automatable": false,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2024-31497",
@@ -432,7 +490,9 @@
       "max_version": "6.3.3",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-31497"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-31497",
+      "automatable": false,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2022-41903",
@@ -446,7 +506,9 @@
       "max_version": "2.32.4",
       "max_inclusive": true,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-41903"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-41903",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2022-42475",
@@ -461,7 +523,9 @@
       "max_version": "6.4.11",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-42475"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-42475",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-27997",
@@ -476,7 +540,9 @@
       "max_version": "6.4.12",
       "max_inclusive": true,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-27997"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-27997",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2024-21762",
@@ -491,7 +557,9 @@
       "max_version": "6.4.15",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-21762"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-21762",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2022-41328",
@@ -506,7 +574,9 @@
       "max_version": "6.4.12",
       "max_inclusive": false,
       "condition": "Requires a privileged local user.",
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-41328"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-41328",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2025-24813",
@@ -520,7 +590,9 @@
       "max_version": "9.0.99",
       "max_inclusive": false,
       "condition": "Exploitable only if default servlet writes and partial PUT are enabled (non-default).",
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-24813"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-24813",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-42321",
@@ -534,7 +606,9 @@
       "max_version": "15.1.2375.17",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-42321"
+      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-42321",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2022-41040",
@@ -548,7 +622,9 @@
       "max_version": "15.1.2507.16",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-41040"
+      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-41040",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2022-41082",
@@ -562,7 +638,9 @@
       "max_version": "15.1.2507.16",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-41082"
+      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-41082",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2020-1472",
@@ -576,7 +654,9 @@
       "max_version": "10.0.17763.1397",
       "max_inclusive": false,
       "condition": "Build number has no update revision. Verify the August 2020 or later Netlogon patch is installed.",
-      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2020-1472"
+      "source": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2020-1472",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-27532",
@@ -590,7 +670,9 @@
       "max_version": "11.0.1.1261",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-27532"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-27532",
+      "automatable": true,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2022-26500",
@@ -604,7 +686,9 @@
       "max_version": "11.0.1.1261",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-26500"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-26500",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2022-26501",
@@ -618,7 +702,9 @@
       "max_version": "11.0.1.1261",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-26501"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-26501",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2022-1388",
@@ -632,7 +718,9 @@
       "max_version": "14.1.4.6",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-1388"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2022-1388",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-46747",
@@ -646,7 +734,9 @@
       "max_version": "14.1.5",
       "max_inclusive": true,
       "condition": "Exploitable when the Configuration Utility is reachable.",
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-46747"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-46747",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-38000",
@@ -660,7 +750,9 @@
       "max_version": "95.0.4638.69",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-38000"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-38000",
+      "automatable": false,
+      "technical_impact": "partial"
     },
     {
       "cve": "CVE-2021-38003",
@@ -674,7 +766,9 @@
       "max_version": "95.0.4638.69",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-38003"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-38003",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-2033",
@@ -688,7 +782,9 @@
       "max_version": "112.0.5615.121",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-2033"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-2033",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-4863",
@@ -702,7 +798,9 @@
       "max_version": "116.0.5845.187",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-4863"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-4863",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-5217",
@@ -716,7 +814,9 @@
       "max_version": "117.0.5938.132",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-5217"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-5217",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-4863",
@@ -730,7 +830,9 @@
       "max_version": "117.0.1",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-4863"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-4863",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-5217",
@@ -744,7 +846,9 @@
       "max_version": "118.0.1",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-5217"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-5217",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2024-9680",
@@ -758,7 +862,9 @@
       "max_version": "131.0.2",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-9680"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2024-9680",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2021-28550",
@@ -772,7 +878,9 @@
       "max_version": "21.001.20150",
       "max_inclusive": true,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-28550"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2021-28550",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-26369",
@@ -786,7 +894,9 @@
       "max_version": "23.006.20320",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-26369"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-26369",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2025-0411",
@@ -800,7 +910,9 @@
       "max_version": "24.09",
       "max_inclusive": false,
       "condition": "Requires a user to open a crafted archive.",
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-0411"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-0411",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-41064",
@@ -816,7 +928,9 @@
       "max_version": "12.6.9",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41064"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41064",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-41064",
@@ -832,7 +946,9 @@
       "max_version": "13.5.2",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41064"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41064",
+      "automatable": true,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-41990",
@@ -848,7 +964,9 @@
       "max_version": "12.6.8",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41990"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41990",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-41992",
@@ -864,7 +982,9 @@
       "max_version": "12.7",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41992"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41992",
+      "automatable": false,
+      "technical_impact": "total"
     },
     {
       "cve": "CVE-2023-41992",
@@ -880,7 +1000,10 @@
       "max_version": "13.6",
       "max_inclusive": false,
       "condition": null,
-      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41992"
+      "source": "https://nvd.nist.gov/vuln/detail/CVE-2023-41992",
+      "automatable": false,
+      "technical_impact": "total"
     }
-  ]
+  ],
+  "_ssvc_verified": "2026-11-08"
 }
