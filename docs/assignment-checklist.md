@@ -78,7 +78,7 @@ All 10 questions are answered from the data in under a tenth of a second. Most o
 
 ---
 
-## Before Monday (small fixes, under an hour each)
+## Quick wins (small fixes, about 5 to 20 minutes each)
 
 1. Q10 caveat: "findings may be understated on stale assets"
 2. Q5 note: which due dates were set under BOD 22-01 vs. BOD 26-04
