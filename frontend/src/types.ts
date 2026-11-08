@@ -4,6 +4,7 @@ export type FixItem = {
     cve_id: string
     vulnerability_name: string | null
     hostname: string
+    asset_id: string | null
     software: string | null
     in_kev: boolean
     cvss_score: number | null

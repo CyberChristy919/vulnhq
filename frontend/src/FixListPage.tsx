@@ -42,39 +42,32 @@ function FixListPage() {
       </div>
       <table>
         <thead>
-          <tr>
-            <th>#</th>
-            <th>CISA deadline</th>
+        <tr>
+            <th>Asset</th>
+            <th>Company ID</th>
             <th>Risk</th>
             <th>Score</th>
             <th>CVE</th>
-            <th>Asset</th>
             <th>Software</th>
             <th>KEV</th>
             <th>Confidence</th>
+            <th>CISA deadline</th>
           </tr>
         </thead>
         <tbody>
-          {items.map((item, index) => (
+          {items.map((item) => (
             <tr
               key={item.finding_id}
               onClick={() => setSelected(item)}
               className={selected?.finding_id === item.finding_id ? 'row selected' : 'row'}
             >
-              <td>{index + 1}</td>
-              <td>
-                <div>{item.bod_label}</div>
-                {item.bod_due_date && <div className="kpi-note">Due {item.bod_due_date}</div>}
-                {item.bod_assumed.length > 0 && (
-                  <div className="kpi-note">Assumed worst case</div>
-                )}
-              </td>
+              <td className="mono">{item.hostname}</td>
+              <td className="mono">{item.asset_id ?? ''}</td>
               <td>
                 <span className={`vhq-badge vhq-badge--${item.tier.toLowerCase()}`}>{item.tier}</span>
               </td>
               <td>{item.risk_score}</td>
               <td className="mono">{item.cve_id}</td>
-              <td className="mono">{item.hostname}</td>
               <td>{item.software}</td>
               <td>
                 {item.in_kev ? 'Yes' : ''}
@@ -85,10 +78,16 @@ function FixListPage() {
               <td>
                 <span className={`chip chip--${item.confidence}`}>{item.confidence}</span>
               </td>
+              <td>
+                <div>{item.bod_label}</div>
+                {item.bod_due_date && <div className="kpi-note">Due {item.bod_due_date}</div>}
+                {item.bod_assumed.length > 0 && (
+                  <div className="kpi-note">Assumed worst case</div>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
-      </table>
       {selected && <ScoreDetails item={selected} onClose={() => setSelected(null)} />}
     </>
   )
