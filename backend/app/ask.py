@@ -231,6 +231,9 @@ def answer(question, items, assets, as_of: date, intent=None) -> Answer:
         # Assets with no scan date can't be checked; say so instead of dropping them
         if unknown:
             notes.append(f"{len(unknown)} assets have no scan date and could not be checked: {', '.join(sorted(unknown))}.")
+                # Old scans miss newer software changes, so the real count may be higher
+        if hosts:
+            notes.append("Findings on these assets may be understated, since their last scan is out of date.")
         return Answer(intent, text, [evidence_row(i) for i in hits], notes)
 
     # Q4: one department's assets with KEV findings
