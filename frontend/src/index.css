@@ -407,3 +407,60 @@ td {
   border-style: dashed;
   color: var(--vhq-text);
 }
+
+/* Ask page */
+.ask-form {
+  display: flex;
+  gap: var(--vhq-space-2);
+  margin-bottom: var(--vhq-space-4);
+  max-width: 900px;
+}
+
+.ask-input {
+  flex: 1;
+  height: 40px;
+  padding: 0 var(--vhq-space-3);
+  border: 1px solid var(--vhq-border);
+  border-radius: var(--vhq-radius-md);
+  background: var(--vhq-surface);
+  font: inherit;
+  color: inherit;
+}
+
+.ask-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vhq-space-2);
+  margin-bottom: var(--vhq-space-6);
+}
+
+.ask-examples .filter {
+  text-align: left;
+  height: auto;
+  padding-top: var(--vhq-space-1);
+  padding-bottom: var(--vhq-space-1);
+}
+
+.ask-result {
+  max-width: none;
+}
+
+.ask-answer {
+  font-size: 16px;
+  margin: 0;
+}
+
+.ask-result h3 {
+  font-size: 14px;
+  margin: var(--vhq-space-2) 0 0;
+}
+
+.ask-notes {
+  margin: 0;
+  padding-left: var(--vhq-space-6);
+  color: var(--vhq-text-muted);
+}
+
+.ask-result table {
+  width: 100%;
+}

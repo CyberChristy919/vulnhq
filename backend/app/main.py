@@ -32,7 +32,9 @@ from app.scoring import ScoreInput, calculate_score, due_date
 from app.kev import kev_kpi, kev_status
 from app.kev import kev_status, kev_kpi
 from app.bod import SSVC, bod_due_date, bod_tier
-
+from dataclasses import asdict
+from pydantic import BaseModel, Field
+from app.ask import EXAMPLES, answer
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Creates tables if they don't exist yet (Alembic migrations come later)
@@ -339,3 +341,22 @@ def stats(db: Session = Depends(get_db)):
         "findings_by_tier": tiers,
         **kev_kpi(items, today),
     }
+
+    # ---------- Ask (plain-English questions) ----------
+
+class AskIn(BaseModel):
+    # 1 to 500 characters, so an empty or huge question is rejected
+    question: str = Field(min_length=1, max_length=500)
+
+
+@app.get("/ask/examples")
+def ask_examples():
+    """The 10 shortcut questions for the Ask page."""
+    return EXAMPLES
+
+
+@app.post("/ask")
+def ask(body: AskIn, db: Session = Depends(get_db)):
+    """Answer a question from the same scored findings and assets the other pages use."""
+    result = answer(body.question, scored_findings(db), list_assets(db), date.today())
+    return asdict(result)
