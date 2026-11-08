@@ -44,7 +44,8 @@ function FixListPage() {
         <thead>
           <tr>
             <th>#</th>
-            <th>Tier</th>
+            <th>CISA deadline</th>
+            <th>Risk</th>
             <th>Score</th>
             <th>CVE</th>
             <th>Asset</th>
@@ -61,6 +62,13 @@ function FixListPage() {
               className={selected?.finding_id === item.finding_id ? 'row selected' : 'row'}
             >
               <td>{index + 1}</td>
+              <td>
+                <div>{item.bod_label}</div>
+                {item.bod_due_date && <div className="kpi-note">Due {item.bod_due_date}</div>}
+                {item.bod_assumed.length > 0 && (
+                  <div className="kpi-note">Assumed worst case</div>
+                )}
+              </td>
               <td>
                 <span className={`vhq-badge vhq-badge--${item.tier.toLowerCase()}`}>{item.tier}</span>
               </td>

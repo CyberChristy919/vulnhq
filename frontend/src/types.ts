@@ -19,7 +19,11 @@ export type FixItem = {
     kev_due_date: string | null
     kev_past_due: boolean
     kev_days_overdue: number | null
-    // Points from each scoring factor, e.g. { kev: 25, epss: 18.6 }
+    bod_tier: number
+    bod_label: string
+    bod_due_date: string | null
+    bod_forensic_triage: boolean
+    bod_assumed: string[]// Points from each scoring factor, e.g. { kev: 25, epss: 18.6 }
     breakdown: Record<string, number>
   }
 
