@@ -1,0 +1,196 @@
+{
+  "metadata": {
+    "description": "Fictional VulnHQ lab inventory for practice. All hostnames and IPs are made up.",
+    "generated": "2026-11-08"
+  },
+  "assets": [
+    {
+      "asset_id": "LAB-FIN-001",
+      "hostname": "lab-fin-pay01.example.local",
+      "ip_address": "10.80.1.11",
+      "asset_type": "server",
+      "department": "Finance",
+      "criticality": "critical",
+      "os": "Windows Server 2019",
+      "last_scan_date": "2026-10-28",
+      "installed_software": [
+        {
+          "name": "Apache HTTP Server",
+          "version": "2.4.49"
+        },
+        {
+          "name": "OpenSSL",
+          "version": "1.1.1k"
+        }
+      ]
+    },
+    {
+      "asset_id": "LAB-FIN-002",
+      "hostname": "lab-fin-gl01.example.local",
+      "ip_address": "10.80.1.12",
+      "asset_type": "server",
+      "department": "Finance",
+      "criticality": "high",
+      "os": "Windows Server 2022",
+      "last_scan_date": "2026-10-30",
+      "installed_software": [
+        {
+          "name": "Apache Tomcat",
+          "version": "9.0.80"
+        },
+        {
+          "name": "Apache Log4j",
+          "version": "2.14.1"
+        }
+      ]
+    },
+    {
+      "asset_id": "LAB-IT-001",
+      "hostname": "lab-it-mail01.example.local",
+      "ip_address": "10.80.2.11",
+      "asset_type": "server",
+      "department": "IT",
+      "criticality": "critical",
+      "os": "Windows Server 2016",
+      "last_scan_date": "2026-10-25",
+      "installed_software": [
+        {
+          "name": "Microsoft Exchange Server",
+          "version": "15.1.2375.12"
+        }
+      ]
+    },
+    {
+      "asset_id": "LAB-IT-002",
+      "hostname": "lab-it-backup01.example.local",
+      "ip_address": "10.80.2.12",
+      "asset_type": "server",
+      "department": "IT",
+      "criticality": "high",
+      "os": "Windows Server 2019",
+      "last_scan_date": "2026-05-02",
+      "installed_software": [
+        {
+          "name": "Veeam Backup & Replication",
+          "version": "11.0.1.1000"
+        },
+        {
+          "name": "7-Zip",
+          "version": "23.01"
+        }
+      ]
+    },
+    {
+      "asset_id": "LAB-OPS-001",
+      "hostname": "lab-ops-vpn01.example.local",
+      "ip_address": "10.80.3.1",
+      "asset_type": "network",
+      "department": "Operations",
+      "criticality": "critical",
+      "os": "FortiOS",
+      "last_scan_date": "2026-10-20",
+      "installed_software": [
+        {
+          "name": "Fortinet FortiOS",
+          "version": "6.4.9"
+        }
+      ]
+    },
+    {
+      "asset_id": "LAB-OPS-002",
+      "hostname": "lab-ops-lb01.example.local",
+      "ip_address": "10.80.3.2",
+      "asset_type": "network",
+      "department": "Operations",
+      "criticality": "high",
+      "os": "F5 TMOS",
+      "last_scan_date": "2026-06-15",
+      "installed_software": [
+        {
+          "name": "F5 BIG-IP",
+          "version": "14.1.4"
+        }
+      ]
+    },
+    {
+      "asset_id": "LAB-ENG-001",
+      "hostname": "lab-eng-ci01.example.local",
+      "ip_address": "10.80.4.11",
+      "asset_type": "server",
+      "department": "Engineering",
+      "criticality": "medium",
+      "os": "Ubuntu 22.04",
+      "last_scan_date": "2026-10-29",
+      "installed_software": [
+        {
+          "name": "Jenkins",
+          "version": "2.401.1"
+        },
+        {
+          "name": "Git",
+          "version": "2.32.1"
+        }
+      ]
+    },
+    {
+      "asset_id": "LAB-ENG-002",
+      "hostname": "lab-eng-mon01.example.local",
+      "ip_address": "10.80.4.12",
+      "asset_type": "server",
+      "department": "Engineering",
+      "criticality": "medium",
+      "os": "Ubuntu 22.04",
+      "last_scan_date": "2026-10-29",
+      "installed_software": [
+        {
+          "name": "Grafana",
+          "version": "8.2.5"
+        },
+        {
+          "name": "nginx",
+          "version": "1.20.0"
+        }
+      ]
+    },
+    {
+      "asset_id": "LAB-HR-001",
+      "hostname": "lab-hr-app01.example.local",
+      "ip_address": "10.80.5.11",
+      "asset_type": "server",
+      "department": "HR",
+      "criticality": "high",
+      "os": "Windows Server 2019",
+      "last_scan_date": "2026-10-27",
+      "installed_software": [
+        {
+          "name": "PostgreSQL",
+          "version": "13.4"
+        }
+      ]
+    },
+    {
+      "asset_id": "LAB-EXEC-001",
+      "hostname": "lab-exec-lt01.example.local",
+      "ip_address": "10.80.6.21",
+      "asset_type": "workstation",
+      "department": "Executive",
+      "criticality": "high",
+      "os": "Windows 11",
+      "last_scan_date": "2026-10-31",
+      "installed_software": [
+        {
+          "name": "Google Chrome",
+          "version": "116.0.5845.96"
+        },
+        {
+          "name": "Adobe Acrobat Reader",
+          "version": "23.003.20201"
+        },
+        {
+          "name": "PuTTY",
+          "version": "0.80"
+        }
+      ]
+    }
+  ]
+}

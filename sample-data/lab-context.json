@@ -1,0 +1,32 @@
+{
+  "assets": [
+    {
+      "hostname": "lab-fin-pay01.example.local",
+      "internet_facing": true,
+      "money_movement": "outbound_payments",
+      "data_classification": "restricted"
+    },
+    {
+      "hostname": "lab-fin-gl01.example.local",
+      "money_movement": "internal_transfers",
+      "data_classification": "confidential"
+    },
+    {
+      "hostname": "lab-it-mail01.example.local",
+      "internet_facing": true,
+      "data_classification": "confidential"
+    },
+    {
+      "hostname": "lab-ops-vpn01.example.local",
+      "internet_facing": true
+    },
+    {
+      "hostname": "lab-ops-lb01.example.local",
+      "internet_facing": true
+    },
+    {
+      "hostname": "lab-hr-app01.example.local",
+      "data_classification": "restricted"
+    }
+  ]
+}

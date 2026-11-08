@@ -175,6 +175,8 @@ VulnHQ uses a calming base palette with standard red / orange / yellow / green s
 
 ## Getting Started
 
+> New to setting up apps? Follow the [VulnHQ Setup Lab Guide](docs/lab-guide.md). It walks through every install on Windows with checkpoints and uses fictional lab data.
+
 ### Prerequisites
 - Git
 - Python 3.12
