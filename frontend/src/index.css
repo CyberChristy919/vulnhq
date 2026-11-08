@@ -405,6 +405,9 @@ td {
   margin: 0;
 }
 
+.card .note {
+  margin: 0;
+}
 
 /* Space between the lines of a file explanation */
 .card .note p {
