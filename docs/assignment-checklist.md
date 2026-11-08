@@ -13,8 +13,8 @@ Status as of November 8, 2026. Answers were checked on the fictional lab data se
 | The 10 assignment questions | 5 | 5 | 0 |
 | Answer quality from the brief | 3 | 5 | 1 |
 | Assignment data issues | 0 | 4 | 1 |
-| Trust and AI rules | 5 | 2 | 3 |
-| **Total (34 items)** | **13** | **16** | **5** |
+| Trust and AI rules | 6 | 2 | 2 |
+| **Total (34 items)** | **14** | **16** | **4** |
 
 All 10 questions are answered from the data in under a tenth of a second. Most of the partial items are a missing detail, like a note or one more number, not a missing feature.
 
@@ -35,7 +35,7 @@ All 10 questions are answered from the data in under a tenth of a second. Most o
 | Q7 | Which business unit has the most critical exposure? | ✅ | Business unit ranking with Critical, KEV and total counts; the metric definition is stated | — | Option to rank by total risk score (the SRS metric) |
 | Q8 | What would patching Apache HTTP Server reduce our CVE count by? | 🟡 | Before and after CVE and finding counts; asks "which one?" when "Apache" is ambiguous | KEV and risk-score before and after are not shown. The patch plan already has those numbers. | Add KEV count and total risk score before and after |
 | Q9 | List all CVEs on network devices sorted by CVSS | ✅ | Network-device CVEs sorted by CVSS, with confidence counts for findings that need a configuration check | — | — |
-| Q10 | Assets not scanned in 30 days with high-severity CVEs? | 🟡 | Answered with 30 days as asked; Assets page flags scans older than 90 days | Missing the caveat "findings may be understated on stale assets" and the company scan-standard view | Add the caveat now; add scan standards (FR-SCN) on the roadmap |
+| Q10 | Assets not scanned in 30 days with high-severity CVEs? | 🟡 | Answered with 30 days as asked, with the caveat that findings on stale assets may be understated; Assets page flags scans older than 90 days | Scan age isn't shown in the answer, and there's no company scan-standard view | Add scan age to the evidence rows; add scan standards (FR-SCN) on the roadmap |
 
 ## 2. Answer quality required by the brief
 
@@ -73,17 +73,17 @@ All 10 questions are answered from the data in under a tenth of a second. Most o
 | AI-06: Test set of the 10 questions plus 10 adversarial questions | 🟡 | All 10 questions tested; tests also cover made-up values and a failing AI | No prompt-injection test. The AI never sees CVE text, which lowers the risk. | Add an adversarial test file: fake CVE, out-of-scope product, injected instructions |
 | FR-VAL-01/02: Verifier checks IDs and numbers in every answer | ⬜ | — | No AI writes answer text, so every ID and number already comes straight from the database | Build the verifier together with AI-written summaries |
 | FR-TRC-04: Every answer stamped with the as-of date and data freshness | ⬜ | The KEV catalog version is printed when it loads | It was a Sunday stretch item that wasn't reached | "Data as of KEV 2026.11.06, EPSS <date>" in the header and on each answer |
-| NFR-AVL-02: Demo runs offline from cached data | ⬜ | KEV, EPSS and NVD results are stored in the database and the AI runs locally | Not tested with the network off | Test offline before the demo: turn off Wi-Fi and run all 10 questions |
+| NFR-AVL-02: Demo runs offline from cached data | ✅ | Tested November 8 with Wi-Fi off: all 10 questions answered. KEV, EPSS and NVD results are stored in the database and the AI runs locally. | — | — |
 | FR-AMB-06: "What this tool does not do" statement | ✅ | Published in the README | — | Also show it in the app |
 
 ---
 
 ## Quick wins (small fixes, about 5 to 20 minutes each)
 
-1. Q10 caveat: "findings may be understated on stale assets"
+1. ~~Q10 caveat~~ (done November 8)
 2. Q5 note: which due dates were set under BOD 22-01 vs. BOD 26-04
 3. Q8: add KEV count and risk score before and after
-4. Test offline: Wi-Fi off, all 10 questions
+4. ~~Test offline~~ (done November 8: all 10 questions work with Wi-Fi off)
 5. Settings fix: allow `OLLAMA_MODEL` in `backend\.env` (add `extra="ignore"` in `app/config.py`)
 
 ## Roadmap (after the interview)
