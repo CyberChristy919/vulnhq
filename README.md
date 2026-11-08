@@ -29,7 +29,7 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 - [x] Asset inventory with business criticality ratings (business context file)
 - [x] Risk-based prioritization score (0 to 100, with factor breakdown)
 - [x] Ranked fix list page with tier filters (Critical / High / Medium / Low) and sort options (risk score, CISA deadline, KEV days overdue, SLA due date, asset)
-- [x] **Ask page:** plain-English questions answered from the data, with evidence rows, caveats and ambiguity handling
+- [x] **Ask page:** plain-English questions answered from the data, with evidence rows, caveats and ambiguity handling; a local AI model (Granite 4.2 via Ollama) handles unusual wording
 - [x] Score details panel showing why each finding ranks where it does
 - [x] Dashboard KPI cards (critical open, known exploited, KEV past due, overdue, stale scans, open findings)
 - [x] Confidence column on every finding (confirmed / conditional / nvd)
@@ -76,7 +76,7 @@ See the full [SRS gap analysis](docs/srs-gap-analysis.md) for requirement IDs.
 
 **Answers, trust and reporting**
 - [x] Natural-language questions answered by a deterministic router, covering the 10 assignment questions (SRS Section 11)
-- [ ] Local LLM to understand unusual wording (numbers still calculated by code)
+- [x] Local AI model to understand unusual wording (Granite 4.2 via Ollama; numbers still calculated by code)
 - [ ] Citations and an evidence bundle per finding; answer verifier with Pass / Fail
 - [x] Package-level patch plan (package, hosts, risk removed) and "what would patching X remove"
 - [ ] Target version per package
@@ -208,6 +208,14 @@ NVD_API_KEY=
 
 A free [NVD API key](https://nvd.nist.gov/developers/request-an-api-key) makes live NVD lookups about 10 times faster. It is optional.
 
+**Optional: local AI model for the Ask page.** Install [Ollama](https://ollama.com/download), then download the model once:
+
+```powershell
+ollama pull granite4.2:8b
+```
+
+Ollama runs in the background on `http://localhost:11434`. To use a different model or address, add `OLLAMA_MODEL=` or `OLLAMA_URL=` to `backend/.env`. On a machine with 8 GB of RAM or less, use `granite4.2:3b`. Without Ollama, the Ask page still works with keywords only.
+
 ### Loading Data
 
 Run these from the `backend` folder with the virtual environment active:
@@ -231,7 +239,7 @@ See [importing](docs/importing.md) for file formats.
 
 ### Running Locally
 
-Use two terminals.
+Start PostgreSQL first (from an Administrator PowerShell: `Get-Service postgresql* | Start-Service`), then use two terminals.
 
 ```powershell
 # Terminal 1: API on http://127.0.0.1:8000 (docs at /docs)
@@ -252,7 +260,7 @@ The Vite dev server forwards `/api/*` requests to the FastAPI backend.
 
 | Page | What it shows |
 |---|---|
-| **Ask** | Type any question, or click one of the 10 shortcut questions. Each answer shows the evidence behind it (asset ID, CVE with NVD link, CVSS, source, KEV due date, CISA deadline, confidence) and notes on anything uncertain. |
+| **Ask** | Type any question, or click one of the 10 shortcut questions. Unusual wording is routed by the local AI model when Ollama is running. Each answer shows the evidence behind it (asset ID, CVE with NVD link, CVSS, source, KEV due date, CISA deadline, confidence) and notes on anything uncertain. |
 | **Fix list** | KPI cards, then findings ranked by risk score, with tier filters and a Sort by menu. Columns include the CISA BOD 26-04 deadline and KEV past-due days. Click a row for the score breakdown. |
 | **Assets** | Every asset, riskiest first. Scans older than 90 days are flagged. Click an asset to see its software and add new software, which is checked for CVEs right away. |
 | **Import** | Upload an asset inventory JSON, then a business context JSON. Shows what was created, plus software that couldn't be checked or needs review. |
@@ -274,19 +282,33 @@ The risk score says how bad a finding would be. Confidence says how sure we are 
 3. **Fix list**: walk through the top findings and open one to show why it ranks there.
 4. **Assets**: point out stale scans on critical systems.
 5. Add software live on the **Assets** page and show the new finding appear in the fix list.
-6. **Ask**: click the 10 shortcut questions, then type one in your own words. Show the evidence table and the "What to know" notes, and type "What would patching Apache reduce?" to show the "which one?" reply.
+6. **Ask**: click the 10 shortcut questions, then type one in your own words. Show the evidence table and the "What to know" notes, and type "What would patching Apache reduce?" to show the "which one?" reply. Then type "Which team is in the roughest shape on exploited bugs?" and point out the note "Question type picked by the local AI model". Ask one question before the demo so the model is already loaded.
 
 ### How the Ask Page Works
 
-No AI model is used. Answers are a workflow over the same data as the other pages:
+Answers are a workflow over the same data as the other pages. A local AI model helps only with understanding the question; it never calculates an answer.
 
 1. **Ingest:** asset inventory and business context (Import page)
 2. **Look up:** CISA KEV, NVD and EPSS, plus CISA SSVC from Vulnrichment
 3. **Match:** software names and versions to CVEs, with a confidence level
 4. **Score:** VulnHQ risk score and tier, BOD 26-04 deadline, KEV past due
-5. **Answer:** keywords pick the question type (`backend/app/ask.py`), details such as department, package, asset type and days are pulled from the question, and the answer is calculated from the scored findings
+5. **Route:** keywords pick the question type (`backend/app/ask.py`). If no keyword matches, the local AI model picks one of the 10 question types instead (`backend/app/llm_intent.py`)
+6. **Answer:** details such as department, package, asset type and days are pulled from the question, and the answer is calculated from the scored findings
 
 Every answer lists its evidence and states caveats: match confidence counts, findings with no CVSS score, assumed CISA tiers, and assets with no scan date. Questions that aren't understood get an honest "can't answer that yet" with suggestions instead of a guess.
+
+#### Local AI Fallback
+
+| Rule | How it works |
+|---|---|
+| Keywords first | The model is asked only when the keyword router finds no match, so the 10 shortcut questions never depend on it. |
+| Limited job | The model returns JSON with a question type, department, package and days. It never sees findings and never produces a number. |
+| Fixed choices | Ollama's structured outputs force the reply to match a JSON schema. The question type must be one of the 10, and department and package must be values that exist in the data; anything else is dropped. |
+| Safe fallback | If Ollama is off, slower than 30 seconds, or returns something unexpected, the keyword answer stands (including "can't answer that yet"). |
+| Transparent | Answers routed by the model start their notes with "Question type picked by the local AI model". |
+| Local only | Questions stay on the machine. Nothing is sent to a cloud AI service. |
+
+Model: [IBM Granite 4.2](https://ollama.com/library/granite4.2) 8B (Apache 2.0), run by [Ollama](https://ollama.com) with thinking turned off and temperature 0 for consistent answers. Tests in `backend/tests/test_llm_intent.py` use a fake model, so they pass without Ollama.
 
 ### What This Tool Does Not Do
 
@@ -294,6 +316,7 @@ Every answer lists its evidence and states caveats: match confidence counts, fin
 - It does not confirm exploitability. "Conditional" and "nvd" matches need a human check.
 - It does not account for vendor backports (for example, OpenSSL patched by Red Hat without a version change).
 - BOD 26-04 deadlines are calculated from CISA's published table, but federal timelines take effect December 7, 2026.
+- The local AI model does not answer questions or calculate numbers. It only picks the question type, and it can pick the wrong one; the note on each AI-routed answer says so, and the evidence table lets an analyst check.
 
 ### Running Tests
 
@@ -310,7 +333,7 @@ pytest
 vulnhq/
 ├── backend/
 │   ├── app/           # FastAPI app: models, scoring, KEV/EPSS/NVD matching, BOD 26-04 tier,
-│   │                  #   KEV past due, patch plan, Ask (plain-English questions), API
+│   │                  #   KEV past due, patch plan, Ask (plain-English questions, local AI fallback), API
 │   ├── data/          # Matching rules and CPE aliases
 │   ├── scripts/       # Load, import, migrate and reset scripts
 │   └── tests/         # pytest tests
@@ -327,7 +350,7 @@ vulnhq/
 
 ## Demo Scope (Monday)
 
-Build through Sunday, then switch to the presentation and docs. Goal: answer the 10 assignment questions (SRS Section 11) with deterministic answers, no AI agent. All 10 are answered on the Ask page.
+Build through Sunday, then switch to the presentation and docs. Goal: answer the 10 assignment questions (SRS Section 11) with deterministic answers. All 10 are answered on the Ask page, and a local AI model routes questions asked in other words.
 
 **Saturday**
 - [x] Replace BOD 22-01 with BOD 26-04 in all docs
@@ -341,11 +364,12 @@ Build through Sunday, then switch to the presentation and docs. Goal: answer the
 - [x] Business unit, asset type, CVSS sort, stale + high (Q1, Q4, Q7, Q9, Q10), answered on the Ask page
 - [x] Fix list Sort by menu
 - [x] Template CISO summary (Q6) and "What this tool does not do"
+- [x] Local AI fallback for unusual wording (Granite 4.2 via Ollama), with tests
 - [ ] Stretch: as-of date in header, GitHub Actions CI
 
 **Stop rule:** If the tier and patch plan aren't working by Sunday evening, freeze and demo what works.
 
-**Scope cuts for the roadmap slide:** local LLM for wording (numbers stay in code), owner sections (SRS 5.11 to 5.24), scanner and ticketing integrations, notifications, remediation workflow, dark mode.
+**Scope cuts for the roadmap slide:** AI-written answer wording (numbers stay in code), owner sections (SRS 5.11 to 5.24), scanner and ticketing integrations, notifications, remediation workflow, dark mode.
 
 ---
 
@@ -353,7 +377,7 @@ Build through Sunday, then switch to the presentation and docs. Goal: answer the
 
 **Done so far**
 - Backend: data model, KEV and EPSS enrichment, risk scoring, SLA due dates, inventory import with vetted rules plus live NVD lookup, business context import
-- Backend: BOD 26-04 tier and deadline, KEV past-due flag, CISA SSVC data, package-level patch plan, Ask answers for any question with evidence and caveats
+- Backend: BOD 26-04 tier and deadline, KEV past-due flag, CISA SSVC data, package-level patch plan, Ask answers for any question with evidence and caveats, local AI fallback for unusual wording (Ollama)
 - Backend API: fix list (with tier, hostname and sort options), assets summary, dashboard stats, add software, JSON imports, `POST /ask`, `GET /ask/examples`
 - Frontend: Ask page; sidebar navigation; Fix list with KPI cards (including KEV past due), CISA deadline column, sort menu, tier filters, confidence column and score details panel; Assets page with details panel and "Add software" form; Import page; Escape closes panels
 
@@ -361,7 +385,6 @@ Build through Sunday, then switch to the presentation and docs. Goal: answer the
 - Dark mode
 - GitHub Actions CI
 - Remediation status tracking
-- Local LLM to understand unusual question wording
 - Explicit Unknown exposure (yes / no / unknown)
 - Confidence levels and needs-verification lane to match the SRS
 - Data-quality report and as-of date
