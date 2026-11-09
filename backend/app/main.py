@@ -35,6 +35,7 @@ from dataclasses import asdict
 from pydantic import BaseModel, Field
 from app.ask import EXAMPLES, answer_with_ai
 from app.llm_intent import classify
+from app.patch_plan import patch_plan
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Creates tables if they don't exist yet (Alembic migrations come later)
@@ -347,6 +348,14 @@ def stats(db: Session = Depends(get_db)):
 class AskIn(BaseModel):
     # 1 to 500 characters, so an empty or huge question is rejected
     question: str = Field(min_length=1, max_length=500)
+
+
+# ---------- Patch plan ----------
+
+@app.get("/patch-plan")
+def get_patch_plan(limit: int = Query(10, le=100), db: Session = Depends(get_db)):
+    """One row per software package, biggest risk reduction first (Q3)."""
+    return [asdict(p) for p in patch_plan(scored_findings(db))[:limit]]
 
 
 @app.get("/ask/examples")
