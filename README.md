@@ -216,7 +216,7 @@ A free [NVD API key](https://nvd.nist.gov/developers/request-an-api-key) makes l
 ollama pull granite4.2:8b
 ```
 
-Ollama runs in the background on `http://localhost:11434`. To use a different model or address, add `OLLAMA_MODEL=` or `OLLAMA_URL=` to `backend/.env`. On a machine with 8 GB of RAM or less, use `granite4.2:3b`. Without Ollama, the Ask page still works with keywords only.
+Ollama runs in the background on `http://localhost:11434`. To use a different model or address, set it in the backend terminal before starting uvicorn, for example `$env:OLLAMA_MODEL = "granite4.2:3b"` or `$env:OLLAMA_URL = "http://localhost:11434"`. Don't put these in `backend/.env`: the settings file only accepts `DATABASE_URL` and `NVD_API_KEY`, and the API won't start with other entries. On a machine with 8 GB of RAM or less, use `granite4.2:3b`. Without Ollama, the Ask page still works with keywords only.
 
 ### Loading Data
 
@@ -256,7 +256,26 @@ npm run dev
 
 The Vite dev server forwards `/api/*` requests to the FastAPI backend.
 
-**Troubleshooting:** If the API hangs after terminals were closed, stuck Python processes may be holding the database. Run `Stop-Process -Name python -Force`, then start uvicorn again.
+**Useful API links** (with the API running; full list at [/docs](http://127.0.0.1:8000/docs)):
+
+| Link | Shows |
+|---|---|
+| [/health](http://127.0.0.1:8000/health) | API and database are connected |
+| [/stats](http://127.0.0.1:8000/stats) | The numbers behind the Fix list cards |
+| [/fix-list?tier=critical&limit=5](http://127.0.0.1:8000/fix-list?tier=critical&limit=5) | Top Critical findings with score breakdown and deadlines |
+| [/patch-plan?limit=5](http://127.0.0.1:8000/patch-plan?limit=5) | Package patch plan, biggest risk removed first |
+| [/vulnerabilities?kev_only=true&limit=5](http://127.0.0.1:8000/vulnerabilities?kev_only=true&limit=5) | Newest CISA KEV entries stored locally |
+| `POST /ask` (try it in /docs) | The same answer, evidence and notes as the Ask page |
+
+**Troubleshooting**
+
+| Symptom | Fix |
+|---|---|
+| The API hangs after terminals were closed | Stuck Python processes may be holding the database. Run `Stop-Process -Name python -Force`, then start uvicorn again. |
+| Vite shows `http proxy error ... ECONNREFUSED 127.0.0.1:8000` | The API isn't running. Start uvicorn in its own terminal, then refresh the browser. |
+| `npm run dev` says it can't find `package.json` | Run it from the `frontend` folder, not the repo root. |
+| The app loads but every number is 0 | The database is empty, for example after `reset_demo`. Import the inventory and context files on the Import page. |
+| `git push` fails with "Connection was reset" | Run `git config http.version HTTP/1.1` once in the repo, then push again. |
 
 ### Using VulnHQ
 
@@ -284,7 +303,8 @@ The risk score says how bad a finding would be. Confidence says how sure we are 
 3. **Fix list**: walk through the top findings and open one to show why it ranks there.
 4. **Assets**: point out stale scans on critical systems.
 5. Add software live on the **Assets** page and show the new finding appear in the fix list.
-6. **Ask**: click the 10 shortcut questions, then type one in your own words. Show the evidence table and the "What to know" notes, and type "What would patching Apache reduce?" to show the "which one?" reply. Then type "Which team is in the roughest shape on exploited bugs?" and point out the note "Question type picked by the local AI model". Ask one question before the demo so the model is already loaded.
+6. **Patch plan**: open [http://127.0.0.1:8000/patch-plan?limit=5](http://127.0.0.1:8000/patch-plan?limit=5) to show the full package plan from the API, biggest risk removed first.
+7. **Ask**: click the 10 shortcut questions, then type one in your own words. Show the evidence table and the "What to know" notes, and type "What would patching Apache reduce?" to show the "which one?" reply. Then type "Which team is in the roughest shape on exploited bugs?" and point out the note "Question type picked by the local AI model". Ask one question before the demo so the model is already loaded.
 
 ### How the Ask Page Works
 
@@ -379,9 +399,9 @@ Build through Sunday, then switch to the presentation and docs. Goal: answer the
 
 **Done so far**
 - Backend: data model, KEV and EPSS enrichment, risk scoring, SLA due dates, inventory import with vetted rules plus live NVD lookup, business context import
-- Backend: BOD 26-04 tier and deadline, KEV past-due flag, CISA SSVC data, package-level patch plan, Ask answers for any question with evidence and caveats, local AI fallback for unusual wording (Ollama)
-- Backend API: fix list (with tier, hostname and sort options), assets summary, dashboard stats, add software, JSON imports, `POST /ask`, `GET /ask/examples`
-- Frontend: Ask page; sidebar navigation; Fix list with KPI cards (including KEV past due), CISA deadline column, sort menu, tier filters, confidence column and score details panel; Assets page with details panel and "Add software" form; Import page; Escape closes panels
+- Backend: BOD 26-04 tier and deadline, KEV past-due flag, CISA SSVC data, package-level patch plan, Ask answers for any question with evidence and caveats (including which directive, BOD 22-01 or BOD 26-04, set each KEV due date, and a stale-scan caveat), local AI fallback for unusual wording (Ollama)
+- Backend API: health check, KEV vulnerabilities, fix list (with tier, hostname and sort options), assets summary, dashboard stats, package patch plan (`GET /patch-plan`), add software, JSON imports, `POST /ask`, `GET /ask/examples`
+- Frontend: Ask page; sidebar navigation; Fix list with KPI cards (including KEV past due), CISA deadline column, sort menu, tier filters, confidence column and score details panel; Assets page with details panel and "Add software" form; Import page with a plain-language explanation of each file; Escape closes panels
 
 **Next up**
 - Dark mode
