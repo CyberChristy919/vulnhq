@@ -56,7 +56,7 @@ def patch_plan(items) -> list[PackagePlan]:
                 risk_removed=round(sum(i.risk_score for i in group), 1),
             )
         )
-    # Biggest risk reduction first; ties go A to Z by package name
+    # Most KEV findings first, then biggest risk reduction; ties go A to Z by package name
     plan.sort(key=lambda p: (-p.kev_findings, -p.risk_removed, p.package))
     return plan
 
