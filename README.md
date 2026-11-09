@@ -263,7 +263,7 @@ The Vite dev server forwards `/api/*` requests to the FastAPI backend.
 | [/health](http://127.0.0.1:8000/health) | API and database are connected |
 | [/stats](http://127.0.0.1:8000/stats) | The numbers behind the Fix list cards |
 | [/fix-list?tier=critical&limit=5](http://127.0.0.1:8000/fix-list?tier=critical&limit=5) | Top Critical findings with score breakdown and deadlines |
-| [/patch-plan?limit=5](http://127.0.0.1:8000/patch-plan?limit=5) | Package patch plan, biggest risk removed first |
+| [/patch-plan?limit=5](http://127.0.0.1:8000/patch-plan?limit=5) | Package patch plan, most KEV findings first, then biggest risk removed |
 | [/vulnerabilities?kev_only=true&limit=5](http://127.0.0.1:8000/vulnerabilities?kev_only=true&limit=5) | Newest CISA KEV entries stored locally |
 | `POST /ask` (try it in /docs) | The same answer, evidence and notes as the Ask page |
 
@@ -303,7 +303,7 @@ The risk score says how bad a finding would be. Confidence says how sure we are 
 3. **Fix list**: walk through the top findings and open one to show why it ranks there.
 4. **Assets**: point out stale scans on critical systems.
 5. Add software live on the **Assets** page and show the new finding appear in the fix list.
-6. **Patch plan**: open [http://127.0.0.1:8000/patch-plan?limit=5](http://127.0.0.1:8000/patch-plan?limit=5) to show the full package plan from the API, biggest risk removed first.
+6. **Patch plan**: open [http://127.0.0.1:8000/patch-plan?limit=5](http://127.0.0.1:8000/patch-plan?limit=5) to show the full package plan from the API, most KEV findings first, then biggest risk removed.
 7. **Ask**: click the 10 shortcut questions, then type one in your own words. Show the evidence table and the "What to know" notes, and type "What would patching Apache reduce?" to show the "which one?" reply. Then type "Which team is in the roughest shape on exploited bugs?" and point out the note "Question type picked by the local AI model". Ask one question before the demo so the model is already loaded.
 
 ### How the Ask Page Works

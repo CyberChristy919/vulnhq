@@ -13,7 +13,9 @@ These tests describe the code before it exists. Build it in app/patch_plan.py:
     patch_plan(items) -> list[PackagePlan]
         items: open findings; each has .software, .cve_id, .hostname,
                .in_kev, .tier, .risk_score
-        One PackagePlan per package, biggest risk_removed first
+        One PackagePlan per package. Packages with the most KEV findings come
+        first, so an actively exploited flaw (like Log4Shell) is never buried
+        under a pile of unreviewed findings. Then biggest risk_removed first
         (ties: package name A to Z).
 
     PackagePlan (dataclass) fields:
@@ -89,14 +91,28 @@ def test_package_name(label, expected):
 
 def test_one_row_per_package():
     plan = patch_plan(ITEMS)
-    assert [p.package for p in plan] == ["Apache HTTP Server", "OpenSSL", "Log4j"]
+    # Apache (3 KEV), Log4j (1 KEV), then OpenSSL (0 KEV)
+    assert [p.package for p in plan] == ["Apache HTTP Server", "Log4j", "OpenSSL"]
 
 
-def test_biggest_risk_removed_first():
+def test_most_kev_findings_first():
     plan = patch_plan(ITEMS)
-    assert plan[0].risk_removed == 248.0   # 90 + 88 + 70
-    assert plan[1].risk_removed == 100.0   # 60 + 40
-    assert plan[2].risk_removed == 95.0
+    assert [p.kev_findings for p in plan] == [3, 1, 0]
+
+
+def test_kev_package_beats_bigger_non_kev_total():
+    # Many unreviewed, non-KEV findings must not outrank one KEV flaw
+    items = [Item("Python 3.8", f"CVE-P{n}", "h1", False, "High", 60.0) for n in range(10)]
+    items.append(Item("Log4j 2.14.1", "CVE-2021-44228", "h2", True, "Critical", 95.0))
+    plan = patch_plan(items)
+    assert plan[0].package == "Log4j"
+    assert plan[1].risk_removed == 600.0   # Python: bigger total, but no KEV
+
+
+def test_same_kev_count_biggest_risk_removed_first():
+    items = [Item("Small 1", "CVE-1", "h1", True, risk_score=40.0),
+             Item("Big 1", "CVE-2", "h1", True, risk_score=90.0)]
+    assert [p.package for p in patch_plan(items)] == ["Big", "Small"]
 
 
 def test_package_counts():
