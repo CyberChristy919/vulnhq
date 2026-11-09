@@ -57,7 +57,7 @@ def patch_plan(items) -> list[PackagePlan]:
             )
         )
     # Biggest risk reduction first; ties go A to Z by package name
-    plan.sort(key=lambda p: (-p.risk_removed, p.package))
+    plan.sort(key=lambda p: (-p.kev_findings, -p.risk_removed, p.package))
     return plan
 
 
