@@ -92,6 +92,7 @@ All 10 questions are answered from the data in under a tenth of a second. Most o
 |---|---|
 | Trust | As-of stamp, trace panel, verifier, adversarial test set, CVSS version, SRS confidence labels and Needs verification tab |
 | Data quality | Data-quality report, scan standards, end-of-support flags, version translators, manual review queue |
+| Board view | Plain-language "Why this order" under every ranked answer and on the Patch plan, easy for a board to find: what comes first, the rule that put it there (most actively exploited flaws first, then total risk), and the trade-off. Example: "Chrome first: 14 actively exploited flaws and a same-day browser update. Log4j next: the most total risk, but it needs app testing and a change window." Show the KEV count on every "Next" line. Code writes the text from the data, so every number matches the proof table. The effort part (same-day update vs. change window) needs a new fix-effort field per package, such as auto-update, library update or vendor patch. |
 | Hand-off | CSV export, owners, remediation status, target versions in the patch plan |
 | Change over time | Daily snapshots and "What's new since last week?" |
 | Owner features | SRS Sections 5.11 to 5.24 (configuration, notifications, SLA policy, vendors, preventive maintenance) |
