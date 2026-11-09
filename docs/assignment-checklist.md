@@ -2,7 +2,7 @@
 
 How VulnHQ measures up against the Deloitte Cyber Engineering interview assignment. The checklist uses the requirements that SRS v2.0 traces to the assignment brief: the 10 assignment questions, requirements whose source is "Assignment brief", the known issues in the assignment data and the trust rules for the AI.
 
-Status as of November 8, 2026. Answers were checked on the fictional lab data set (`sample-data/lab-inventory.json`) with the keyword router. 176 automated tests pass.
+Status as of November 9, 2026. Answers were checked on the fictional lab data set (`sample-data/lab-inventory.json`) with the keyword router. 179 automated tests pass.
 
 **Status key:** ✅ Done · 🟡 Partial (works, with a gap noted) · ⬜ Not started
 
@@ -28,7 +28,7 @@ All 10 questions are answered from the data in under a tenth of a second. Most o
 |---|---|---|---|---|---|
 | Q1 | Which of our assets have critical unpatched CVEs? | ✅ | Assets with CVSS 9.0+ findings, counts by match confidence, NVD links | — | Add a coverage-gap note (for example, "Windows patch level can't be assessed") |
 | Q2 | What is our highest-risk server right now and why? | ✅ | One server, top CVE, risk score, criticality, KEV count; score breakdown on the Fix list | — | — |
-| Q3 | Which software package should we patch first? | 🟡 | Package-level ranking with hosts, findings removed, KEV count and risk removed, plus the next two packages | No target version ("upgrade to X"). The vetted rules store affected version ranges, not a fixed version for each product. | Add `fixed_version` to `vuln_rules.json` and show "Upgrade to X" in the answer |
+| Q3 | Which software package should we patch first? | 🟡 | Package-level ranking with hosts, findings removed, KEV count and risk removed, plus the next two packages. The full plan is also available at `GET /patch-plan` (added November 9) | No target version ("upgrade to X"). The vetted rules store affected version ranges, not a fixed version for each product. | Add `fixed_version` to `vuln_rules.json` and show "Upgrade to X" in the answer |
 | Q4 | How many Finance assets are affected by actively exploited vulnerabilities? | ✅ | Count of Finance assets plus the list of KEV findings with due dates | — | — |
 | Q5 | Are any assets past a CISA KEV due date? | ✅ | Findings past the KEV due date, days overdue, oldest first; KPI card and Fix list column. A note says how many due dates were set under BOD 22-01 vs. BOD 26-04 | — | — |
 | Q6 | Summarise our posture for the CISO in 3 sentences | 🟡 | Three sentences built by code from the data, so every number is exact | Numbers are not cited one by one and there is no verifier "Pass" badge. No AI writes the text, so there is nothing for a verifier to catch yet. | Add citations under the summary; add the verifier when the AI writes summaries |
