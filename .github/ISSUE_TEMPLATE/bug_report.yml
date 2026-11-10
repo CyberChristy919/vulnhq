@@ -1,0 +1,59 @@
+name: Bug report
+description: Something in VulnHQ isn't working as expected.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. **Security issues go through the private [security policy](https://github.com/CyberChristy919/vulnhq/security/policy), not here.**
+        Use only fictional data in this report. Don't paste real hostnames, IP addresses or scan output.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, including any error message.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run `python -m scripts.reset_demo`
+        2. Import sample-data/lab-inventory.json on the Import page
+        3. Open the Fix list
+        4. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Import
+        - Fix list / scoring
+        - Assets
+        - Ask page
+        - Patch plan
+        - API
+        - Setup / docs
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Windows 11, Python 3.12, Node 22, PostgreSQL 16, Ollama on/off
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Remove anything sensitive first.
+      render: shell

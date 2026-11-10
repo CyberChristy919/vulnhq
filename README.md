@@ -428,13 +428,32 @@ Aligned to SRS Section 12. If time is tight, build 1, 2, 4, 5, then 3 and 6.
 
 ## Contributing
 
-Contributions, ideas, and feedback are welcome.
+VulnHQ is a **volunteer project** and welcomes contributors who want real-world experience with vulnerability management, FastAPI, React and security data such as CISA KEV, EPSS and NVD.
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Commit your changes: `git commit -m "Add your feature"`
-4. Push the branch: `git push origin feature/your-feature`
-5. Open a pull request
+| Start here | What it covers |
+|---|---|
+| [Contributing guide](CONTRIBUTING.md) | Setup, picking an issue, branch names, checks and reviews |
+| [Contributor agreement](CONTRIBUTOR_AGREEMENT.md) | Unpaid volunteer terms and the rights you grant for your contributions |
+| [Code of conduct](CODE_OF_CONDUCT.md) | How we work together |
+| [Good first issues](https://github.com/CyberChristy919/vulnhq/labels/good%20first%20issue) | Small, well-defined tasks for new contributors |
+
+**Quick version**
+
+1. Pick an issue and comment to ask for it.
+2. Fork the repository and create a branch, for example `feature/your-feature`.
+3. Make your change, run `pytest` (and `npm run lint` and `npm run build` for UI changes).
+4. Commit with sign-off: `git commit -s -m "Add your feature"`.
+5. Open a pull request and complete the template, including the contributor agreement box.
+
+Contributions are unpaid. Contributors get public credit, recognition points for merged work and, for consistent contributors, references. Use only fictional data; never commit real company data or secrets.
+
+### Contributors
+
+Thank you to everyone who helps build VulnHQ. Points are for recognition only.
+
+| Contributor | Areas | Points |
+|---|---|---|
+| [@CyberChristy919](https://github.com/CyberChristy919) | Maintainer | n/a |
 
 ---
 
