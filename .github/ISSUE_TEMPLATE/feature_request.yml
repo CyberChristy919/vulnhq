@@ -1,0 +1,46 @@
+name: Feature request
+description: Suggest an idea or improvement for VulnHQ.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please wait for a maintainer go-ahead before starting work on a new feature, so your time isn't wasted.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Who has this problem, and what are they trying to do? For example, "A remediation lead can't tell which packages to patch this week."
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Related framework or source (if any)
+      multiple: true
+      options:
+        - CISA KEV
+        - CISA BOD 26-04
+        - EPSS
+        - NVD
+        - SSVC
+        - NIST CSF 2.0
+        - NIST SP 800-40
+        - OWASP
+        - None
+  - type: checkboxes
+    id: volunteer
+    attributes:
+      label: Contributing
+      options:
+        - label: I'd like to work on this myself

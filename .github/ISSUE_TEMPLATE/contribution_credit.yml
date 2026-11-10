@@ -1,0 +1,16 @@
+name: Contribution credit (non-code)
+description: Log non-code work such as reviews, triage, design or research for recognition points.
+labels: ["contribution-credit"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this to log work that isn't a merged pull request. The maintainer will add a `points:*` label when closing it.
+        Points are for recognition only and have no cash value (see the [contributor agreement](https://github.com/CyberChristy919/vulnhq/blob/main/CONTRIBUTOR_AGREEMENT.md)).
+  - type: textarea
+    id: work
+    attributes:
+      label: What you did
+      description: Link the issues, pull requests, designs or documents.
+    validations:
+      required: true

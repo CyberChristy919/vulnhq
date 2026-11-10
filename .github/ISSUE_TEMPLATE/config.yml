@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/CyberChristy919/vulnhq/security/advisories/new
+    about: Please report security issues privately. Never open a public issue for them.
+  - name: Contributing guide
+    url: https://github.com/CyberChristy919/vulnhq/blob/main/CONTRIBUTING.md
+    about: How to set up VulnHQ, pick an issue and open a pull request.
