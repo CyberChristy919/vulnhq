@@ -6,6 +6,8 @@ removes the most risk, and what patching one package would change.
 
 from dataclasses import dataclass
 
+from app.fix_type import package_fix_type
+
 
 def package_name(label: str | None) -> str:
     """'Apache HTTP Server 2.4.49' -> 'Apache HTTP Server'."""
@@ -33,9 +35,11 @@ class PackagePlan:
     critical_findings: int
     # Total risk score that goes away if this package is patched everywhere
     risk_removed: float
+    # Hardest known fix across this package's CVEs; explains the order, never changes it
+    fix_type: str = "unknown"
 
 
-def patch_plan(items) -> list[PackagePlan]:
+def patch_plan(items, fix_types=None) -> list[PackagePlan]:
     """One row per package, biggest risk reduction first (Q3)."""
     # Put every finding in a group named after its package
     groups: dict[str, list] = {}
@@ -54,6 +58,8 @@ def patch_plan(items) -> list[PackagePlan]:
                 kev_findings=sum(i.in_kev for i in group),
                 critical_findings=sum(i.tier == "Critical" for i in group),
                 risk_removed=round(sum(i.risk_score for i in group), 1),
+                # Each distinct CVE's fix type; a CVE that wasn't looked up counts as unknown
+                fix_type=package_fix_type([(fix_types or {}).get(c, "unknown") for c in {i.cve_id for i in group}]),
             )
         )
     # Most KEV findings first, then biggest risk reduction; ties go A to Z by package name
