@@ -36,6 +36,7 @@ from pydantic import BaseModel, Field
 from app.ask import EXAMPLES, answer_with_ai
 from app.llm_intent import classify
 from app.patch_plan import patch_plan
+from app.explain import why_this_order
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Creates tables if they don't exist yet (Alembic migrations come later)
@@ -356,6 +357,12 @@ class AskIn(BaseModel):
 def get_patch_plan(limit: int = Query(10, le=100), db: Session = Depends(get_db)):
     """One row per software package, biggest risk reduction first (Q3)."""
     return [asdict(p) for p in patch_plan(scored_findings(db))[:limit]]
+
+
+@app.get("/patch-plan/why")
+def get_patch_plan_why(limit: int = Query(3, ge=1, le=10), db: Session = Depends(get_db)):
+    """Plain-language reasons for the Patch plan order, for a board audience."""
+    return {"why": why_this_order(patch_plan(scored_findings(db)), limit)}
 
 
 @app.get("/ask/examples")

@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from datetime import date
 
 from app.kev import BOD_26_04_ISSUED
+from app.explain import why_this_order
 from app.patch_plan import package_name, patch_plan, patch_impact
 
 # Shortcut questions shown on the Ask page, and suggested when a question isn't understood
@@ -42,6 +43,8 @@ class Answer:
     notes: list[str] = field(default_factory=list)
     # Questions to try instead, when the question isn't understood or is ambiguous
     suggestions: list[str] = field(default_factory=list)
+    # Board-level "Why this order" lines; only the patch_first answer fills this
+    why: list[str] = field(default_factory=list)
 
 
 def has(q, *words):
@@ -194,8 +197,9 @@ def answer(question, items, assets, as_of: date, intent=None) -> Answer:
         text = (f"Patch {p.package} first: it removes {p.findings} findings ({p.kev_findings} in CISA KEV) "
                 f"across {len(p.hosts)} hosts, risk score total {p.risk_removed}.")
         mine = [i for i in items if package_name(i.software) == p.package]
-        notes = [f"Next: {x.package} ({x.findings} findings, risk {x.risk_removed})" for x in plan[1:3]]
-        return Answer(intent, text, [evidence_row(i) for i in mine], notes + common_notes(mine))
+        # The why lines explain the next packages, so the old "Next: ..." notes are gone
+        return Answer(intent, text, [evidence_row(i) for i in mine], common_notes(mine),
+                      why=why_this_order(plan))
 
     # Q8: what patching one package would remove; asks "which one?" if the name is ambiguous
     if intent == "patch_impact":
