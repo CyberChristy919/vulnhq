@@ -3,9 +3,10 @@ import FixListPage from './FixListPage'
 import AssetsPage from './AssetsPage'
 import ImportPage from './ImportPage'
 import AskPage from './AskPage'
+import PatchPlanPage from './PatchPlanPage'
 
 // The pages in the sidebar. Add a new page here first.
-const PAGES = ['Ask', 'Fix list', 'Assets', 'Import']
+const PAGES = ['Ask', 'Fix list', 'Patch plan', 'Assets', 'Import']
 
 function App() {
   // Which page is showing right now
@@ -31,6 +32,7 @@ function App() {
         {page === 'Assets' && <AssetsPage />}
         {page === 'Import' && <ImportPage />}
         {page === 'Ask' && <AskPage />}
+        {page === 'Patch plan' && <PatchPlanPage />}
       </main>
     </div>
   )
