@@ -8,3 +8,4 @@ dist/
 # Private demo and interview data (never commit)
 sample-data/private/
 backend/data/nvd_cache.json
+backend/data/osv_cache.json
