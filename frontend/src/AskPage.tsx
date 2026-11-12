@@ -20,6 +20,8 @@ type AskResult = {
   evidence: Evidence[]
   notes: string[]
   suggestions: string[]
+  // Board-level "Why this order" lines; only "patch first" answers fill this
+  why: string[]
 }
 
 function AskPage() {
@@ -113,6 +115,19 @@ function AskPage() {
                 </button>
               ))}
             </div>
+          )}
+
+          {/* Why this order: the first line is the ranking rule, the rest explain each package */}
+          {result.why.length > 0 && (
+            <>
+              <h3>Why this order</h3>
+              <p className="ask-why-rule">{result.why[0]}</p>
+              <ol className="ask-why">
+                {result.why.slice(1).map((w) => (
+                  <li key={w}>{w}</li>
+                ))}
+              </ol>
+            </>
           )}
 
           {/* Caveats: uncertain matches, missing data, assumptions */}

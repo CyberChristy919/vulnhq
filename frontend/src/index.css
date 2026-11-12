@@ -498,6 +498,16 @@ td {
   color: var(--vhq-text-muted);
 }
 
+.ask-why-rule {
+  margin: 0;
+  color: var(--vhq-text-muted);
+}
+
+.ask-why {
+  margin: 0;
+  padding-left: var(--vhq-space-6);
+}
+
 .ask-result table {
   width: 100%;
 }
