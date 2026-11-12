@@ -53,7 +53,7 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 - [ ] OWASP Risk Rating scoring option
 
 ### Added from SRS review (v1 and v1.2)
-See the full [SRS gap analysis](docs/srs-gap-analysis.md) for requirement IDs. See the [assignment checklist](docs/assignment-checklist.md) for status, reasons and plans against the interview assignment.
+See the full [SRS gap analysis](docs/srs-gap-analysis.md) for requirement IDs. See the [assignment checklist](docs/assignment-checklist.md) for status, reasons and plans against the interview assignment. See the [glossary](docs/glossary.md) for terms and acronyms.
 
 **Prioritization and matching**
 - [x] BOD 26-04 tier per finding (exposure, KEV, automatable, technical impact) from a versioned matrix file, with the score ordering work inside each tier (SRS Section 9)
@@ -363,7 +363,7 @@ vulnhq/
 │   └── src/           # React UI: App.tsx (sidebar), AskPage, FixListPage, AssetsPage, ImportPage,
 │                      #   KpiCards, ScoreDetails and AssetDetails panels, useEscape hook
 ├── src/styles/        # Shared design tokens (base.css)
-├── docs/              # Scoring model, design guide, importing, framework alignment, SRS gap analysis
+├── docs/              # Scoring model, design guide, importing, framework alignment, SRS gap analysis, glossary
 ├── sample-data/       # Demo assets (private/ is gitignored and never committed)
 └── README.md
 ```
