@@ -48,7 +48,8 @@ class NvdMatch:
     cvss: float | None
     product: str  # part:vendor:product, e.g. a:apache:tomcat
     broad: bool = False  # matched only by a wide range like 15.0 through 15.6
-
+    # First fixed version from NVD's versionEndExcluding; None if NVD doesn't name one
+    fixed_version: str | None = None
 
 # ---------- Name to product ID ----------
 
@@ -131,6 +132,30 @@ def affects(cve: dict, product: str, version: str) -> str | None:
                     elif best is None:
                         best = "broad"
     return best
+
+def fixed_in(cve: dict, product: str, version: str) -> str | None:
+    """The first fixed version for this product and version, or None if NVD doesn't name one."""
+    want = product.lower()
+    for config in cve.get("configurations", []):
+        for node in config.get("nodes", []):
+            for m in node.get("cpeMatch", []):
+                # Only the product itself, not the platform it runs on
+                if not m.get("vulnerable"):
+                    continue
+                # Skip other products listed in the same CVE
+                crit = m["criteria"].split(":")
+                if ":".join(crit[2:5]).lower() != want:
+                    continue
+                # Only an exclusive end names a fix; "through 2.16.0" doesn't
+                end = m.get("versionEndExcluding")
+                if not end:
+                    continue
+                # The start of this branch's range, if there is one
+                lo = m.get("versionStartIncluding") or m.get("versionStartExcluding")
+                # False = the end is excluded, so the fixed version itself isn't affected
+                if in_range(version, lo, "versionStartIncluding" in m, end, False):
+                    return end
+    return None
 
 
 def _cvss(cve: dict) -> float | None:
@@ -245,7 +270,7 @@ class NvdClient:
                     continue
                 how = affects(cve, product, version)
                 if how:
-                    results.append(NvdMatch(cve["id"], _title(cve), _cvss(cve), product, how == "broad"))
+                    results.append(NvdMatch(cve["id"], _title(cve), _cvss(cve), product, how == "broad", fixed_in(cve, product, version)))                    
             start += data.get("resultsPerPage", 0)
             if start >= data.get("totalResults", 0) or not data.get("resultsPerPage"):
                 break
