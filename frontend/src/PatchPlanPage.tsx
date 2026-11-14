@@ -10,6 +10,7 @@ type PackagePlan = {
   kev_findings: number
   critical_findings: number
   risk_removed: number
+  fix_type: string
 }
 
 function PatchPlanPage() {
@@ -67,6 +68,7 @@ function PatchPlanPage() {
                 <th>Critical</th>
                 <th>Hosts</th>
                 <th>Risk removed</th>
+                <th>Effort</th>
               </tr>
             </thead>
             <tbody>
@@ -79,6 +81,7 @@ function PatchPlanPage() {
                   <td>{p.critical_findings}</td>
                   <td>{p.hosts.length}</td>
                   <td>{p.risk_removed}</td>
+                  <td>{p.fix_type}</td>
                 </tr>
               ))}
             </tbody>
