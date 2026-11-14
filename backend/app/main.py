@@ -41,6 +41,7 @@ from app.fix_lookup import lookup_fix_types, nvd_fixed_versions
 from app.matcher import load_rules
 from app.nvd import _load_cache as load_nvd_cache
 from app.osv import OsvClient
+from app.fix_type import package_fix_type
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -375,13 +376,15 @@ def get_patch_plan(limit: int = Query(10, le=100), db: Session = Depends(get_db)
     plan = patch_plan(items)[:limit]
     # Only look up CVEs in the rows we return, so a short list stays fast
     cves = [c for p in plan for c in p.cves]
-    fix_types = lookup_fix_types(
-        cves,
-        kev_required_actions(db, cves),
-        nvd_fixed_versions(load_rules(), load_nvd_cache()),
-        OsvClient(timeout=5).record,
-    )
-    return [asdict(p) for p in patch_plan(items, fix_types)[:limit]]
+    # Look these up once and share them across every row
+    kev = kev_required_actions(db, cves)
+    nvd_fixed = nvd_fixed_versions(load_rules(), load_nvd_cache())
+    osv = OsvClient(timeout=5)
+    # Each row passes its own package, so Chrome isn't judged by electron's entry
+    for row in plan:
+        types = lookup_fix_types(row.cves, kev, nvd_fixed, osv.record, package=row.package)
+        row.fix_type = package_fix_type(list(types.values()))
+    return [asdict(p) for p in plan]
 
 
 @app.get("/patch-plan/why")

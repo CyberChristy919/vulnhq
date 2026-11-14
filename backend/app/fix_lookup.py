@@ -23,7 +23,7 @@ def nvd_fixed_versions(rules, nvd_cache):
     return found
 
 
-def lookup_fix_types(cve_ids, required_actions, nvd_fixed, osv_record):
+def lookup_fix_types(cve_ids, required_actions, nvd_fixed, osv_record, package=None):
     """CVE ID -> fix type. OSV being down never stops the page from loading."""
     types = {}
     osv_up = True
@@ -37,6 +37,6 @@ def lookup_fix_types(cve_ids, required_actions, nvd_fixed, osv_record):
                 # OSV is down: skip it for this CVE and every one after
                 osv_up = False
         # KEV first, then OSV, then NVD; False because these are exclusive ends
-        types[cve_id] = fix_type(required_actions.get(cve_id), record, nvd_fixed.get(cve_id), False)
+        types[cve_id] = fix_type(required_actions.get(cve_id), record, nvd_fixed.get(cve_id), False, package)
     return types
  
