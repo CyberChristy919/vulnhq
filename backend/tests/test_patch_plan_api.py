@@ -16,10 +16,23 @@ if not any(getattr(r, "path", "") == "/patch-plan" for r in main.app.routes):
     pytest.skip("GET /patch-plan isn't in app/main.py yet", allow_module_level=True)
 
 
+class OfflineOsv:
+    """Stands in for OsvClient so these tests never reach the network."""
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def record(self, cve_id):
+        return None
+
+
 @pytest.fixture
 def client(monkeypatch):
     # Use the sample findings instead of the database
     monkeypatch.setattr(main, "scored_findings", lambda db, *args, **kwargs: ITEMS)
+    # No database, NVD cache or OSV calls for fix type (raising=False: fine before they exist)
+    monkeypatch.setattr(main, "kev_required_actions", lambda db, cves: {}, raising=False)
+    monkeypatch.setattr(main, "load_nvd_cache", lambda: {}, raising=False)
+    monkeypatch.setattr(main, "OsvClient", OfflineOsv, raising=False)
     main.app.dependency_overrides[main.get_db] = lambda: None
     yield TestClient(main.app)
     main.app.dependency_overrides.clear()
