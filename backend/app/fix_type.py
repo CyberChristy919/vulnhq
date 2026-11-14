@@ -1,5 +1,7 @@
 """Fix type: how hard a fix is, using only facts from CISA KEV, OSV.dev and NVD."""
 
+import re
+
 # OSV ecosystems for libraries that get built into apps (fix = rebuild and test)
 LIBRARY_ECOSYSTEMS = {"Maven", "PyPI", "npm", "NuGet", "Go", "crates.io", "RubyGems", "Packagist", "Hex", "Pub"}
 
@@ -13,13 +15,24 @@ def kev_says_replace(required_action):
     text = (required_action or "").lower()
     return "end-of-life" in text or "disconnect" in text
 
+def matches_package(osv_name, package):
+    """True if OSV's package name is the installed package, e.g. 'org.apache.logging.log4j:log4j-core' and 'log4j-core'."""
+    # Nothing to compare, so it can't match
+    if not osv_name or not package:
+        return False
+    # Keep the part after the last ":" or "/", and write spaces as "-" like OSV does
+    return re.split(r"[:/]", osv_name)[-1].lower() == package.lower().replace(" ", "-")
 
-def is_library(osv_vuln):
-    """True if OSV lists an affected package in a library ecosystem."""
+
+def is_library(osv_vuln, installed=None):
+    """True if OSV lists the installed package in a library ecosystem."""
     # None becomes {}, and a missing "affected" becomes [], so the loop just doesn't run
     for entry in (osv_vuln or {}).get("affected", []):
         # Chrome's entry has no "package", so fall back to {}
         package = entry.get("package") or {}
+        # OSV also lists other products that bundle the library (electron, SkiaSharp), so skip those
+        if installed is not None and not matches_package(package.get("name"), installed):
+            continue
         if package.get("ecosystem") in LIBRARY_ECOSYSTEMS:
             return True
     return False
@@ -34,13 +47,13 @@ def fixed_version(max_version, max_inclusive):
     return None
 
 
-def fix_type(required_action, osv_vuln, max_version, max_inclusive):
+def fix_type(required_action, osv_vuln, max_version, max_inclusive, package=None):
     """'replace', 'library update', 'vendor update' or 'unknown'; first match wins."""
     # KEV says end-of-life: no patch will come, so the product must be replaced
     if kev_says_replace(required_action):
         return "replace"
     # OSV says it's a library: every app that bundles it needs a rebuild and testing
-    if is_library(osv_vuln):
+    if is_library(osv_vuln, package):
         return "library update"
     # NVD names a fixed version: the vendor has an update to install
     if fixed_version(max_version, max_inclusive):
