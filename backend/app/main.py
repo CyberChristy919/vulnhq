@@ -37,6 +37,11 @@ from app.ask import EXAMPLES, answer_with_ai
 from app.llm_intent import classify
 from app.patch_plan import patch_plan
 from app.explain import why_this_order
+from app.fix_lookup import lookup_fix_types, nvd_fixed_versions
+from app.matcher import load_rules
+from app.nvd import _load_cache as load_nvd_cache
+from app.osv import OsvClient
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Creates tables if they don't exist yet (Alembic migrations come later)
@@ -352,11 +357,31 @@ class AskIn(BaseModel):
 
 
 # ---------- Patch plan ----------
+def kev_required_actions(db: Session, cve_ids) -> dict:
+    """CVE ID -> CISA KEV requiredAction, for only the CVEs asked for."""
+    rows = db.execute(
+        select(models.Vulnerability.cve_id, models.Vulnerability.required_action)
+        # Only these CVEs, and only ones KEV gave an action
+        .where(models.Vulnerability.cve_id.in_(list(cve_ids)))
+        .where(models.Vulnerability.required_action.is_not(None))
+    )
+    return {cve_id: action for cve_id, action in rows}
 
 @app.get("/patch-plan")
 def get_patch_plan(limit: int = Query(10, le=100), db: Session = Depends(get_db)):
     """One row per software package, biggest risk reduction first (Q3)."""
-    return [asdict(p) for p in patch_plan(scored_findings(db))[:limit]]
+    items = scored_findings(db)
+    # The order never depends on fix type, so pick the rows first
+    plan = patch_plan(items)[:limit]
+    # Only look up CVEs in the rows we return, so a short list stays fast
+    cves = [c for p in plan for c in p.cves]
+    fix_types = lookup_fix_types(
+        cves,
+        kev_required_actions(db, cves),
+        nvd_fixed_versions(load_rules(), load_nvd_cache()),
+        OsvClient(timeout=5).record,
+    )
+    return [asdict(p) for p in patch_plan(items, fix_types)[:limit]]
 
 
 @app.get("/patch-plan/why")
