@@ -5,7 +5,7 @@ node_modules/
 dist/
 .pytest_cache/
 
-# Private demo and interview data (never commit)
+# Private demo and data (never commit)
 sample-data/private/
 backend/data/nvd_cache.json
 backend/data/osv_cache.json
