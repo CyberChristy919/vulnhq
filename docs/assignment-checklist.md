@@ -2,7 +2,7 @@
 
 How VulnHQ measures up against the Deloitte Cyber Engineering interview assignment. The checklist uses the requirements that SRS v2.0 traces to the assignment brief: the 10 assignment questions, requirements whose source is "Assignment brief", the known issues in the assignment data and the trust rules for the AI.
 
-Status as of November 12, 2026. Answers were checked on the fictional lab data set (`sample-data/lab-inventory.json`) with the keyword router. 246 automated tests pass.
+Status as of November 15, 2026. Answers were checked on the fictional lab data set (`sample-data/lab-inventory.json`) with the keyword router. 314 automated tests pass.
 
 **Status key:** ✅ Done · 🟡 Partial (works, with a gap noted) · ⬜ Not started
 
@@ -92,7 +92,7 @@ All 10 questions are answered from the data in under a tenth of a second. Most o
 |---|---|
 | Trust | As-of stamp, trace panel, verifier, adversarial test set, CVSS version, SRS confidence labels and Needs verification tab |
 | Data quality | Data-quality report, scan standards, end-of-support flags, version translators, manual review queue |
-| Board view | Plain-language "Why this order" under every ranked answer and on the Patch plan, easy for a board to find: what comes first, the rule that put it there (most actively exploited flaws first, then total risk), and the trade-off. Example: "Chrome first: 14 actively exploited flaws and a same-day browser update. Log4j next: the most total risk, but it needs app testing and a change window." Show the KEV count on every "Next" line. Code writes the text from the data, so every number matches the proof table. The effort part (same-day update vs. change window) needs a new fix-effort field per package, such as auto-update, library update or vendor patch. |
+| Board view | ✅ Done November 15: "Why this order" on the Ask page and the Patch plan, with the rule (most actively exploited findings first, then total risk), the KEV count on every line, the trade-off, and the effort from KEV, OSV and NVD. Example: "log4j-core next: 7 actively exploited findings, fewer than Google Chrome (14). It removes more total risk (879.4 vs 732.1), but exploited findings come first. Effort: library update (rebuild and test every app that bundles it)." Next: say "same-day" for browsers that auto-update, if a source supports it. |
 | Hand-off | CSV export, owners, remediation status, target versions in the patch plan |
 | Change over time | Daily snapshots and "What's new since last week?" |
 | Owner features | SRS Sections 5.11 to 5.24 (configuration, notifications, SLA policy, vendors, preventive maintenance) |
