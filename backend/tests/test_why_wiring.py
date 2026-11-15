@@ -37,9 +37,9 @@ if not hasattr(ask.Answer(None, ""), "why"):
 
 EXPECTED = [
     ORDER_RULE,
-    "Apache HTTP Server first: 3 actively exploited flaws on 2 hosts.",
-    "Cisco IOS XE next: 2 actively exploited flaws, fewer than Apache HTTP Server (3).",
-    "OpenSSL next: 0 actively exploited flaws, fewer than Cisco IOS XE (2).",
+    "Apache HTTP Server first: 3 actively exploited findings on 2 hosts.",
+    "Cisco IOS XE next: 2 actively exploited findings, fewer than Apache HTTP Server (3).",
+    "OpenSSL next: 0 actively exploited findings, fewer than Cisco IOS XE (2).",
 ]
 
 
