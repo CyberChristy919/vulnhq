@@ -37,7 +37,11 @@ function PatchPlanPage() {
   return (
     <>
       <h1>Patch plan</h1>
-      <p className="note">Which software to patch first, and why.</p>
+      <p className="note">
+        Which software to patch first, and why. Effort comes from CISA KEV, OSV.dev and NVD. See the{' '}
+        <a href="https://github.com/CyberChristy919/vulnhq/blob/main/docs/glossary.md" target="_blank" rel="noreferrer">glossary</a>{' '}
+        for what each term means.
+      </p>
 
       {error && <p>Can't load the patch plan: {error}. Is the API running?</p>}
 
