@@ -21,14 +21,26 @@ Terms and acronyms used in VulnHQ code, docs and pages. Each entry links to the 
 
 How hard a fix is likely to be, from easiest to hardest. Fix type explains the order; it doesn't change the ranking. See `backend/app/fix_type.py`.
 
-| Value | When VulnHQ uses it |
-|-------|---------------------|
-| **vendor update** | NVD names a fixed version, so the vendor ships an update (for example, Google Chrome 124.0.6367.201). |
-| **library update** | OSV lists a package ecosystem, so every app that bundles the library needs a rebuild and testing (for example, log4j-core). |
-| **replace** | KEV `requiredAction` says end-of-life or disconnect, so there's no patch. |
-| **unknown** | No source answered. VulnHQ says so instead of guessing. |
+The Patch plan shows it as **Effort**: in the Effort column, and at the end of each "Why this order" line, with the note in the last column below (`EFFORT_NOTE` in `backend/app/explain.py`).
+
+| Value | When VulnHQ uses it | "Why this order" note |
+|-------|---------------------|-----------------------|
+| **vendor update** | NVD names a fixed version, so the vendor ships an update (for example, Google Chrome 124.0.6367.201). | install the vendor's update |
+| **library update** | OSV lists the installed package in a library ecosystem, so every app that bundles it needs a rebuild and testing (for example, log4j-core). | rebuild and test every app that bundles it |
+| **replace** | KEV `requiredAction` says end-of-life or disconnect, so there's no patch. | end-of-life, so replace it |
+| **unknown** | No source answered. VulnHQ says so instead of guessing. | (nothing added) |
 
 A package with several CVEs gets the hardest known type across them.
+
+**Package matching:** an OSV record also lists other products that bundle the same library. For example, Chrome's libwebp CVE (CVE-2023-4863) lists NuGet SkiaSharp, and its libvpx CVE (CVE-2023-5217) lists npm electron. VulnHQ counts an OSV package only when its name matches the installed package (`matches_package` in `backend/app/fix_type.py`). Otherwise, Chrome would show as a library update. Sources: [GHSA-j7hp-h8jx-5ppr](https://osv.dev/vulnerability/GHSA-j7hp-h8jx-5ppr), [GHSA-qqvq-6xgj-jw8g](https://osv.dev/vulnerability/GHSA-qqvq-6xgj-jw8g).
+
+## VulnHQ terms
+
+| Term | Meaning |
+|------|---------|
+| **Finding** | One CVE on one host. The counts on the Patch plan and in "Why this order" are findings, not distinct flaws: Google Chrome's 14 KEV findings are 5 CVEs across 5 hosts. |
+| **Actively exploited** | A finding whose CVE is in CISA KEV. It's the first sort key on the Fix list and Patch plan. |
+| **Risk removed** | The sum of the risk scores of a package's findings, so it's what patching that package takes off the board. It's the second sort key. See the [scoring model](scoring.md). |
 
 ## Scoring and security terms
 
