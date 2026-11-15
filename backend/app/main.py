@@ -368,13 +368,9 @@ def kev_required_actions(db: Session, cve_ids) -> dict:
     )
     return {cve_id: action for cve_id, action in rows}
 
-@app.get("/patch-plan")
-def get_patch_plan(limit: int = Query(10, le=100), db: Session = Depends(get_db)):
-    """One row per software package, biggest risk reduction first (Q3)."""
-    items = scored_findings(db)
-    # The order never depends on fix type, so pick the rows first
-    plan = patch_plan(items)[:limit]
-    # Only look up CVEs in the rows we return, so a short list stays fast
+def add_fix_types(db: Session, plan):
+    """Fill in fix_type on each Patch plan row, from KEV, OSV and NVD."""
+    # Only look up CVEs in these rows, so a short list stays fast
     cves = [c for p in plan for c in p.cves]
     # Look these up once and share them across every row
     kev = kev_required_actions(db, cves)
@@ -384,7 +380,24 @@ def get_patch_plan(limit: int = Query(10, le=100), db: Session = Depends(get_db)
     for row in plan:
         types = lookup_fix_types(row.cves, kev, nvd_fixed, osv.record, package=row.package)
         row.fix_type = package_fix_type(list(types.values()))
+
+
+@app.get("/patch-plan")
+def get_patch_plan(limit: int = Query(10, le=100), db: Session = Depends(get_db)):
+    """One row per software package, biggest risk reduction first (Q3)."""
+    # The order never depends on fix type, so pick the rows first
+    plan = patch_plan(scored_findings(db))[:limit]
+    add_fix_types(db, plan)
     return [asdict(p) for p in plan]
+
+
+@app.get("/patch-plan/why")
+def get_patch_plan_why(limit: int = Query(3, ge=1, le=10), db: Session = Depends(get_db)):
+    """Plain-language reasons for the Patch plan order, for a board audience."""
+    # Cut to the packages we explain first, so we only look those up
+    plan = patch_plan(scored_findings(db))[:limit]
+    add_fix_types(db, plan)
+    return {"why": why_this_order(plan, limit)}
 
 
 @app.get("/patch-plan/why")
