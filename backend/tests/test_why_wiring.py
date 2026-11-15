@@ -64,6 +64,16 @@ def test_other_answers_have_no_why():
 
 # ---------- API ----------
 
+class OfflineOsv:
+    """Stands in for OsvClient so tests never call api.osv.dev."""
+
+    def __init__(self, timeout=30, **kwargs):
+        pass
+
+    def record(self, cve_id):
+        return None
+
+
 has_route = any(getattr(r, "path", "") == "/patch-plan/why" for r in main.app.routes)
 needs_route = pytest.mark.skipif(not has_route, reason="GET /patch-plan/why isn't in app/main.py yet")
 
@@ -73,6 +83,11 @@ def client(monkeypatch):
     # Use the sample findings instead of the database
     monkeypatch.setattr(main, "scored_findings", lambda db, *args, **kwargs: ITEMS)
     monkeypatch.setattr(main, "list_assets", lambda db, *args, **kwargs: ASSETS)
+    # /patch-plan/why looks up fix types; keep it offline with no fix data, so no Effort shows
+    monkeypatch.setattr(main, "kev_required_actions", lambda db, cves: {}, raising=False)
+    monkeypatch.setattr(main, "load_rules", lambda: [], raising=False)
+    monkeypatch.setattr(main, "load_nvd_cache", lambda: {}, raising=False)
+    monkeypatch.setattr(main, "OsvClient", OfflineOsv, raising=False)
     main.app.dependency_overrides[main.get_db] = lambda: None
     yield TestClient(main.app)
     main.app.dependency_overrides.clear()
