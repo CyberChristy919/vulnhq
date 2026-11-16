@@ -168,7 +168,7 @@ VulnHQ uses a calming base palette with standard red / orange / yellow / green s
 | Frontend | React + TypeScript (Vite) |
 | Backend | Python 3.12, FastAPI, SQLAlchemy |
 | Database | PostgreSQL 16 |
-| Testing | pytest (backend); frontend testing TBD |
+| Testing | pytest (backend), Vitest (frontend) |
 | CI/CD | GitHub Actions |
 
 ---
@@ -342,10 +342,23 @@ Model: [IBM Granite 4.2](https://ollama.com/library/granite4.2) 8B (Apache 2.0),
 
 ### Running Tests
 
+Backend (from `backend/`, with the virtual environment active):
+
 ```powershell
 cd backend
 pytest
 ```
+
+Frontend (from `frontend/`):
+
+```powershell
+cd frontend
+npm.cmd test
+```
+
+`npm test` runs the [Vitest](https://vitest.dev) tests in `frontend/src` (files ending in `.test.ts`) once and exits. In Windows PowerShell, use `npm.cmd` so the command isn't blocked by the script execution policy.
+
+GitHub Actions runs both on every pull request, along with `npm run lint` and `npm run build`.
 
 ---
 
@@ -441,7 +454,7 @@ VulnHQ is a **volunteer project** and welcomes contributors who want real-world 
 
 1. Pick an issue and comment to ask for it.
 2. Fork the repository and create a branch, for example `feature/your-feature`.
-3. Make your change, run `pytest` (and `npm run lint` and `npm run build` for UI changes).
+3. Make your change, run `pytest` (and `npm test`, `npm run lint` and `npm run build` for UI changes).
 4. Commit with sign-off: `git commit -s -m "Add your feature"`.
 5. Open a pull request and complete the template, including the contributor agreement box.
 
