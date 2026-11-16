@@ -131,6 +131,10 @@ python -m scripts.import_spotlight ..\sample-data\spotlight-demo.json
 
 The script prints assets created and updated, findings created and each skipped record. Running the same export again updates the hosts without duplicating findings.
 
+Spotlight exports describe hosts, not the business they support, so these hosts start with no money-movement or data-classification points. `sample-data/spotlight-context.json` adds that context for the demo hosts; import it on the Import page under Business context, or with `POST /import/context`.
+
+Spotlight hosts have no Company ID, owner, department or software list. Filling those in by hand is on the roadmap (see Planned in the README).
+
 ## Vulnerability Rules
 
 `backend/data/vuln_rules.json` maps software name and version ranges to CVEs. Each rule cites NVD or the vendor advisory. KEV status and EPSS come from the database, so they stay current after `load_kev` and `load_epss`.

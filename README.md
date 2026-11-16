@@ -35,6 +35,7 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 - [x] Confidence column on every finding (confirmed / conditional / nvd)
 - [x] Assets page with stale-scan flags, asset details panel and an "Add software" form
 - [x] JSON import page in the UI (inventory and business context), with a check for files that have no software
+- [x] CrowdStrike Falcon Spotlight import (`python -m scripts.import_spotlight <file>`): open and reopened findings grouped by host, with skipped records listed. See [importing](docs/importing.md#crowdstrike-falcon-spotlight-export).
 - [x] Sidebar navigation; side panels close with Escape
 - [ ] Dark mode
 - [ ] Remediation status tracking (Open → In Progress → Fixed → Verified)
@@ -45,7 +46,8 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 - [x] SLA due dates by remediation tier (fix-by date, days remaining, overdue flag)
 - [ ] Owner assignment and notifications
 - [ ] Executive reporting: closure rate, MTTR, risk trend
-- [ ] Scanner integrations (e.g., Tenable, Qualys, Rapid7, Snyk)
+- [ ] Scanner integrations (e.g., Tenable, Qualys, Rapid7, Snyk); CrowdStrike Falcon Spotlight file import is done
+- [ ] Spotlight import on the Import page, plus Spotlight's installed-app data as software on each host
 - [ ] Ticketing integrations (e.g., Jira, ServiceNow)
 - [ ] Exception and risk-acceptance workflow
 - [ ] NIST CSF 2.0 subcategory tagging and coverage view
@@ -67,6 +69,9 @@ See the full [SRS gap analysis](docs/srs-gap-analysis.md) for requirement IDs. S
 
 **Data and enrichment**
 - [ ] Data-quality report on import (counts, missing fields, departments vs. business units)
+- [ ] Edit asset details on the Assets page to fill in missing fields (Company ID, owner, department, application, criticality, internet exposure, last scan date), with a "missing fields" badge and filter
+- [ ] Bulk update missing fields from a CSV or JSON file matched by hostname, with a preview before saving
+- [ ] Record who changed a field, when, and the old and new value; values from a later scanner import never silently overwrite a manual entry
 - [ ] Configurable as-of date; show it on every page
 - [ ] Store KEV catalog version, raw NVD responses, EPSS percentile and model version
 - [x] SSVC Automatable and Technical Impact from CISA Vulnrichment
@@ -284,7 +289,7 @@ The Vite dev server forwards `/api/*` requests to the FastAPI backend.
 | **Ask** | Type any question, or click one of the 10 shortcut questions. Unusual wording is routed by the local AI model when Ollama is running. Each answer shows the evidence behind it (asset ID, CVE with NVD link, CVSS, source, KEV due date, CISA deadline, confidence) and notes on anything uncertain. |
 | **Fix list** | KPI cards, then findings ranked by risk score, with tier filters and a Sort by menu. Columns include the CISA BOD 26-04 deadline and KEV past-due days. Click a row for the score breakdown. |
 | **Assets** | Every asset, riskiest first. Scans older than 90 days are flagged. Click an asset to see its software and add new software, which is checked for CVEs right away. |
-| **Import** | Upload an asset inventory JSON, then a business context JSON. Shows what was created, plus software that couldn't be checked or needs review. |
+| **Import** | Upload an asset inventory JSON, then a business context JSON. Shows what was created, plus software that couldn't be checked or needs review. Spotlight exports are imported from the terminal for now (`scripts.import_spotlight`). |
 
 **Confidence** tells you how sure VulnHQ is that a CVE applies to that software version:
 
@@ -300,11 +305,12 @@ The risk score says how bad a finding would be. Confidence says how sure we are 
 
 1. Reset: `python -m scripts.reset_demo` (type `RESET`). CVE, KEV and EPSS data are kept.
 2. **Import** page: import the inventory file, then the business context file. Context moves findings on payment and sensitive-data systems up a tier.
-3. **Fix list**: walk through the top findings and open one to show why it ranks there.
-4. **Assets**: point out stale scans on critical systems.
-5. Add software live on the **Assets** page and show the new finding appear in the fix list.
-6. **Patch plan**: open [http://127.0.0.1:8000/patch-plan?limit=5](http://127.0.0.1:8000/patch-plan?limit=5) to show the full package plan from the API, most KEV findings first, then biggest risk removed.
-7. **Ask**: click the 10 shortcut questions, then type one in your own words. Show the evidence table and the "What to know" notes, and type "What would patching Apache reduce?" to show the "which one?" reply. Then type "Which team is in the roughest shape on exploited bugs?" and point out the note "Question type picked by the local AI model". Ask one question before the demo so the model is already loaded.
+3. **Spotlight import** (terminal, from the `backend` folder): run `python -m scripts.import_spotlight ..\sample-data\spotlight-demo.json`. Point out 4 assets and 5 findings created, `sp-007` skipped with a reason and the closed record left out. On the **Fix list**, the `fin-...example.com` hosts rank below the lab hosts because Spotlight has no business context. Then import `sample-data/spotlight-context.json` on the **Import** page (Business context) and refresh: the payment and file-transfer hosts move up. Scanners say what's vulnerable; business context says what matters most.
+4. **Fix list**: walk through the top findings and open one to show why it ranks there.
+5. **Assets**: point out stale scans on critical systems.
+6. Add software live on the **Assets** page and show the new finding appear in the fix list.
+7. **Patch plan**: open [http://127.0.0.1:8000/patch-plan?limit=5](http://127.0.0.1:8000/patch-plan?limit=5) to show the full package plan from the API, most KEV findings first, then biggest risk removed.
+8. **Ask**: click the 10 shortcut questions, then type one in your own words. Show the evidence table and the "What to know" notes, and type "What would patching Apache reduce?" to show the "which one?" reply. Then type "Which team is in the roughest shape on exploited bugs?" and point out the note "Question type picked by the local AI model". Ask one question before the demo so the model is already loaded.
 
 ### How the Ask Page Works
 

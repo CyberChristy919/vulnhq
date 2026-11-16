@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "description": "Fictional business context for the hosts in spotlight-demo.json. Import it after the Spotlight export to show how business impact changes the order."
+  },
+  "assets": [
+    {
+      "hostname": "fin-pay01.example.com",
+      "money_movement": "outbound_payments",
+      "data_classification": "restricted"
+    },
+    {
+      "hostname": "fin-mft01.example.com",
+      "money_movement": "outbound_payments",
+      "data_classification": "restricted"
+    },
+    {
+      "hostname": "fin-vpn01.example.com",
+      "data_classification": "confidential"
+    },
+    {
+      "hostname": "fin-gl01.example.com",
+      "money_movement": "internal_transfers",
+      "data_classification": "confidential"
+    }
+  ]
+}
