@@ -119,6 +119,17 @@ python -m scripts.import_assets ..\sample-data\demo-assets.json
 
 Or use `POST /import/assets`.
 
+### CrowdStrike Falcon Spotlight Export
+
+`app.spotlight.spotlight_to_import()` converts a Spotlight vulnerability export (the API's `{"resources": [...]}` reply or a bare list) into this format. It keeps `open` and `reopen` records, groups CVEs by hostname and lists records it skipped. `sample-data/spotlight-demo.json` is a fictional export for practice.
+
+Convert the export, then import the result (from the backend folder):
+
+```powershell
+python -c 'import json,sys; from pathlib import Path; from app.spotlight import spotlight_to_import as f; r,s=f(json.load(open(sys.argv[1]))); Path(sys.argv[2]).write_text(r.model_dump_json(indent=2)); print(s)' ..\sample-data\spotlight-demo.json ..\sample-data\spotlight-import.json
+python -m scripts.import_assets ..\sample-data\spotlight-import.json
+```
+
 ## Vulnerability Rules
 
 `backend/data/vuln_rules.json` maps software name and version ranges to CVEs. Each rule cites NVD or the vendor advisory. KEV status and EPSS come from the database, so they stay current after `load_kev` and `load_epss`.

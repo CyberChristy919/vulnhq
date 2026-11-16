@@ -1,0 +1,19 @@
+{
+  "meta": {"note": "Fictional demo data in CrowdStrike Falcon Spotlight format. Hostnames and IPs are made up (RFC 5737 / example.com)."},
+  "resources": [
+    {"id": "sp-001", "status": "open", "cve": {"id": "CVE-2021-44228"},
+     "host_info": {"hostname": "fin-pay01.example.com", "local_ip": "192.0.2.11", "internet_exposure": "Yes", "asset_criticality": "Critical"}},
+    {"id": "sp-002", "status": "open", "cve": {"id": "CVE-2023-4966"},
+     "host_info": {"hostname": "fin-vpn01.example.com", "local_ip": "192.0.2.20", "internet_exposure": "Yes", "asset_criticality": "High"}},
+    {"id": "sp-003", "status": "reopen", "cve": {"id": "CVE-2023-34362"},
+     "host_info": {"hostname": "fin-mft01.example.com", "local_ip": "192.0.2.30", "internet_exposure": "Yes", "asset_criticality": "Critical"}},
+    {"id": "sp-004", "status": "open", "cve": {"id": "CVE-2021-41773"},
+     "host_info": {"hostname": "fin-pay01.example.com", "local_ip": "192.0.2.11", "internet_exposure": "Yes", "asset_criticality": "Critical"}},
+    {"id": "sp-005", "status": "open", "cve": {"id": "CVE-2021-44228"},
+     "host_info": {"hostname": "fin-gl01.example.com", "local_ip": "198.51.100.15", "internet_exposure": "No", "asset_criticality": "Medium"}},
+    {"id": "sp-006", "status": "closed", "cve": {"id": "CVE-2017-0144"},
+     "host_info": {"hostname": "fin-gl01.example.com", "local_ip": "198.51.100.15", "internet_exposure": "No", "asset_criticality": "Medium"}},
+    {"id": "sp-007", "status": "open", "cve": {},
+     "host_info": {"hostname": "fin-hr01.example.com", "local_ip": "198.51.100.40", "internet_exposure": "No", "asset_criticality": "Low"}}
+  ]
+}
