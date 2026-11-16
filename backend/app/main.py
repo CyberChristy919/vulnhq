@@ -346,7 +346,6 @@ def stats(db: Session = Depends(get_db)):
         "kev_findings": sum(i.in_kev for i in items),
         "overdue_findings": sum(i.overdue for i in items),
         "findings_by_tier": tiers,
-        "findings_by_tier": tiers,
         **kev_kpi(items, today),
     }
 
