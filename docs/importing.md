@@ -123,12 +123,13 @@ Or use `POST /import/assets`.
 
 `app.spotlight.spotlight_to_import()` converts a Spotlight vulnerability export (the API's `{"resources": [...]}` reply or a bare list) into this format. It keeps `open` and `reopen` records, groups CVEs by hostname and lists records it skipped. `sample-data/spotlight-demo.json` is a fictional export for practice.
 
-Convert the export, then import the result (from the backend folder):
+Import it in one step (from the backend folder):
 
 ```powershell
-python -c 'import json,sys; from pathlib import Path; from app.spotlight import spotlight_to_import as f; r,s=f(json.load(open(sys.argv[1]))); Path(sys.argv[2]).write_text(r.model_dump_json(indent=2)); print(s)' ..\sample-data\spotlight-demo.json ..\sample-data\spotlight-import.json
-python -m scripts.import_assets ..\sample-data\spotlight-import.json
+python -m scripts.import_spotlight ..\sample-data\spotlight-demo.json
 ```
+
+The script prints assets created and updated, findings created and each skipped record. Running the same export again updates the hosts without duplicating findings.
 
 ## Vulnerability Rules
 
