@@ -169,7 +169,7 @@ VulnHQ uses a calming base palette with standard red / orange / yellow / green s
 | Backend | Python 3.12, FastAPI, SQLAlchemy |
 | Database | PostgreSQL 16 |
 | Testing | pytest (backend); frontend testing TBD |
-| CI/CD | GitHub Actions (planned) |
+| CI/CD | GitHub Actions |
 
 ---
 
