@@ -2,7 +2,7 @@
 
 How VulnHQ measures up against the Deloitte Cyber Engineering interview assignment. The checklist uses the requirements that SRS v2.0 traces to the assignment brief: the 10 assignment questions, requirements whose source is "Assignment brief", the known issues in the assignment data and the trust rules for the AI.
 
-Status as of November 15, 2026. Answers were checked on the fictional lab data set (`sample-data/lab-inventory.json`) with the keyword router. 314 automated tests pass.
+Status as of November 16, 2026. Answers were checked on the fictional lab data set (`sample-data/lab-inventory.json`) with the keyword router. 328 automated tests pass (322 backend, 6 frontend).
 
 **Status key:** ✅ Done · 🟡 Partial (works, with a gap noted) · ⬜ Not started
 
