@@ -78,7 +78,7 @@ def find_package(question, packages):
 
 def find_days(question, default=30):
     """'last 45 days' -> 45; no number -> default."""
-    m = re.search(r"(\d+)\s*days?", question.lower())
+    m = re.search(r"\b(\d+)\s*days?", question.lower())
     return int(m.group(1)) if m else default
 
 
