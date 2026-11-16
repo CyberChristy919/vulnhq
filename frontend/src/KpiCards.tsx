@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Stats } from './types'
+import { loadStats } from './loadStats'
 
 function KpiCards() {
   const [stats, setStats] = useState<Stats | null>(null)
@@ -7,7 +8,7 @@ function KpiCards() {
   // Runs once when the page opens: get the dashboard numbers
   useEffect(() => {
     fetch('/api/stats')
-      .then((res) => res.json())
+      .then(loadStats)
       .then(setStats)
       .catch(() => setStats(null))
   }, [])
