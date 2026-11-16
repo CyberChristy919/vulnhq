@@ -1,0 +1,2 @@
+# Keep pip requirements as plain text with LF line endings on every OS
+requirements*.txt text eol=lf

@@ -125,6 +125,7 @@ pip install -r requirements.txt
 - If asked about the execution policy, type `Y` and press Enter. This lets PowerShell run the project's activation script.
 - After activation, your prompt starts with `(.venv)`. **Every backend command in this guide needs that `(.venv)`**. If you open a new window, run the `cd` and `Activate.ps1` lines again.
 - The install takes a few minutes.
+- If you add a package later, edit `requirements.txt` by hand in Cursor rather than running `pip freeze > requirements.txt`. In Windows PowerShell, `>` saves the file as UTF-16, which GitHub shows as a binary file. If you do need to freeze, use `pip freeze | Out-File -Encoding utf8 requirements.txt`.
 
 ### Step 2: Tell the app where the database is
 
