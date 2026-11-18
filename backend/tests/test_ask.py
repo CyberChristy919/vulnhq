@@ -101,7 +101,7 @@ def run(q):
     return ask.answer(q, ITEMS, ASSETS, AS_OF)
 
 
-# ---------- The 10 assignment questions pick the right intent ----------
+# ---------- The 10 core questions pick the right intent 
 
 @pytest.mark.parametrize("question, intent", [
     ("Which of our assets have critical unpatched CVEs?", "critical_assets"),
