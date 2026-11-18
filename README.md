@@ -55,7 +55,7 @@ VulnHQ flips the model: **stop patching everything and fix what matters first.**
 - [ ] OWASP Risk Rating scoring option
 
 ### Added from SRS review (v1 and v1.2)
-See the full [SRS gap analysis](docs/srs-gap-analysis.md) for requirement IDs. See the [assignment checklist](docs/assignment-checklist.md) for status, reasons and plans against the interview assignment. See the [glossary](docs/glossary.md) for terms and acronyms.
+See the full [SRS gap analysis](docs/srs-gap-analysis.md) for requirement IDs. See the [requirements checklist](docs/requirements-checklist.md) for status, reasons and plans against the core requirements. See the [glossary](docs/glossary.md) for terms and acronyms.
 
 **Prioritization and matching**
 - [x] BOD 26-04 tier per finding (exposure, KEV, automatable, technical impact) from a versioned matrix file, with the score ordering work inside each tier (SRS Section 9)
@@ -80,7 +80,7 @@ See the full [SRS gap analysis](docs/srs-gap-analysis.md) for requirement IDs. S
 - [ ] Daily KEV refresh; mark NVD cache entries older than 7 days stale
 
 **Answers, trust and reporting**
-- [x] Natural-language questions answered by a deterministic router, covering the 10 assignment questions (SRS Section 11)
+- [x] Natural-language questions answered by a deterministic router, covering the 10 core questions (SRS Section 11)
 - [x] Local AI model to understand unusual wording (Granite 4.2 via Ollama; numbers still calculated by code)
 - [ ] Citations and an evidence bundle per finding; answer verifier with Pass / Fail
 - [x] Package-level patch plan (package, hosts, risk removed) and "what would patching X remove"
@@ -389,28 +389,28 @@ vulnhq/
 
 ---
 
-## Demo Scope (Monday)
+## Product Direction
 
-Build through Sunday, then switch to the presentation and docs. Goal: answer the 10 assignment questions (SRS Section 11) with deterministic answers. All 10 are answered on the Ask page, and a local AI model routes questions asked in other words.
+VulnHQ is being built as a commercial product: a vulnerability prioritization app that security teams can buy, install and trust with their own data.
 
-**Saturday**
-- [x] Replace BOD 22-01 with BOD 26-04 in all docs
-- [x] BOD 26-04 tier per finding from [`bod2604_matrix.json`](backend/data/bod2604_matrix.json): add `automatable` and `technical_impact` to the vetted rules, explicit Unknown exposure (worst case plus flag), Tier and Deadline columns
-- [x] KEV past-due flag and KPI card (Q5)
+**Who it's for:** security and IT teams that already run a scanner but spend hours turning its results into a defensible fix list. The first focus is financial services, where CISA deadlines, auditors and business-critical payment systems all shape what gets fixed first.
 
-**Sunday**
-- [ ] Confidence levels Confirmed / Likely / Uncertain, "Needs verification" tab, ruled-out count
-- [x] Package-level patch plan with before / after (Q3, Q8)
-- [ ] "Why it ranks here" sentence
-- [x] Business unit, asset type, CVSS sort, stale + high (Q1, Q4, Q7, Q9, Q10), answered on the Ask page
-- [x] Fix list Sort by menu
-- [x] Template CISO summary (Q6) and "What this tool does not do"
-- [x] Local AI fallback for unusual wording (Granite 4.2 via Ollama), with tests
-- [ ] Stretch: as-of date in header, GitHub Actions CI
+**What a customer gets today**
+- A ranked fix list that combines CISA KEV, BOD 26-04 deadlines, EPSS and business context, with the reason behind every rank
+- Plain-English questions answered in seconds, with the evidence on every row
+- A local AI model that only reads the question, so customer data never leaves their network and every number comes from code
+- CrowdStrike Falcon Spotlight import, plus JSON inventory and business context files
 
-**Stop rule:** If the tier and patch plan aren't working by Sunday evening, freeze and demo what works.
-
-**Scope cuts for the roadmap slide:** AI-written answer wording (numbers stay in code), owner sections (SRS 5.11 to 5.24), scanner and ticketing integrations, notifications, remediation workflow, dark mode.
+**What it needs before it's ready to sell**
+- [ ] Sign-in with roles (admin, analyst, read-only), then single sign-on (SSO)
+- [ ] Each customer's data kept separate, starting with one install per customer
+- [ ] An install and update package (for example Docker), with backup and restore
+- [ ] Owners, remediation status and CSV export, so the list can be handed to the patch team
+- [ ] More scanner imports (Tenable, Qualys, Rapid7) and ticketing (Jira, ServiceNow)
+- [ ] Audit log of questions, answers and configuration changes
+- [ ] Independent security testing of VulnHQ itself (OWASP ASVS Level 2)
+- [ ] Commercial license and customer terms
+- [ ] Pilot with one business unit's real scanner export, measuring analyst hours saved
 
 ---
 
@@ -424,7 +424,6 @@ Build through Sunday, then switch to the presentation and docs. Goal: answer the
 
 **Next up**
 - Dark mode
-- GitHub Actions CI
 - Remediation status tracking
 - Explicit Unknown exposure (yes / no / unknown)
 - Confidence levels and needs-verification lane to match the SRS

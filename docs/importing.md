@@ -143,7 +143,7 @@ Products in the rules file use only the rules (no NVD lookup), so their results 
 
 ## Private Data
 
-`sample-data/private/` is in `.gitignore`. Keep customer, interview or other non-public files there.
+`sample-data/private/` is in `.gitignore`. Keep customer or other non-public files there.
 
 ## Starting a Demo Clean
 
