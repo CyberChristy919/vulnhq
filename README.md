@@ -446,12 +446,12 @@ Aligned to SRS Section 12. If time is tight, build 1, 2, 4, 5, then 3 and 6.
 
 ## Contributing
 
-VulnHQ is a **volunteer project** and welcomes contributors who want real-world experience with vulnerability management, FastAPI, React and security data such as CISA KEV, EPSS and NVD.
+VulnHQ welcomes volunteer contributors who want real-world experience with vulnerability management, FastAPI, React and security data such as CISA KEV, EPSS and NVD. Ongoing roles, including business manager and marketing, are set up through the core team (see [Team Roles](CONTRIBUTING.md#team-roles)).
 
 | Start here | What it covers |
 |---|---|
 | [Contributing guide](CONTRIBUTING.md) | Setup, picking an issue, branch names, checks and reviews |
-| [Contributor agreement](CONTRIBUTOR_AGREEMENT.md) | Unpaid volunteer terms and the rights you grant for your contributions |
+| [Contributor agreement](CONTRIBUTOR_AGREEMENT.md) | Volunteer terms, core team agreements and the rights you grant for your contributions |
 | [Code of conduct](CODE_OF_CONDUCT.md) | How we work together |
 | [Good first issues](https://github.com/CyberChristy919/vulnhq/labels/good%20first%20issue) | Small, well-defined tasks for new contributors |
 
@@ -463,7 +463,7 @@ VulnHQ is a **volunteer project** and welcomes contributors who want real-world 
 4. Commit with sign-off: `git commit -s -m "Add your feature"`.
 5. Open a pull request and complete the template, including the contributor agreement box.
 
-Contributions are unpaid. Contributors get public credit, recognition points for merged work and, for consistent contributors, references. Use only fictional data; never commit real company data or secrets.
+Volunteer contributions are unpaid. Contributors get public credit, recognition points for merged work and, for consistent contributors, references. Use only fictional data; never commit real company data or secrets.
 
 ### Contributors
 

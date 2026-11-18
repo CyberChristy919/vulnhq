@@ -1,6 +1,6 @@
 # Contributing to VulnHQ
 
-Thank you for your interest in VulnHQ. This is a volunteer project: contributors build real experience on a working vulnerability-management app and get public credit for their work.
+Thank you for your interest in VulnHQ. Volunteer contributors build real experience on a working vulnerability-management app and get public credit for their work. Ongoing roles, including business roles, are set up through the core team (see [Team Roles](#team-roles)).
 
 Before you start, please read:
 
@@ -20,6 +20,28 @@ Before you start, please read:
 | **References** | Consistent contributors can ask the maintainer for a LinkedIn recommendation or a reference |
 
 VulnHQ contributions are **unpaid**. Points are for recognition only and have no cash value. See the [contributor agreement](CONTRIBUTOR_AGREEMENT.md) for details.
+
+---
+
+## Team Roles
+
+VulnHQ is being built as a commercial product. There are two ways to take part:
+
+| Path | Who it's for | How it works |
+|---|---|---|
+| **Volunteer contributor** | Anyone who wants to help now and then with code, tests, docs or design | Public credit and recognition points, as described on this page. No pay, ownership or share of a sale. |
+| **Core team member** | People who commit to an ongoing role and work toward selling VulnHQ | A separate written agreement, signed before the work starts. It sets out the role, the expected time and any share of the proceeds if VulnHQ is sold. |
+
+**Core team roles include business functions** as well as engineering, for example:
+
+- **Business manager:** planning, budgets, partnerships and pilot customers
+- **Marketing:** brand, website, launch content and outreach
+- **Sales:** customer conversations, demos and pilots
+- **Engineering and security:** features, testing and security reviews
+
+**How to ask about a core team role:** open an issue labeled `question` with the role you're interested in, or contact the maintainer. Each core team member signs an agreement first. Ownership shares and sale terms are kept in the signed agreements, not in this public repository.
+
+**Who holds VulnHQ today:** Cyber Christy LLC owns and protects VulnHQ for now. When the project is ready, VulnHQ may move to a new company formed for it, and the agreements move with it.
 
 ---
 
