@@ -1,6 +1,6 @@
 # VulnHQ Contributor Agreement
 
-**Version 1.0** · Applies to every contribution to VulnHQ.
+**Version 1.1** · Applies to every contribution to VulnHQ.
 
 VulnHQ is owned and maintained by **Cyber Christy LLC** ("the Project Owner"). This agreement explains, in plain language, the terms for contributing. It covers code, tests, documentation, designs, data files, issue content and any other material you submit ("Contributions").
 
@@ -15,7 +15,9 @@ VulnHQ is owned and maintained by **Cyber Christy LLC** ("the Project Owner"). T
 - You're not entitled to compensation, revenue, profit, equity or reimbursement of expenses for any Contribution.
 - Recognition points (see [CONTRIBUTING.md](CONTRIBUTING.md#recognition-points)) recognize your work. They have **no cash value** and are not a promise of future payment.
 
-## 2. Possible Future Programs
+## 2. Core Team Agreements and Future Programs
+
+Core team members (see [Team Roles](CONTRIBUTING.md#team-roles)) take part under a separate written agreement with the Project Owner, signed before their work starts. That agreement, not this one, sets out any ownership, pay or share of sale proceeds. If the two conflict, the signed core team agreement controls.
 
 The Project Owner may, at its sole discretion, create a contributor reward or profit-sharing program in the future. If it does, the terms will be set out in a separate written agreement that participants must sign. There's no promise that any such program will be created, and nothing in this agreement entitles you to take part in one.
 
@@ -25,7 +27,11 @@ You keep the copyright in your Contributions. By submitting a Contribution, you 
 
 You also grant Cyber Christy LLC a perpetual, worldwide, royalty-free, irrevocable patent license for any patent claims you can license that your Contribution would otherwise infringe, for use as part of VulnHQ.
 
-## 4. Your Promises
+## 4. Transfer to a Future Company
+
+Cyber Christy LLC holds VulnHQ for now. It may transfer or assign this agreement, and the licenses you grant under it, to a company formed to own or develop VulnHQ, or to anyone that acquires VulnHQ. After a transfer, "the Project Owner" means the new owner, and this agreement continues to apply to your past and future Contributions.
+
+## 5. Your Promises
 
 By submitting a Contribution, you confirm that:
 
@@ -35,19 +41,19 @@ By submitting a Contribution, you confirm that:
 4. If it includes third-party code, you've identified the source and its license in the pull request, and that license allows the use.
 5. To your knowledge, it doesn't infringe anyone else's rights.
 
-## 5. No Obligation to Use
+## 6. No Obligation to Use
 
 The Project Owner doesn't have to accept, merge, use or keep any Contribution, and may change or remove Contributions at any time.
 
-## 6. Credit
+## 7. Credit
 
 The Project Owner will make reasonable efforts to credit contributors in the README contributors list and release notes. If you prefer not to be credited by name, say so in your pull request.
 
-## 7. No Warranty
+## 8. No Warranty
 
 Contributions are provided "as is." You don't have to provide support for your Contributions.
 
-## 8. Accepting This Agreement
+## 9. Accepting This Agreement
 
 You accept this agreement for each Contribution when you:
 
