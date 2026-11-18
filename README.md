@@ -403,6 +403,7 @@ VulnHQ is being built as a commercial product: a vulnerability prioritization ap
 
 **What it needs before it's ready to sell**
 - [ ] Sign-in with roles (admin, analyst, read-only), then single sign-on (SSO)
+- [ ] Multi-factor authentication (MFA) before launch: authenticator-app codes (TOTP) with one-time recovery codes, required for admins, then passkeys; with SSO, the customer's identity provider enforces MFA
 - [ ] Each customer's data kept separate, starting with one install per customer
 - [ ] An install and update package (for example Docker), with backup and restore
 - [ ] Owners, remediation status and CSV export, so the list can be handed to the patch team
