@@ -1,7 +1,7 @@
 """Tests for the Ask feature (SRS FR-NLQ, FR-TRC, FR-AMB; Q1 to Q10).
 
 These tests describe the code before it exists. Build it in app/ask.py.
-Users can type any question; the 10 assignment questions are shortcuts.
+Users can type any question; the 10 core questions are shortcuts.
 No AI model: keywords pick the question type, and every number comes from the data.
 
     detect_intent(question, departments=(), packages=()) -> str | None
@@ -115,7 +115,7 @@ def run(q):
     ("List all CVEs affecting our network devices sorted by CVSS score.", "network_cves"),
     ("Are there any assets that have not been scanned in the last 30 days that also have high-severity CVEs?", "stale_high"),
 ])
-def test_assignment_questions(question, intent):
+def test_core_questions(question, intent):
     assert ask.detect_intent(question, DEPTS, PKGS) == intent
 
 

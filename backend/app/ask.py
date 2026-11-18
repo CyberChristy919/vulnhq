@@ -1,6 +1,6 @@
 """Answer plain-English questions about vulnerability exposure (SRS FR-NLQ, Q1 to Q10).
 
-Users can ask anything; the 10 assignment questions are shortcuts.
+Users can ask anything; the 10 core questions are shortcuts.
 Keywords pick the question type first; if they don't match, a local AI model (Ollama) picks it.
 Every number comes from the data, not the model.
 """
